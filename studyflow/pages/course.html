@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyFlow | Course</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../sass/main.css" />
+  </head>
+  <body class="sf-app-body course-page">
+    <div class="sf-dashboard-layout">
+      <main class="sf-main-workspace">
+        <section class="course-content slide-up delay-100">
+          <a href="../index.html" class="course-back-link"
+            >← Back to Dashboard</a
+          >
+          <div class="course-layout">
+            <div class="course-main-column">
+              <div class="course-hero">
+                <h1 id="course-title" class="course-title">Course Title</h1>
+                <p id="course-desc" class="course-description">
+                  Course description loading...
+                </p>
+              </div>
+
+              <section class="course-topics-panel">
+                <div class="course-section-heading">
+                  <h2>Course Topics</h2>
+                  <span>Choose a topic to begin</span>
+                </div>
+                <div class="topic-list" id="topics-container">
+                  <!-- Topics injected via JS -->
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../js/app.js" type="module"></script>
+  </body>
+</html>

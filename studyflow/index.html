@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyFlow | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="sass/main.css" />
+  </head>
+  <body class="sf-app-body">
+    <div class="sf-dashboard-layout">
+      <!-- ─── Left Sidebar Navigation ──────────────────────────────────── -->
+      <aside class="sf-sidebar" id="sf-sidebar">
+        <!-- App Logo & Brand -->
+        <div class="sf-sidebar-brand">
+          <img
+            src="assets/icons/logo.png"
+            alt="StudyFlow Logo"
+            class="sf-brand-logo"
+          />
+          <span class="sf-brand-name"
+            ><span class="sf-white">Study</span
+            ><span class="sf-blue">Flow</span></span
+          >
+        </div>
+
+        <!-- Primary Nav Items -->
+        <nav class="sf-nav-menu">
+          <a href="index.html" class="sf-nav-item active">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="pages/chat.html" class="sf-nav-item sf-ai-pill">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+              />
+            </svg>
+            <span>AI Tutor Chat</span>
+          </a>
+          <a href="#quizzes" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Quizzes</span>
+          </a>
+          <a href="#calendar-widget" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <span>Calendar</span>
+          </a>
+        </nav>
+
+        <!-- Sidebar Footer Settings -->
+        <div class="sf-sidebar-footer">
+          <a href="#settings" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span>Settings</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- ─── Main Content Workspace ───────────────────────────────────── -->
+      <main class="sf-main-workspace">
+        <!-- Top Workspace Bar -->
+        <header class="sf-top-header">
+          <div>
+            <button class="sf-mobile-menu-btn" id="sf-sidebar-toggle">
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+            <div class="sf-greeting-block">
+              <h1 class="sf-greeting-title">Hello, Student! 👋</h1>
+              <p class="sf-greeting-subtitle">
+                Ready to continue your learning journey?
+              </p>
+            </div>
+          </div>
+
+          <div class="sf-header-actions">
+            <a
+              href="pages/chat.html"
+              class="sf-header-ai-btn"
+              title="Open Fullscreen AI Chat"
+            >
+              <span class="sf-sparkle">✦</span>
+              <span>Ask AI Tutor</span>
+            </a>
+            <button class="sf-icon-badge-btn" title="Notifications">
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </button>
+            <div class="sf-user-avatar" title="Ridwan • FUGUS Student">R</div>
+          </div>
+        </header>
+
+        <!-- Dashboard Core Grid Layout (Laptop Screen matching Reference) -->
+        <div class="sf-dashboard-grid">
+          <!-- ── Column 1 & 2: Primary Study Feed ──────────────────────── -->
+          <div class="sf-primary-column">
+            <!-- Today's Goal Card -->
+            <section class="sf-card sf-goal-card">
+              <div class="sf-goal-content">
+                <div class="sf-card-title">Today's Goal</div>
+                <div class="sf-goal-status" id="goal-topics-text">
+                  3 / 5 Topics
+                </div>
+                <div class="sf-goal-bar-track">
+                  <div class="sf-goal-bar-fill" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Radial Progress Dial (60% from Reference Photo) -->
+              <div class="sf-radial-wrap">
+                <svg class="sf-radial-svg" viewBox="0 0 80 80">
+                  <circle
+                    class="sf-radial-bg"
+                    cx="40"
+                    cy="40"
+                    r="32"
+                    stroke-width="7"
+                  ></circle>
+                  <circle
+                    class="sf-radial-progress"
+                    cx="40"
+                    cy="40"
+                    r="32"
+                    stroke-width="7"
+                    stroke-dasharray="201"
+                    stroke-dashoffset="80"
+                  ></circle>
+                </svg>
+                <div class="sf-radial-text">60%</div>
+              </div>
+            </section>
+
+            <!-- Retired quick-access widgets are hidden; enrolled courses remain below. -->
+            <section class="sf-card sf-continue-section" id="subjects-section">
+              <div class="sf-section-header">
+                <h2 class="sf-section-title">Continue Learning</h2>
+                <a href="#courses-grid" class="sf-view-all-link">View all</a>
+              </div>
+
+              <!-- Course Progress List (Reference Photo Items: Data Structures, Calculus, etc.) -->
+              <div class="sf-continue-list">
+                <!-- Course Item 1: COS 201 (Data Structures / Concepts) -->
+                <a href="pages/topic.html?c=COS201&t=T01" class="sf-course-row">
+                  <div class="sf-course-icon-badge cos">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                      />
+                    </svg>
+                  </div>
+                  <div class="sf-course-details">
+                    <div class="sf-course-name">Data Structures & Concepts</div>
+                    <div class="sf-course-sub">Stacks and Queues • COS 201</div>
+                    <div class="sf-progress-track">
+                      <div class="sf-progress-bar cos" style="width: 75%"></div>
+                    </div>
+                  </div>
+                  <div class="sf-percent-badge cos">75%</div>
+                </a>
+
+                <!-- Course Item 2: MTH 201 (Calculus II) -->
+                <a href="pages/topic.html?c=MTH201&t=T01" class="sf-course-row">
+                  <div class="sf-course-icon-badge mth">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="sf-course-details">
+                    <div class="sf-course-name">Calculus II</div>
+                    <div class="sf-course-sub">
+                      Limits and Continuity • MTH 201
+                    </div>
+                    <div class="sf-progress-track">
+                      <div class="sf-progress-bar mth" style="width: 50%"></div>
+                    </div>
+                  </div>
+                  <div class="sf-percent-badge mth">50%</div>
+                </a>
+
+                <!-- Course Item 3: CSC 203 (Computer Architecture) -->
+                <a href="pages/topic.html?c=CSC203&t=T01" class="sf-course-row">
+                  <div class="sf-course-icon-badge csc">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="sf-course-details">
+                    <div class="sf-course-name">Computer Architecture</div>
+                    <div class="sf-course-sub">
+                      ALU & CPU Datapaths • CSC 203
+                    </div>
+                    <div class="sf-progress-track">
+                      <div class="sf-progress-bar csc" style="width: 35%"></div>
+                    </div>
+                  </div>
+                  <div class="sf-percent-badge csc">35%</div>
+                </a>
+              </div>
+            </section>
+
+            <!-- All Courses Detailed Grid -->
+            <section class="sf-all-courses-wrap" id="courses-grid">
+              <div class="sf-section-header">
+                <h2 class="sf-section-title">All Enrolled Courses</h2>
+                <span class="sf-sub-tag">FUGUS 200L Second Semester</span>
+              </div>
+              <div id="courses-container" class="courses-grid">
+                <!-- Dynamically populated from coursesData via app.js -->
+              </div>
+            </section>
+          </div>
+
+          <!-- ── Column 3: Calendar and AI launch ─────────────────────────── -->
+          <div class="sf-secondary-column">
+            <!-- Retired quick notes widget -->
+            <section class="sf-card sf-notes-card" id="quick-notes-panel">
+              <div class="sf-card-title">Quick Notes</div>
+              <ul class="sf-notes-list">
+                <li class="sf-note-bullet">
+                  <span class="sf-bullet-dot"></span>
+                  <span class="sf-note-text">Binary Search Tree</span>
+                </li>
+                <li class="sf-note-bullet">
+                  <span class="sf-bullet-dot"></span>
+                  <span class="sf-note-text">Time Complexity</span>
+                </li>
+                <li class="sf-note-bullet">
+                  <span class="sf-bullet-dot"></span>
+                  <span class="sf-note-text">Dynamic Programming</span>
+                </li>
+                <li class="sf-note-bullet">
+                  <span class="sf-bullet-dot"></span>
+                  <span class="sf-note-text">Normalization</span>
+                </li>
+              </ul>
+              <div class="sf-notes-add-row">
+                <a href="pages/chat.html?course=COS201" class="sf-add-note-btn"
+                  >+ Review with AI Tutor</a
+                >
+              </div>
+            </section>
+
+            <!-- Live Calendar Widget -->
+            <section class="sf-card sf-calendar-card" id="calendar-widget">
+              <div class="sf-calendar-header">
+                <span
+                  class="sf-cal-month-title"
+                  id="calendar-month-title"
+                ></span>
+                <div class="sf-cal-nav-arrows">
+                  <button
+                    class="sf-cal-arrow"
+                    id="calendar-prev"
+                    type="button"
+                    aria-label="Previous month"
+                  >
+                    &lt;
+                  </button>
+                  <button
+                    class="sf-cal-arrow"
+                    id="calendar-next"
+                    type="button"
+                    aria-label="Next month"
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </div>
+
+              <!-- Days of week -->
+              <div class="sf-cal-grid sf-cal-days">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span
+                ><span>Th</span><span>Fr</span><span>Sa</span>
+              </div>
+
+              <!-- Calendar Dates Matrix -->
+              <div class="sf-cal-grid sf-cal-dates" id="calendar-dates"></div>
+
+              <div class="sf-cal-footer">
+                <span class="sf-event-badge" id="calendar-today"></span>
+                <span
+                  id="calendar-time"
+                  class="sf-live-time"
+                  aria-live="polite"
+                ></span>
+              </div>
+            </section>
+
+            <!-- Fast AI Launch Card -->
+            <section class="sf-card sf-ai-callout-card">
+              <div class="sf-callout-sparkle">✦</div>
+              <div class="sf-callout-title">Need Exam Explanations?</div>
+              <p class="sf-callout-p">
+                StudyFlow AI is aligned with FUGUS NUC benchmarks. Ask any
+                question step-by-step.
+              </p>
+              <a href="pages/chat.html" class="sf-callout-btn"
+                >Launch AI Chat →</a
+              >
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/app.js" type="module"></script>
+  </body>
+</html>

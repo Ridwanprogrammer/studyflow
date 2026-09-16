@@ -1,0 +1,129 @@
+// Card styles
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.course-card {
+  @extend .glass-panel;
+  padding: 2rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-blue), var(--brand-cyan));
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(1, 169, 254, 0.3); // Cyan glow
+    box-shadow: 0 10px 40px rgba(0, 74, 218, 0.15);
+
+    &::before {
+      opacity: 1;
+      background: linear-gradient(90deg, var(--brand-cyan), var(--brand-lime));
+    }
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .course-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .course-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--brand-cyan);
+    font-weight: 500;
+  }
+}
+
+// Topic List Styles
+.topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.topic-item {
+  @extend .glass-panel;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-left-color: var(--brand-lime);
+    transform: translateX(4px);
+  }
+
+  .topic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    h4 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    span {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+  }
+
+  .topic-status {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.status-new {
+      background: rgba(185, 226, 1, 0.15);
+      color: var(--brand-lime);
+    }
+
+    &.status-progress {
+      background: rgba(1, 169, 254, 0.15);
+      color: var(--brand-cyan);
+    }
+  }
+}

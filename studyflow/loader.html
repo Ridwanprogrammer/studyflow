@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyFlow</title>
+    <meta http-equiv="refresh" content="5;url=index.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="./loader.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="loader-stage scene-fadeout">
+      <!-- Clean desk photo background -->
+      <div class="loader-bg"></div>
+      <div class="loader-vignette"></div>
+
+      <!-- Exact visual composition anchor -->
+      <div class="branding-anchor">
+        <div class="branding-header-row">
+          <!-- Logo with neon glow ring -->
+          <div class="logo-container">
+            <div class="logo-ambient-glow"></div>
+            <img
+              class="logo-svg"
+              src="assets/icons/logo.png"
+              alt="StudyFlow Logo"
+            />
+          </div>
+
+          <!-- "StudyFlow" (Study in white, Flow in bright cyan) -->
+          <div class="brand-title-wrap">
+            <span class="title-study">Study</span
+            ><span class="title-flow">Flow</span>
+          </div>
+        </div>
+
+        <!-- Tagline -->
+        <div class="brand-tagline">Smarter Study. Better Results.</div>
+
+        <!-- Sleek Progress Indicator -->
+        <div class="loader-progress-wrap">
+          <div class="loader-progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function goToDashboard() {
+        window.location.href = "index.html";
+      }
+
+      // Automatically redirect when animation completes
+      setTimeout(goToDashboard, 4800);
+
+      // Allow clicking anywhere to skip straight to dashboard immediately
+      document.body.addEventListener("click", goToDashboard);
+    </script>
+  </body>
+</html>
