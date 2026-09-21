@@ -1,15 +1,21 @@
 // StudyFlow global styles
 
-// Core Theme Variables
-:root {
-  // Brand Colors from Logo
-  --brand-cyan: #01a9fe;
-  --brand-blue: #004ada;
-  --brand-lime: #b9e201;
-  --brand-green: #3eaf00;
+@use "abstracts/variables" as *;
+@use "components/utils";
+@use "components/nav";
+@use "components/cards";
+@use "components/dashboard-sidebars";
+@use "components/course";
+@use "components/topic";
+@use "components/chat";
 
-  // Dark Theme
-  --bg: #0b0f19;
+:root {
+  --brand-cyan: #{$brand-cyan};
+  --brand-blue: #{$brand-blue};
+  --brand-lime: #{$brand-lime};
+  --brand-green: #{$brand-green};
+
+  --bg: #{$bg-900};
   --bg-gradient:
     radial-gradient(
       circle at top right,
@@ -22,8 +28,8 @@
       transparent 40%
     );
 
-  --text: #ffffff;
-  --text-secondary: #94a3b8;
+  --text: #{$text};
+  --text-secondary: #{$text-muted};
 
   --surface: rgba(255, 255, 255, 0.03);
   --border: rgba(255, 255, 255, 0.08);
@@ -73,14 +79,6 @@ textarea {
   font-size: 0.78rem;
   margin-left: auto;
 }
-
-// Components
-@import "components/utils";
-@import "components/nav";
-@import "components/cards";
-@import "components/dashboard-sidebars";
-@import "components/course";
-@import "components/topic";
 
 // Fullscreen AI chat attachments and quick tools
 .gpt-input-capsule-wrapper {
