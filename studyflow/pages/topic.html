@@ -19,11 +19,7 @@
           <div class="container">
             <a id="back-link" href="#" class="back-btn">← Back to Course</a>
             <div class="topic-actions">
-              <button
-                id="upload-btn"
-                class="action-btn upload-btn"
-                title="Upload materials to enhance notes"
-              >
+              <button id="ask-assistant-btn" class="action-btn study-btn">
                 <svg
                   width="16"
                   height="16"
@@ -35,27 +31,10 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4-4m0 0l4 4m-4-4v9"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   />
                 </svg>
-                Upload Materials
-              </button>
-              <button id="study-btn" class="action-btn study-btn">
-                <svg
-                  width="16"
-                  height="16"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                  />
-                </svg>
-                Study with AI
+                Ask Assistant
               </button>
               <button id="export-btn" class="action-btn export-btn">
                 <svg
@@ -84,7 +63,6 @@
           <div class="notes-panel slide-up delay-100">
             <div class="notes-header">
               <h1 id="topic-title" class="notes-title">Loading...</h1>
-              <div id="topic-status-badge" class="status-badge"></div>
             </div>
             <div class="notes-content" id="notes-container">
               <!-- Notes injected via JS -->

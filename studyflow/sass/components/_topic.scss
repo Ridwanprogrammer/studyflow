@@ -202,6 +202,38 @@
     margin-top: 0;
   }
 
+  .notes-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--brand-cyan);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .notes-why {
+    border-left-color: var(--brand-lime);
+    background: rgba(185, 226, 1, 0.04);
+  }
+
+  .notes-plain {
+    border-left-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.04);
+  }
+
+  .notes-examples {
+    border-left-color: var(--brand-blue);
+    background: rgba(59, 130, 246, 0.04);
+  }
+
+  .notes-quiz {
+    border-left-color: #ef4444;
+    background: rgba(239, 68, 68, 0.04);
+  }
+
   blockquote {
     border-left: 4px solid var(--brand-lime);
     margin: 1.5rem 0;

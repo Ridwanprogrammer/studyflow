@@ -1,14 +1,8 @@
-import {
-  coursesData,
-  getCourseById,
-  getTopicById,
-  logStudyInteraction,
-} from "./courses.js";
-import {
-  generateTopicNotes,
-  sendChatMessage,
-  analyzePdfContent,
-} from "./api/ai.js";
+import { coursesData, getCourseById, getTopicById } from "./courses.js";
+import { sendChatMessage, analyzePdfContent } from "./api/ai.js";
+import { markGlossaryTermsInHtml } from "./glossary.js";
+import { parseAndRenderMath, renderMathInContainer } from "./math-renderer.js";
+import { initGlossaryUI } from "./glossary-ui.js";
 
 // ─── Shared State ─────────────────────────────────────────────────────────────
 let currentCourse = null;
@@ -16,11 +10,73 @@ let currentTopic = null;
 let chatHistory = []; // { role, content }
 let isChatBusy = false;
 let isFullScreen = false;
+let glossaryHtml = "";
+
+// ─── Mental Model Scaffold Builder ────────────────────────────────────────────
+function buildMentalModelScaffold(courseTitle, topicTitle, notes) {
+  return { steps: [], glossary: "" };
+}
+
+function startQuickCheck(scaffold) {}
+
+function openChatWithContext() {
+  if (
+    window.location.pathname.includes("topic.html") ||
+    window.location.pathname.includes("course.html")
+  ) {
+    window.location.href = "chat.html";
+    if (currentCourse && currentTopic) {
+      localStorage.setItem(
+        "chatContext",
+        JSON.stringify({
+          courseId: currentCourse.id,
+          topicId: currentTopic.id,
+          courseTitle: currentCourse.title,
+          topicTitle: currentTopic.title,
+        }),
+      );
+    }
+  } else {
+    openChatSidebar();
+  }
+}
 
 // ─── Markdown Parser ─────────────────────────────────────────────────────────
 function parseNotes(md) {
   if (!md) return "Notes not available.";
   let html = md;
+
+  // 1. Process KaTeX math expressions BEFORE markdown tag conversions
+  html = parseAndRenderMath(html);
+
+  // 2. Process interactive glossary term tags [[termId|Label]] or [[termId]]
+  html = markGlossaryTermsInHtml(html);
+
+  // Extract Glossary if present in old format
+  const glossaryMatch = html.match(
+    /## Key terms & glossary([\s\S]*?)(?=## |$)/i,
+  );
+  glossaryHtml = "";
+  if (glossaryMatch) {
+    const glossaryContent = glossaryMatch[1];
+    const terms = [];
+    const termLines = glossaryContent.match(
+      /^\s*-\s*\*\*([^*]+)\*\*:\s*(.*)$/gim,
+    );
+    if (termLines) {
+      termLines.forEach((line) => {
+        const m = line.match(/^\s*-\s*\*\*([^*]+)\*\*:\s*(.*)$/i);
+        if (m) terms.push({ term: m[1].trim(), def: m[2].trim() });
+      });
+    }
+    if (terms.length) {
+      glossaryHtml = '<aside class="glossary-sidebar"><h4>Key Terms</h4><ul>';
+      terms.forEach((t) => {
+        glossaryHtml += `<li><strong>${t.term}</strong>: ${t.def}</li>`;
+      });
+      glossaryHtml += "</ul></aside>";
+    }
+  }
 
   // DeepSeek R1 <think> → collapsible
   html = html.replace(
@@ -62,6 +118,12 @@ function parseNotes(md) {
   html = html.replace(/^\* (.*$)/gim, "<li>$1</li>");
   html = html.replace(/^- (.*$)/gim, "<li>$1</li>");
 
+  // Highlight Section titles
+  html = html.replace(
+    /## Section (\d+) — (.*$)/gim,
+    '<h2 class="notes-section-title">Section $1 — $2</h2>',
+  );
+
   // Paragraphs (double newlines)
   html = html.replace(/\n\n/g, "</p><p>");
   html = "<p>" + html + "</p>";
@@ -83,8 +145,6 @@ function renderDashboard() {
     card.className = `course-card fade-in delay-${(index + 1) * 100}`;
 
     const total = course.topics?.length ?? 0;
-    const completed =
-      course.topics?.filter((t) => t.status === "completed").length ?? 0;
 
     card.innerHTML = `
       <h3>${course.id}</h3>
@@ -94,7 +154,6 @@ function renderDashboard() {
       </div>
       <div class="course-meta">
         <span>${total} Topic${total !== 1 ? "s" : ""}</span>
-        <span style="color:var(--text-secondary)">${completed}/${total} done</span>
       </div>`;
     container.appendChild(card);
   });
@@ -243,19 +302,9 @@ function renderTopicView() {
   const backLink = document.getElementById("back-link");
   if (backLink) backLink.href = `course.html?id=${courseId}`;
 
-  // Topic title & badge
+  // Topic title
   const titleEl = document.getElementById("topic-title");
-  const badgeEl = document.getElementById("topic-status-badge");
   if (titleEl) titleEl.textContent = currentTopic.title;
-  if (badgeEl) {
-    const labels = {
-      new: "New",
-      progress: "In Progress",
-      completed: "Completed",
-    };
-    badgeEl.textContent = labels[currentTopic.status] ?? "";
-    badgeEl.className = `status-badge badge-${currentTopic.status}`;
-  }
 
   renderNotesArea();
   wireTopicButtons();
@@ -265,76 +314,25 @@ function renderNotesArea() {
   const container = document.getElementById("notes-container");
   if (!container) return;
 
-  // If notes already exist and are not the "pending AI generation" placeholder,
-  // treat the topic as completed and just render the notes directly.
-  const hasRealNotes =
-    currentTopic.notes &&
-    currentTopic.notes.trim().length > 0 &&
-    !currentTopic.notes.includes("pending AI generation");
-
-  if (hasRealNotes) {
-    container.innerHTML = parseNotes(currentTopic.notes);
+  const notes = currentTopic.notes || "";
+  if (!notes.trim()) {
+    container.innerHTML = `<div class="empty-state"><p>No notes available for this topic.</p></div>`;
     return;
   }
 
-  if (
-    currentTopic.status === "new" ||
-    currentTopic.notes.includes("pending AI generation") ||
-    !currentTopic.notes.length
-  ) {
-    container.innerHTML = `
-      <div style="text-align:center; padding:4rem 1rem;">
-        <div style="font-size:3rem; margin-bottom:1rem;">🤖</div>
-        <h2 style="margin-bottom:0.5rem">Notes not generated yet</h2>
-        <p style="color:var(--text-secondary); margin-bottom:2rem; max-width:400px; margin-inline:auto;">
-          Click below to have Antigravity AI generate adaptive, curriculum-aligned notes for <strong>${currentTopic.title}</strong>.
-        </p>
-        <button id="generate-btn" class="action-btn study-btn" style="font-size:1rem; padding:0.9rem 2rem;">
-          ✨ Generate Notes with AI
-        </button>
-        <div id="gen-loading" style="display:none; margin-top:2rem;">
-          <div class="ai-thinking-pulse">Antigravity AI is thinking…</div>
-          <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:0.5rem">This may take 15–30 seconds</p>
-        </div>
-        <div id="gen-error" style="display:none; color:#ef4444; margin-top:1rem;"></div>
-      </div>`;
+  // Render markdown notes with math and interactive glossary tags
+  container.innerHTML = parseNotes(notes) + (glossaryHtml || "");
 
-    document
-      .getElementById("generate-btn")
-      .addEventListener("click", handleGenerateNotes);
-  } else {
-    container.innerHTML = parseNotes(currentTopic.notes);
-  }
-}
+  // Initialize KaTeX rendering pass in container
+  renderMathInContainer(container);
 
-async function handleGenerateNotes() {
-  const btn = document.getElementById("generate-btn");
-  const loading = document.getElementById("gen-loading");
-  const errEl = document.getElementById("gen-error");
-
-  btn.style.display = "none";
-  loading.style.display = "block";
-  errEl.style.display = "none";
-
-  try {
-    const notes = await generateTopicNotes(
-      currentCourse.title,
-      currentTopic.title,
-    );
-    currentTopic.notes = notes;
-    currentTopic.status = "progress";
-    logStudyInteraction(currentCourse.id, currentTopic.id, {
-      type: "generate",
-      content: "AI notes generated for this topic",
-    });
-    renderNotesArea();
-  } catch (err) {
-    loading.style.display = "none";
-    btn.style.display = "inline-flex";
-    errEl.style.display = "block";
-    errEl.textContent =
-      "❌ Could not generate notes. Check your API key or try again.";
-  }
+  // Initialize Contextual Glossary UI (popovers, return highlighting, click listeners)
+  initGlossaryUI({
+    container,
+    courseId: currentCourse.id,
+    topicId: currentTopic.id,
+    topicTitle: currentTopic.title,
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -499,10 +497,6 @@ function wireChatInput() {
     appendChatBubble("user", message);
 
     chatHistory.push({ role: "user", content: message });
-    logStudyInteraction(currentCourse.id, currentTopic.id, {
-      type: "question",
-      content: message,
-    });
 
     isChatBusy = true;
     sendBtn.disabled = true;
@@ -519,10 +513,6 @@ function wireChatInput() {
       thinking?.remove();
       appendChatBubble("ai", reply);
       chatHistory.push({ role: "assistant", content: reply });
-      logStudyInteraction(currentCourse.id, currentTopic.id, {
-        type: "ai-response",
-        content: reply.slice(0, 200),
-      });
     } catch (err) {
       thinking?.remove();
       appendChatBubble(
@@ -616,10 +606,6 @@ function wireUploadModal() {
     await new Promise((r) => setTimeout(r, 1500));
 
     const fileNames = uploadedFiles.map((f) => f.name).join(", ");
-    logStudyInteraction(currentCourse.id, currentTopic.id, {
-      type: "upload",
-      content: `Uploaded: ${fileNames}`,
-    });
 
     // Append a context note to the topic notes
     const uploadNote = `\n\n---\n## 📎 Materials Uploaded\nThe following materials were uploaded and will inform your next AI session:\n${uploadedFiles.map((f) => `- ${f.name}`).join("\n")}`;
@@ -695,7 +681,6 @@ async function handlePdfGenerate() {
       currentCourse.title,
       currentTopic.title,
       currentTopic.notes,
-      currentTopic.studyHistory ?? [],
       prefs,
     );
 

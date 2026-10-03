@@ -8,7 +8,7 @@
 }
 
 .course-card {
-  @extend .glass-panel;
+  @extend .glass-panel !optional;
   padding: 2rem;
   text-decoration: none;
   color: var(--text);
@@ -75,7 +75,7 @@
 }
 
 .topic-item {
-  @extend .glass-panel;
+  @extend .glass-panel !optional;
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;

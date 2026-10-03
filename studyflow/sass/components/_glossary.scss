@@ -1,0 +1,560 @@
+// StudyFlow Global Glossary & Math Rendering Styles
+
+// ─── Interactive Glossary Term in Text ──────────────────────────────────────
+.sf-glossary-term {
+  color: var(--brand-cyan, #01a9fe);
+  border-bottom: 1.5px dashed dotted var(--brand-cyan, #01a9fe);
+  padding: 0 2px;
+  margin: 0 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline;
+  font-weight: 500;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(1, 169, 254, 0.15);
+    border-bottom-style: solid;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(1, 169, 254, 0.2);
+  }
+}
+
+// Glowing Pulse Animation when returning from Glossary to exact origin
+@keyframes sf-returned-pulse {
+  0% {
+    background-color: rgba(1, 169, 254, 0.6);
+    box-shadow: 0 0 20px rgba(1, 169, 254, 0.9);
+    transform: scale(1.05);
+  }
+  50% {
+    background-color: rgba(185, 226, 1, 0.4);
+    box-shadow: 0 0 15px rgba(185, 226, 1, 0.7);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+    transform: scale(1);
+  }
+}
+
+.sf-glossary-returned-highlight {
+  animation: sf-returned-pulse 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  display: inline-block;
+}
+
+// ─── Contextual Quick Definition Popover ─────────────────────────────────────
+.sf-glossary-popover {
+  position: absolute;
+  z-index: 9999;
+  width: min(340px, calc(100vw - 32px));
+  background: #0f172a;
+  border: 1px solid rgba(1, 169, 254, 0.3);
+  border-radius: 16px;
+  padding: 1.1rem;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(1, 169, 254, 0.15);
+  backdrop-filter: blur(12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s;
+
+  &.sf-popover-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px) scale(0.96);
+    pointer-events: none;
+  }
+
+  &.sf-popover-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+.sf-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sf-popover-discipline-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand-cyan, #01a9fe);
+  background: rgba(1, 169, 254, 0.12);
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  border: 1px solid rgba(1, 169, 254, 0.25);
+}
+
+.sf-popover-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.sf-popover-term-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+}
+
+.sf-popover-def-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.sf-popover-short-def {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+  margin-bottom: 0.85rem;
+}
+
+.sf-popover-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.75rem;
+}
+
+.sf-popover-see-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(1, 169, 254, 0.14);
+  border: 1px solid rgba(1, 169, 254, 0.35);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--brand-cyan, #01a9fe);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(1, 169, 254, 0.3);
+  }
+}
+
+// ─── KaTeX Math Rendering Styles ─────────────────────────────────────────────
+.sf-math-block-wrap {
+  overflow-x: auto;
+  padding: 0.85rem 1rem;
+  margin: 1rem 0;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.sf-math-inline-wrap {
+  display: inline-block;
+  padding: 0 0.15rem;
+  vertical-align: middle;
+}
+
+// ─── Global Glossary Page Styles (pages/glossary.html) ───────────────────────
+.glossary-page {
+  .sf-main-workspace {
+    max-width: 1300px;
+  }
+}
+
+.sf-origin-return-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(1, 169, 254, 0.18), rgba(185, 226, 1, 0.12));
+  border: 1px solid rgba(1, 169, 254, 0.35);
+  border-radius: 14px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.sf-origin-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #e2e8f0;
+  font-size: 0.92rem;
+
+  strong {
+    color: var(--brand-cyan, #01a9fe);
+  }
+}
+
+.sf-return-topic-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand-cyan, #01a9fe);
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.86rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(-2px);
+    box-shadow: 0 4px 14px rgba(1, 169, 254, 0.4);
+  }
+
+  &.secondary-return {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    &:hover {
+      background: rgba(1, 169, 254, 0.2);
+      border-color: var(--brand-cyan, #01a9fe);
+      color: var(--brand-cyan, #01a9fe);
+    }
+  }
+}
+
+.sf-glossary-controls-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.sf-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 0.95rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  svg {
+    color: #94a3b8;
+  }
+}
+
+.sf-clear-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.sf-discipline-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.sf-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  &.active {
+    background: rgba(1, 169, 254, 0.18);
+    border-color: var(--brand-cyan, #01a9fe);
+    color: var(--brand-cyan, #01a9fe);
+    font-weight: 700;
+  }
+}
+
+// Split Layout
+.sf-glossary-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1.5rem;
+  min-height: 600px;
+}
+
+.sf-glossary-list-panel {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sf-list-header {
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.sf-terms-scroll-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 650px;
+  padding: 0.5rem;
+}
+
+.sf-term-card {
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.35rem;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.selected {
+    background: rgba(1, 169, 254, 0.14);
+    border-color: rgba(1, 169, 254, 0.35);
+  }
+}
+
+.sf-term-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.sf-term-card-name {
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.sf-term-disc-tag {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+}
+
+.sf-term-card-sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Right Detail Panel
+.sf-glossary-detail-panel {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sf-detail-placeholder {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #94a3b8;
+
+  .sf-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.sf-detail-content {
+  &.hidden {
+    display: none;
+  }
+}
+
+.sf-detail-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.sf-discipline-badge {
+  background: rgba(1, 169, 254, 0.14);
+  color: var(--brand-cyan, #01a9fe);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 99px;
+  margin-right: 0.5rem;
+}
+
+.sf-category-tag {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.sf-detail-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.75rem 0 0;
+}
+
+.sf-detail-section {
+  margin-bottom: 1.75rem;
+}
+
+.sf-section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.sf-short-def-box {
+  background: rgba(1, 169, 254, 0.06);
+  border-left: 3px solid var(--brand-cyan, #01a9fe);
+  padding: 1rem 1.25rem;
+  border-radius: 0 12px 12px 0;
+
+  p {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    line-height: 1.5;
+  }
+}
+
+.sf-markdown-body {
+  color: #cbd5e1;
+  line-height: 1.65;
+  font-size: 0.98rem;
+
+  p {
+    margin-top: 0;
+  }
+}
+
+.sf-math-display-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+
+.sf-examples-list {
+  padding-left: 1.25rem;
+  color: #cbd5e1;
+
+  li {
+    margin-bottom: 0.6rem;
+    line-height: 1.5;
+  }
+}
+
+.sf-related-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.sf-related-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  &:hover {
+    background: rgba(1, 169, 254, 0.18);
+    border-color: var(--brand-cyan, #01a9fe);
+    color: var(--brand-cyan, #01a9fe);
+  }
+}
+
+.sf-detail-footer-action {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 900px) {
+  .sf-glossary-grid {
+    grid-template-columns: 1fr;
+  }
+}

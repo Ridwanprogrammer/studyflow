@@ -8,6 +8,7 @@
 @use "components/course";
 @use "components/topic";
 @use "components/chat";
+@use "components/glossary";
 
 :root {
   --brand-cyan: #{$brand-cyan};
