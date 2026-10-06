@@ -11,41 +11,37 @@ if (typeof window !== "undefined" && window.katex) {
 }
 
 /**
- * Ensures KaTeX stylesheet and script are present if not already loaded
+ * Ensures KaTeX stylesheet and script are present if not already loaded.
+ * KaTeX is loaded via <script> tag in HTML before this module runs,
+ * so window.katex should already be available in most cases.
  */
 export function initMathRenderer() {
   if (typeof window === "undefined") return;
 
-  if (window.katex) {
+  // Pick up katex if it was loaded via <script> tag already
+  if (window.katex && !katexInstance) {
     katexInstance = window.katex;
     return;
   }
 
-  // Inject KaTeX stylesheet if missing
+  if (katexInstance) return;
+
+  // CDN fallback: inject KaTeX stylesheet if missing
   if (!document.getElementById("sf-katex-css")) {
     const css = document.createElement("link");
     css.id = "sf-katex-css";
     css.rel = "stylesheet";
-    css.href = "../node_modules/katex/dist/katex.min.css";
-    css.onerror = () => {
-      // CDN Fallback
-      css.href = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
-    };
+    css.href = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
     document.head.appendChild(css);
   }
 
-  // Inject KaTeX script if missing
+  // CDN fallback: inject KaTeX script if missing
   if (!document.getElementById("sf-katex-js") && !window.katex) {
     const script = document.createElement("script");
     script.id = "sf-katex-js";
-    script.src = "../node_modules/katex/dist/katex.min.js";
-    script.onerror = () => {
-      // CDN Fallback
-      script.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js";
-    };
+    script.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js";
     script.onload = () => {
       katexInstance = window.katex;
-      // Re-trigger math render if any unrendered math elements exist
       renderMathInContainer(document.body);
     };
     document.head.appendChild(script);

@@ -9,7 +9,11 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- KaTeX for mathematical notation rendering -->
+    <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css" />
     <link rel="stylesheet" href="../sass/main.css" />
+    <script defer src="../node_modules/katex/dist/katex.min.js"></script>
+    <script defer src="../node_modules/katex/contrib/auto-render/katex.auto-render.min.js"></script>
   </head>
   <body class="sf-app-body topic-page">
     <div class="sf-dashboard-layout">
@@ -36,6 +40,23 @@
                 </svg>
                 Ask Assistant
               </button>
+              <a id="glossary-btn" href="glossary.html" class="action-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.45rem;">
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+                Glossary
+              </a>
               <button id="export-btn" class="action-btn export-btn">
                 <svg
                   width="16"
@@ -328,6 +349,18 @@
       <!-- Injected by JS before print -->
     </div>
 
+    <script src="../node_modules/katex/dist/katex.min.js"></script>
+    <script src="../node_modules/katex/contrib/auto-render/katex.auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      });
+    </script>
     <script src="../js/app.js" type="module"></script>
   </body>
 </html>

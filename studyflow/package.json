@@ -1,14 +1,16 @@
 {
   "name": "studyflow",
   "version": "1.0.0",
-  "description": "A prototype web app for adaptive learning, progress tracking, and AI-assisted study recommendations.",
+  "description": "A web app for adaptive learning, progress tracking, and AI-assisted study recommendations.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build:sass": "sass sass/main.scss sass/main.css",
+    "watch:sass": "sass --watch sass/main.scss sass/main.css"
   },
   "keywords": [],
   "author": "",

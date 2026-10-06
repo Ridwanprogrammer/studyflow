@@ -19,6 +19,7 @@ app.use(
         styleSrc: ["'self'", "https:", "'unsafe-inline'"],
         fontSrc: ["'self'", "https:", "data:"],
         imgSrc: ["'self'", "data:", "blob:"],
+        connectSrc: ["'self'"],
       },
     },
   }),
