@@ -277,9 +277,14 @@ function renderCourseView() {
     el.href = `topic.html?c=${course.id}&t=${topic.id}`;
     el.className = `topic-item fade-in delay-${(index + 1) * 100}`;
 
+    // Check if topic notes contain KaTeX math markers
+    const hasMath = topic.notes && /(\$\$.*\$\$|[^\\]\$[^$\n]+\$|\\$[^$\n]+\$|\\$.*\\$)/s.test(topic.notes);
+    const mathBadge = hasMath ? '<span class="sf-math-badge">Ⓜ</span>' : "";
+
     el.innerHTML = `
       <div class="topic-info">
         <h4>${topic.title}</h4>
+        ${mathBadge}
       </div>`;
     container.appendChild(el);
   });

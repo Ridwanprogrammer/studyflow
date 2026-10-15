@@ -90,7 +90,7 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.15);
 }
 
 .top-nav {
@@ -162,6 +162,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  border: 1px solid var(--brand-blue);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 .course-card::before {
   content: "";
@@ -276,9 +279,8 @@
   width: 248px;
   height: 100vh;
   padding: 1.5rem 1rem;
-  background: rgba(8, 13, 24, 0.94);
+  background: rgba(8, 13, 24, 0.53);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
 }
 
 .sf-sidebar-brand {
@@ -1349,6 +1351,9 @@
   outline: none;
   border-color: var(--brand-cyan);
 }
+#chat-input::-moz-placeholder {
+  color: var(--text-secondary);
+}
 #chat-input::placeholder {
   color: var(--text-secondary);
 }
@@ -2304,6 +2309,10 @@
   line-height: 1.5;
 }
 
+.chat-page-body .gpt-textarea::-moz-placeholder {
+  color: #74839a;
+}
+
 .chat-page-body .gpt-textarea::placeholder {
   color: #74839a;
 }
@@ -2980,7 +2989,7 @@ textarea {
 .sf-goal-card,
 .sf-continue-section,
 .sf-notes-card {
-  display: none;
+  /* display is managed per-page; do not globally hide */
 }
 
 .sf-live-time {
@@ -3024,7 +3033,8 @@ textarea {
 .message-attachment-chip img {
   width: 34px;
   height: 34px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border-radius: 10px;
   flex-shrink: 0;
 }
@@ -3115,6 +3125,4 @@ textarea {
     left: 1rem;
     bottom: 5.8rem;
   }
-}
-
-/*# sourceMappingURL=main.css.map */
+}/*# sourceMappingURL=main.css.map */

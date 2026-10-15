@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 430" role="img" aria-labelledby="title description">
+  <title id="title">Basic logic gate symbols</title>
+  <desc id="description">Standard symbols for NOT, AND, NAND, OR, NOR, XOR, and XNOR gates. Inputs are labelled A and B, and outputs are labelled Y. A small circle marks an inverted output.</desc>
+  <defs>
+    <style>
+      .card { fill: #111e2b; stroke: #30475a; stroke-width: 1.5; }
+      .wire, .gate { fill: none; stroke: #a9d8ec; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .bubble { fill: #111e2b; stroke: #a9d8ec; stroke-width: 3; }
+      .label { fill: #eff8ff; font: 700 15px system-ui, sans-serif; }
+      .pin { fill: #9eb4c4; font: 12px system-ui, sans-serif; }
+      .hint { fill: #a8bdcb; font: 13px system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="card" x="18" y="18" width="236" height="188" rx="14"/>
+  <text class="label" x="136" y="184" text-anchor="middle">NOT</text>
+  <text class="pin" x="38" y="76">A</text>
+  <path class="wire" d="M52 72 H88"/>
+  <path class="gate" d="M88 45 L137 72 L88 99 Z"/>
+  <circle class="bubble" cx="144" cy="72" r="6"/>
+  <path class="wire" d="M150 72 H207"/>
+  <text class="pin" x="213" y="76">Y</text>
+
+  <rect class="card" x="274" y="18" width="236" height="188" rx="14"/>
+  <text class="label" x="392" y="184" text-anchor="middle">AND</text>
+  <text class="pin" x="292" y="67">A</text>
+  <text class="pin" x="292" y="119">B</text>
+  <path class="wire" d="M308 63 H330 M308 115 H330"/>
+  <path class="gate" d="M330 42 H368 A37 37 0 0 1 368 136 H330 Z"/>
+  <path class="wire" d="M405 89 H467"/>
+  <text class="pin" x="473" y="93">Y</text>
+
+  <rect class="card" x="530" y="18" width="236" height="188" rx="14"/>
+  <text class="label" x="648" y="184" text-anchor="middle">NAND</text>
+  <text class="pin" x="548" y="67">A</text>
+  <text class="pin" x="548" y="119">B</text>
+  <path class="wire" d="M564 63 H586 M564 115 H586"/>
+  <path class="gate" d="M586 42 H624 A37 37 0 0 1 624 136 H586 Z"/>
+  <circle class="bubble" cx="665" cy="89" r="6"/>
+  <path class="wire" d="M671 89 H723"/>
+  <text class="pin" x="729" y="93">Y</text>
+
+  <rect class="card" x="786" y="18" width="236" height="188" rx="14"/>
+  <text class="label" x="904" y="184" text-anchor="middle">OR</text>
+  <text class="pin" x="804" y="67">A</text>
+  <text class="pin" x="804" y="119">B</text>
+  <path class="wire" d="M820 63 H844 M820 115 H844"/>
+  <path class="gate" d="M844 42 Q858 89 844 136 Q895 131 933 89 Q895 47 844 42 Z"/>
+  <path class="wire" d="M933 89 H979"/>
+  <text class="pin" x="985" y="93">Y</text>
+
+  <rect class="card" x="146" y="226" width="236" height="188" rx="14"/>
+  <text class="label" x="264" y="392" text-anchor="middle">NOR</text>
+  <text class="pin" x="164" y="275">A</text>
+  <text class="pin" x="164" y="327">B</text>
+  <path class="wire" d="M180 271 H204 M180 323 H204"/>
+  <path class="gate" d="M204 250 Q218 297 204 344 Q255 339 293 297 Q255 255 204 250 Z"/>
+  <circle class="bubble" cx="300" cy="297" r="6"/>
+  <path class="wire" d="M306 297 H353"/>
+  <text class="pin" x="359" y="301">Y</text>
+
+  <rect class="card" x="402" y="226" width="236" height="188" rx="14"/>
+  <text class="label" x="520" y="392" text-anchor="middle">XOR</text>
+  <text class="pin" x="420" y="275">A</text>
+  <text class="pin" x="420" y="327">B</text>
+  <path class="wire" d="M436 271 H458 M436 323 H458"/>
+  <path class="gate" d="M458 250 Q472 297 458 344 M470 250 Q484 297 470 344 Q521 339 559 297 Q521 255 470 250 Z"/>
+  <path class="wire" d="M559 297 H609"/>
+  <text class="pin" x="615" y="301">Y</text>
+
+  <rect class="card" x="658" y="226" width="236" height="188" rx="14"/>
+  <text class="label" x="776" y="392" text-anchor="middle">XNOR</text>
+  <text class="pin" x="676" y="275">A</text>
+  <text class="pin" x="676" y="327">B</text>
+  <path class="wire" d="M692 271 H714 M692 323 H714"/>
+  <path class="gate" d="M714 250 Q728 297 714 344 M726 250 Q740 297 726 344 Q777 339 815 297 Q777 255 726 250 Z"/>
+  <circle class="bubble" cx="828" cy="297" r="6"/>
+  <path class="wire" d="M834 297 H865"/>
+  <text class="pin" x="871" y="301">Y</text>
+
+  <text class="hint" x="520" y="426" text-anchor="middle">An output circle means NOT (inversion).</text>
+</svg>

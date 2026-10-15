@@ -68,11 +68,11 @@ textarea {
   font: inherit;
 }
 
-// Retired dashboard widgets: their underlying data was static and misleading.
+// Dashboard goal and progress widgets
 .sf-goal-card,
 .sf-continue-section,
 .sf-notes-card {
-  display: none;
+  /* display is managed per-page; do not globally hide */
 }
 
 .sf-live-time {

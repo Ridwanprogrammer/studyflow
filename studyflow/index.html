@@ -164,7 +164,7 @@
               class="sf-header-ai-btn"
               title="Open Fullscreen AI Chat"
             >
-              <span class="sf-sparkle">✦</span>
+              <!-- <span class="sf-sparkle">&#9733;</span> -->
               <span>Ask AI Tutor</span>
             </a>
             <button class="sf-icon-badge-btn" title="Notifications">
@@ -191,141 +191,6 @@
         <div class="sf-dashboard-grid">
           <!-- ── Column 1 & 2: Primary Study Feed ──────────────────────── -->
           <div class="sf-primary-column">
-            <!-- Today's Goal Card -->
-            <section class="sf-card sf-goal-card">
-              <div class="sf-goal-content">
-                <div class="sf-card-title">Today's Goal</div>
-                <div class="sf-goal-status" id="goal-topics-text">
-                  3 / 5 Topics
-                </div>
-                <div class="sf-goal-bar-track">
-                  <div class="sf-goal-bar-fill" style="width: 60%"></div>
-                </div>
-              </div>
-
-              <!-- Radial Progress Dial (60% from Reference Photo) -->
-              <div class="sf-radial-wrap">
-                <svg class="sf-radial-svg" viewBox="0 0 80 80">
-                  <circle
-                    class="sf-radial-bg"
-                    cx="40"
-                    cy="40"
-                    r="32"
-                    stroke-width="7"
-                  ></circle>
-                  <circle
-                    class="sf-radial-progress"
-                    cx="40"
-                    cy="40"
-                    r="32"
-                    stroke-width="7"
-                    stroke-dasharray="201"
-                    stroke-dashoffset="80"
-                  ></circle>
-                </svg>
-                <div class="sf-radial-text">60%</div>
-              </div>
-            </section>
-
-            <!-- Retired quick-access widgets are hidden; enrolled courses remain below. -->
-            <section class="sf-card sf-continue-section" id="subjects-section">
-              <div class="sf-section-header">
-                <h2 class="sf-section-title">Continue Learning</h2>
-                <a href="#courses-grid" class="sf-view-all-link">View all</a>
-              </div>
-
-              <!-- Course Progress List (Reference Photo Items: Data Structures, Calculus, etc.) -->
-              <div class="sf-continue-list">
-                <!-- Course Item 1: COS 201 (Data Structures / Concepts) -->
-                <a href="pages/topic.html?c=COS201&t=T01" class="sf-course-row">
-                  <div class="sf-course-icon-badge cos">
-                    <svg
-                      width="20"
-                      height="20"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                      />
-                    </svg>
-                  </div>
-                  <div class="sf-course-details">
-                    <div class="sf-course-name">Data Structures & Concepts</div>
-                    <div class="sf-course-sub">Stacks and Queues • COS 201</div>
-                    <div class="sf-progress-track">
-                      <div class="sf-progress-bar cos" style="width: 75%"></div>
-                    </div>
-                  </div>
-                  <div class="sf-percent-badge cos">75%</div>
-                </a>
-
-                <!-- Course Item 2: MTH 201 (Calculus II) -->
-                <a href="pages/topic.html?c=MTH201&t=T01" class="sf-course-row">
-                  <div class="sf-course-icon-badge mth">
-                    <svg
-                      width="20"
-                      height="20"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="sf-course-details">
-                    <div class="sf-course-name">Calculus II</div>
-                    <div class="sf-course-sub">
-                      Limits and Continuity • MTH 201
-                    </div>
-                    <div class="sf-progress-track">
-                      <div class="sf-progress-bar mth" style="width: 50%"></div>
-                    </div>
-                  </div>
-                  <div class="sf-percent-badge mth">50%</div>
-                </a>
-
-                <!-- Course Item 3: CSC 203 (Computer Architecture) -->
-                <a href="pages/topic.html?c=CSC203&t=T01" class="sf-course-row">
-                  <div class="sf-course-icon-badge csc">
-                    <svg
-                      width="20"
-                      height="20"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="sf-course-details">
-                    <div class="sf-course-name">Computer Architecture</div>
-                    <div class="sf-course-sub">
-                      ALU & CPU Datapaths • CSC 203
-                    </div>
-                    <div class="sf-progress-track">
-                      <div class="sf-progress-bar csc" style="width: 35%"></div>
-                    </div>
-                  </div>
-                  <div class="sf-percent-badge csc">35%</div>
-                </a>
-              </div>
-            </section>
-
             <!-- All Courses Detailed Grid -->
             <section class="sf-all-courses-wrap" id="courses-grid">
               <div class="sf-section-header">
@@ -337,7 +202,6 @@
               </div>
             </section>
           </div>
-
         </div>
       </main>
     </div>
