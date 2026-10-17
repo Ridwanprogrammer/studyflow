@@ -161,6 +161,40 @@
   color: var(--text);
 }
 
+.topic-outline-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.4rem 0 0.9rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.outline-chip {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: #fff;
+    background: rgba(1, 169, 254, 0.15);
+    border-color: rgba(1, 169, 254, 0.35);
+  }
+}
+
 .status-badge {
   font-size: 0.75rem;
   font-weight: 700;
@@ -232,6 +266,60 @@
   .notes-quiz {
     border-left-color: #ef4444;
     background: rgba(239, 68, 68, 0.04);
+  }
+
+  // Interactive Quiz / Self-Test Reveal
+  .knowledge-check-reveal {
+    margin: 1.25rem 0;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    overflow: hidden;
+
+    summary.quiz-reveal-btn {
+      padding: 0.85rem 1.15rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #34d399;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.15s ease;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &:hover {
+        background: rgba(16, 185, 129, 0.12);
+      }
+    }
+
+    .quiz-answer-content {
+      padding: 1rem 1.25rem;
+      border-top: 1px dashed rgba(16, 185, 129, 0.2);
+      background: rgba(15, 23, 42, 0.6);
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+  }
+
+  // Font Zoom States
+  &.font-small {
+    font-size: 0.95rem;
+  }
+  &.font-normal {
+    font-size: 1.05rem;
+  }
+  &.font-large {
+    font-size: 1.18rem;
+  }
+  &.font-xlarge {
+    font-size: 1.3rem;
   }
 
   blockquote {

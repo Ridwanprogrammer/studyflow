@@ -32,8 +32,10 @@
   --text: #{$text};
   --text-secondary: #{$text-muted};
 
-  --surface: rgba(255, 255, 255, 0.03);
-  --border: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-raised: rgba(255, 255, 255, 0.07);
+  --border: rgba(180, 205, 226, 0.12);
+  --border-strong: rgba(180, 205, 226, 0.2);
 }
 
 * {
@@ -53,6 +55,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 main {
@@ -68,17 +71,59 @@ textarea {
   font: inherit;
 }
 
-// Dashboard goal and progress widgets
-.sf-goal-card,
-.sf-continue-section,
-.sf-notes-card {
-  /* display is managed per-page; do not globally hide */
+button,
+a,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  color: #06111a;
+  background: var(--brand-cyan);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-cyan);
+  outline-offset: 3px;
+}
+
+.sf-skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.65rem;
+  background: var(--brand-cyan);
+  color: #06111a;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+
+  &:focus {
+    transform: translateY(0);
+  }
 }
 
 .sf-live-time {
   color: var(--text-secondary);
   font-size: 0.78rem;
   margin-left: auto;
+}
+
+.sf-math-block-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
 }
 
 // Fullscreen AI chat attachments and quick tools
@@ -211,5 +256,16 @@ textarea {
   .quick-tools-menu {
     left: 1rem;
     bottom: 5.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

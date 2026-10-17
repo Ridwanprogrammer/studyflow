@@ -11,8 +11,10 @@
     />
     <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css" id="sf-katex-css" />
     <link rel="stylesheet" href="../sass/main.css" />
+    <script defer src="../node_modules/katex/dist/katex.min.js"></script>
   </head>
   <body class="sf-app-body glossary-page">
+    <a class="sf-skip-link" href="#main-content">Skip to main content</a>
     <div class="sf-dashboard-layout">
       <!-- ─── Left Sidebar Navigation ──────────────────────────────────── -->
       <aside class="sf-sidebar" id="sf-sidebar">
@@ -32,7 +34,7 @@
         </div>
 
         <!-- Primary Nav Items -->
-        <nav class="sf-nav-menu">
+        <nav class="sf-nav-menu" aria-label="Main navigation">
           <a href="../index.html" class="sf-nav-item">
             <svg
               width="18"
@@ -49,6 +51,24 @@
               />
             </svg>
             <span>Dashboard</span>
+          </a>
+
+          <a href="courses.html" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>My Courses</span>
           </a>
 
           <a href="glossary.html" class="sf-nav-item active">
@@ -87,40 +107,20 @@
             <span>AI Tutor Chat</span>
           </a>
         </nav>
-
-        <!-- Sidebar Footer Settings -->
-        <div class="sf-sidebar-footer">
-          <a href="../index.html#settings" class="sf-nav-item">
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2.2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <span>Settings</span>
-          </a>
-        </div>
       </aside>
 
       <!-- ─── Main Content Workspace ───────────────────────────────────── -->
-      <main class="sf-main-workspace">
+      <main class="sf-main-workspace" id="main-content">
         <!-- Top Workspace Bar -->
         <header class="sf-top-header">
           <div>
-            <button class="sf-mobile-menu-btn" id="sf-sidebar-toggle">
+            <button
+              class="sf-mobile-menu-btn"
+              id="sf-sidebar-toggle"
+              aria-label="Toggle navigation"
+              aria-controls="sf-sidebar"
+              aria-expanded="false"
+            >
               <svg
                 width="20"
                 height="20"
@@ -137,14 +137,43 @@
               </svg>
             </button>
             <div class="sf-greeting-block">
-              <h1 class="sf-greeting-title">Global Glossary 📚</h1>
+              <div class="sf-page-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>STUDYFLOW KNOWLEDGE BASE</span>
+              </div>
+              <h1 class="sf-greeting-title">Global Glossary</h1>
               <p class="sf-greeting-subtitle">
-                Core StudyFlow terminology & mathematical definitions across all courses
+                Core definitions, mathematical formalisms & worked examples across all courses
               </p>
             </div>
           </div>
 
           <div class="sf-header-actions">
+            <button
+              class="sf-search-cmd-btn sf-cmd-trigger"
+              id="global-search-btn"
+              title="Quick Search (Ctrl + K)"
+              aria-label="Quick Search"
+            >
+              <svg
+                width="15"
+                height="15"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <span>Search</span>
+              <kbd>Ctrl+K</kbd>
+            </button>
             <a
               href="chat.html"
               class="sf-header-ai-btn"
@@ -153,18 +182,22 @@
               <span class="sf-sparkle">✦</span>
               <span>Ask AI Tutor</span>
             </a>
+            <div class="sf-user-avatar" title="Ridwan • FUGUS Student">R</div>
           </div>
         </header>
 
         <!-- Origin Return Banner (Visible if learner arrived from a topic) -->
         <div id="sf-origin-return-bar" class="sf-origin-return-bar hidden">
           <div class="sf-origin-info">
-            <span class="sf-origin-icon">📍</span>
+            <span class="sf-origin-dot" aria-hidden="true"></span>
             <span>Origin: <strong id="sf-origin-topic-name">Lesson</strong></span>
           </div>
-          <button id="sf-return-to-topic-btn" class="sf-return-topic-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <button id="sf-return-to-topic-btn" class="sf-return-topic-btn" title="Return to origin lesson (Esc)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
             <span>Return to topic</span>
+            <kbd class="sf-key-hint">Esc</kbd>
           </button>
         </div>
 
@@ -172,87 +205,255 @@
         <div class="sf-glossary-workspace">
           <!-- Search & Filter Control Panel -->
           <div class="sf-glossary-controls-card">
+            <!-- Search row -->
             <div class="sf-glossary-search-row">
               <div class="sf-search-input-wrap">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg class="sf-search-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <input
                   type="text"
                   id="sf-glossary-search-input"
-                  placeholder="Search glossary terms (e.g. domain, derivative, velocity, recursion)..."
-                  aria-label="Search terms"
+                  placeholder="Search concepts (e.g. domain, derivative, velocity, recursion, molarity)..."
+                  aria-label="Search glossary terms"
+                  autocomplete="off"
                 />
-                <button id="sf-glossary-clear-search" class="sf-clear-btn hidden" title="Clear search">✕</button>
+                <kbd class="sf-search-shortcut-hint" id="sf-search-hint" title="Press / to focus">/</kbd>
+                <button id="sf-glossary-clear-search" class="sf-clear-btn hidden" title="Clear search (Esc)" aria-label="Clear search">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
               </div>
             </div>
 
-            <!-- Discipline Filter Pills -->
-            <div class="sf-discipline-pills" id="sf-discipline-pills">
-              <button class="sf-pill active" data-discipline="All">All Disciplines</button>
-              <button class="sf-pill" data-discipline="Mathematics">Mathematics</button>
-              <button class="sf-pill" data-discipline="Computer Science">Computer Science</button>
-              <button class="sf-pill" data-discipline="Physics">Physics</button>
-              <button class="sf-pill" data-discipline="Chemistry">Chemistry</button>
+            <!-- Filter Pills (Disciplines + Starred) -->
+            <div class="sf-glossary-filter-toolbar">
+              <div class="sf-discipline-pills" id="sf-discipline-pills" role="tablist" aria-label="Discipline filter">
+                <button class="sf-pill active" data-discipline="All" role="tab" aria-selected="true">
+                  <span class="sf-pill-dot dot-all"></span>
+                  <span>All Disciplines</span>
+                  <span class="sf-pill-count" id="count-all">0</span>
+                </button>
+                <button class="sf-pill" data-discipline="Mathematics" role="tab" aria-selected="false">
+                  <span class="sf-pill-dot dot-math"></span>
+                  <span>Mathematics</span>
+                  <span class="sf-pill-count" id="count-math">0</span>
+                </button>
+                <button class="sf-pill" data-discipline="Computer Science" role="tab" aria-selected="false">
+                  <span class="sf-pill-dot dot-cs"></span>
+                  <span>Computer Science</span>
+                  <span class="sf-pill-count" id="count-cs">0</span>
+                </button>
+                <button class="sf-pill" data-discipline="Physics" role="tab" aria-selected="false">
+                  <span class="sf-pill-dot dot-phys"></span>
+                  <span>Physics</span>
+                  <span class="sf-pill-count" id="count-phys">0</span>
+                </button>
+                <button class="sf-pill" data-discipline="Chemistry" role="tab" aria-selected="false">
+                  <span class="sf-pill-dot dot-chem"></span>
+                  <span>Chemistry</span>
+                  <span class="sf-pill-count" id="count-chem">0</span>
+                </button>
+                <button class="sf-pill sf-pill-starred" data-discipline="Starred" role="tab" aria-selected="false" title="View your bookmarked terms">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  <span>Bookmarks</span>
+                  <span class="sf-pill-count" id="count-starred">0</span>
+                </button>
+              </div>
+
+              <!-- Quick Sort Dropdown -->
+              <div class="sf-glossary-sort-wrap">
+                <label for="sf-sort-select" class="sf-sort-label">Sort:</label>
+                <select id="sf-sort-select" class="sf-sort-select" aria-label="Sort terms">
+                  <option value="az">A → Z</option>
+                  <option value="za">Z → A</option>
+                  <option value="discipline">By Discipline</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Alphabetical A-Z Scrubber Bar -->
+            <div class="sf-az-scrubber-bar" id="sf-az-scrubber" aria-label="Alphabetical jump bar">
+              <!-- Dynamically populated via JS -->
             </div>
           </div>
 
           <!-- Master-Detail Split Grid -->
-          <div class="sf-glossary-grid">
+          <div class="sf-glossary-grid" id="sf-glossary-grid">
             <!-- Left Column: Term List -->
-            <div class="sf-glossary-list-panel">
+            <div class="sf-glossary-list-panel" id="sf-glossary-list-panel">
               <div class="sf-list-header">
-                <span id="sf-terms-count">Showing 0 terms</span>
+                <div class="sf-list-stats">
+                  <span class="sf-stats-indicator" aria-hidden="true"></span>
+                  <span id="sf-terms-count">Showing 0 terms</span>
+                </div>
+                <div class="sf-list-keyboard-hint">
+                  <kbd>↑</kbd><kbd>↓</kbd> navigate
+                </div>
               </div>
-              <div class="sf-terms-scroll-list" id="sf-terms-list">
+              <div class="sf-terms-scroll-list" id="sf-terms-list" role="listbox" aria-label="Glossary term list">
                 <!-- Injected via JS -->
               </div>
             </div>
 
             <!-- Right Column: Detailed View -->
             <div class="sf-glossary-detail-panel" id="sf-term-detail-panel">
-              <div class="sf-detail-placeholder" id="sf-detail-empty">
-                <div class="sf-empty-icon">📖</div>
-                <h3>Select a term to view full definition</h3>
-                <p>Click any term on the left or search to view formal definitions, worked examples, and related concepts.</p>
+              <!-- Mobile Back to List Button (visible on mobile viewport) -->
+              <div class="sf-mobile-back-bar" id="sf-mobile-back-bar">
+                <button type="button" id="sf-mobile-back-btn" class="sf-mobile-back-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
+                  <span>Back to terms list</span>
+                </button>
               </div>
 
+              <!-- Empty state placeholder -->
+              <div class="sf-detail-placeholder" id="sf-detail-empty">
+                <div class="sf-empty-icon-wrap">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h3>Select a term to view definition</h3>
+                <p>Click any concept on the left, use arrow keys, or search to inspect formal mathematical statements, worked examples, and related topics.</p>
+              </div>
+
+              <!-- Term Detail Content -->
               <div class="sf-detail-content hidden" id="sf-detail-body">
+                <!-- Breadcrumbs & Navigation Trail -->
+                <div class="sf-detail-breadcrumbs" id="sf-detail-breadcrumbs">
+                  <span class="sf-crumb-root">Glossary</span>
+                  <span class="sf-crumb-sep">/</span>
+                  <span class="sf-crumb-disc" id="sf-crumb-disc">Mathematics</span>
+                  <span class="sf-crumb-sep">/</span>
+                  <span class="sf-crumb-cat" id="sf-crumb-cat">Calculus</span>
+                </div>
+
+                <!-- Header block -->
                 <div class="sf-detail-header">
-                  <div>
-                    <span class="sf-discipline-badge" id="sf-detail-discipline">Mathematics</span>
-                    <span class="sf-category-tag" id="sf-detail-category">Calculus</span>
+                  <div class="sf-detail-header-left">
+                    <div class="sf-detail-tags">
+                      <span class="sf-discipline-badge" id="sf-detail-discipline">Mathematics</span>
+                      <span class="sf-category-tag" id="sf-detail-category">Calculus</span>
+                    </div>
                     <h2 class="sf-detail-title" id="sf-detail-title">Domain</h2>
+                  </div>
+
+                  <!-- Action Toolbar -->
+                  <div class="sf-detail-toolbar">
+                    <!-- Bookmark/Star button -->
+                    <button type="button" id="sf-bookmark-term-btn" class="sf-tool-btn" title="Bookmark this term for exam review" aria-label="Bookmark term">
+                      <svg class="sf-star-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                      <span id="sf-bookmark-btn-label">Star</span>
+                    </button>
+
+                    <!-- Text-to-Speech Listen Button -->
+                    <button type="button" id="sf-pronounce-term-btn" class="sf-tool-btn" title="Listen to definition" aria-label="Listen to definition">
+                      <svg class="sf-audio-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/>
+                      </svg>
+                      <span id="sf-audio-btn-label">Listen</span>
+                    </button>
+
+                    <!-- Copy definition -->
+                    <button type="button" id="sf-copy-term-btn" class="sf-tool-btn" title="Copy definition to clipboard" aria-label="Copy definition">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/>
+                      </svg>
+                      <span>Copy</span>
+                    </button>
+
+                    <!-- Share / Copy Link -->
+                    <button type="button" id="sf-share-term-btn" class="sf-tool-btn" title="Copy link to this term" aria-label="Copy link">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                      </svg>
+                      <span>Share</span>
+                    </button>
+
+                    <!-- Ask AI Tutor -->
+                    <button type="button" id="sf-ai-explain-term-btn" class="sf-tool-btn sf-tool-ai" title="Ask AI Tutor to break down this term">
+                      <span class="sf-sparkle">✦</span>
+                      <span>Ask AI</span>
+                    </button>
                   </div>
                 </div>
 
-                <!-- Short Definition -->
+                <!-- Brief Summary -->
                 <div class="sf-detail-section sf-short-def-box">
-                  <div class="sf-section-label">Brief Summary</div>
+                  <div class="sf-section-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Brief Summary</span>
+                  </div>
                   <p id="sf-detail-short-def"></p>
                 </div>
 
                 <!-- Full Explanation -->
-                <div class="sf-detail-section">
-                  <div class="sf-section-label">Full Explanation</div>
+                <div class="sf-detail-section sf-explanation-section">
+                  <div class="sf-section-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
+                    <span>In-Depth Explanation</span>
+                  </div>
                   <div id="sf-detail-full-def" class="sf-markdown-body"></div>
                 </div>
 
-                <!-- Formal Definition (where applicable) -->
+                <!-- Formal Definition (KaTeX with copy formula button) -->
                 <div class="sf-detail-section sf-formal-box" id="sf-formal-wrapper">
-                  <div class="sf-section-label">Formal Definition</div>
+                  <div class="sf-formal-header">
+                    <div class="sf-section-label">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                      </svg>
+                      <span>Formal Mathematical Statement</span>
+                    </div>
+                    <button type="button" id="sf-copy-latex-btn" class="sf-copy-latex-btn" title="Copy raw LaTeX formula">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                      </svg>
+                      <span>Copy LaTeX</span>
+                    </button>
+                  </div>
                   <div id="sf-detail-formal" class="sf-math-display-box"></div>
                 </div>
 
-                <!-- Examples -->
+                <!-- Worked Examples -->
                 <div class="sf-detail-section" id="sf-examples-wrapper">
-                  <div class="sf-section-label">Examples</div>
+                  <div class="sf-section-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Worked Examples</span>
+                  </div>
                   <ul id="sf-detail-examples" class="sf-examples-list"></ul>
                 </div>
 
                 <!-- Related Terms -->
                 <div class="sf-detail-section">
-                  <div class="sf-section-label">Related Terminology</div>
+                  <div class="sf-related-header">
+                    <div class="sf-section-label">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                      </svg>
+                      <span>Related Terminology</span>
+                    </div>
+                    <!-- Navigation step back/forward between recently viewed terms -->
+                    <div class="sf-term-nav-trail" id="sf-term-nav-trail">
+                      <button type="button" id="sf-prev-term-btn" class="sf-crumb-nav-btn" title="Go back to previously viewed term" disabled>
+                        ← Back
+                      </button>
+                    </div>
+                  </div>
                   <div id="sf-detail-related" class="sf-related-chips"></div>
                 </div>
 
@@ -271,7 +472,6 @@
     </div>
 
     <!-- Script imports -->
-    <script src="../node_modules/katex/dist/katex.min.js"></script>
     <script src="../js/glossary-page.js" type="module"></script>
   </body>
 </html>

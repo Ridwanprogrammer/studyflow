@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudyFlow | Course</title>
+    <title>StudyFlow | Course View</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -12,43 +12,210 @@
     <link rel="stylesheet" href="../sass/main.css" />
   </head>
   <body class="sf-app-body course-page">
+    <a class="sf-skip-link" href="#main-content">Skip to main content</a>
     <div class="sf-dashboard-layout">
-      <main class="sf-main-workspace">
+      <!-- ─── Left Sidebar Navigation ──────────────────────────────────── -->
+      <aside class="sf-sidebar" id="sf-sidebar">
+        <!-- App Logo & Brand -->
+        <div class="sf-sidebar-brand">
+          <a href="../index.html" style="display:flex; align-items:center; gap:0.75rem; text-decoration:none;">
+            <img
+              src="../assets/icons/logo.png"
+              alt="StudyFlow Logo"
+              class="sf-brand-logo"
+            />
+            <span class="sf-brand-name"
+              ><span class="sf-white">Study</span
+              ><span class="sf-blue">Flow</span></span
+            >
+          </a>
+        </div>
+
+        <!-- Primary Nav Items -->
+        <nav class="sf-nav-menu" aria-label="Main navigation">
+          <a href="../index.html" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="glossary.html" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            <span>Global Glossary</span>
+          </a>
+
+          <a href="chat.html" class="sf-nav-item sf-ai-pill">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+              />
+            </svg>
+            <span>AI Tutor Chat</span>
+          </a>
+
+          <a href="courses.html" class="sf-nav-item">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>My Courses</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- ─── Main Content Workspace ───────────────────────────────────── -->
+      <main class="sf-main-workspace" id="main-content">
+        <!-- Top Workspace Bar -->
+        <header class="sf-top-header">
+          <div>
+            <button
+              class="sf-mobile-menu-btn"
+              id="sf-sidebar-toggle"
+              aria-label="Toggle navigation"
+              aria-controls="sf-sidebar"
+              aria-expanded="false"
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+            <div class="sf-greeting-block">
+              <nav aria-label="Breadcrumb" style="margin-bottom: 0.2rem;">
+                <a href="../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.76rem; font-weight: 600;">Dashboard</a>
+                <span style="color: var(--border-strong); margin: 0 0.35rem; font-size: 0.76rem;">/</span>
+                <span id="course-breadcrumb-code" style="color: var(--brand-cyan); font-size: 0.76rem; font-weight: 700;">Course</span>
+              </nav>
+              <h1 id="course-title" class="sf-greeting-title">Loading Course...</h1>
+            </div>
+          </div>
+
+          <div class="sf-header-actions">
+            <button
+              class="sf-search-cmd-btn sf-cmd-trigger"
+              id="global-search-btn"
+              title="Quick Search (Ctrl + K)"
+              aria-label="Quick Search"
+            >
+              <svg
+                width="15"
+                height="15"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <span>Search</span>
+              <kbd>Ctrl+K</kbd>
+            </button>
+            <a
+              id="course-ai-tutor-btn"
+              href="chat.html"
+              class="sf-header-ai-btn"
+              title="Open AI Tutor for this course"
+            >
+              <span class="sf-sparkle">✦</span>
+              <span>Course AI Tutor</span>
+            </a>
+            <div class="sf-user-avatar" title="Ridwan • FUGUS Student">R</div>
+          </div>
+        </header>
+
+        <!-- Course Content Body -->
         <section class="course-content slide-up delay-100">
-          <a href="../index.html" class="course-back-link"
-            >← Back to Dashboard</a
-          >
           <div class="course-layout">
             <div class="course-main-column">
+              <!-- Course Hero Card -->
               <div class="course-hero">
-                <h1 id="course-title" class="course-title">Course Title</h1>
+                <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom: 0.5rem; flex-wrap:wrap;">
+                  <span class="course-eyebrow" id="course-code"></span>
+                  <span class="sf-sub-tag" id="course-badge-level">FUGUS · 200 Level · Second Semester</span>
+                </div>
+                <h1 id="course-hero-title" class="course-title">Course Title</h1>
                 <p id="course-desc" class="course-description">
                   Course description loading...
                 </p>
+
+                <!-- Course Action Quick Chips -->
+                <div style="display:flex; align-items:center; gap:0.6rem; margin-top: 1.25rem; flex-wrap:wrap;">
+                  <a id="hero-ai-study-btn" href="chat.html" class="sf-callout-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; border-radius:10px; font-size:0.82rem;">
+                    <span>✦ Ask AI Tutor About This Course</span>
+                  </a>
+                  <a href="glossary.html" class="action-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; border-radius:10px; font-size:0.82rem; background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">
+                    <span>📖 Course Terminology in Glossary</span>
+                  </a>
+                </div>
               </div>
 
+              <!-- Course Topics Panel -->
               <section class="course-topics-panel">
                 <div class="course-section-heading">
-                  <h2>Course Topics</h2>
-                  <span>Choose a topic to begin</span>
-                  <!-- <a href="chat.html" class="ask-assistant-top">
-                    <svg
-                      width="16"
-                      height="16"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                    Ask Assistant
-                  </a> -->
+                  <div>
+                    <h2>Curriculum Topics</h2>
+                    <span id="course-topic-count">Choose a topic to begin studying</span>
+                  </div>
                 </div>
+
                 <div class="topic-list" id="topics-container">
                   <!-- Topics injected via JS -->
                 </div>

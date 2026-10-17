@@ -1,8 +1,5 @@
 /* Course page theme */
 .course-page {
-  .sf-dashboard-layout {
-    display: block;
-  }
 
   .sf-main-workspace {
     min-height: 100vh;
@@ -282,6 +279,10 @@
     .topic-info span,
     .topic-status {
       display: none;
+    }
+
+    .topic-info .topic-math-badge {
+      display: inline-flex;
     }
   }
 }

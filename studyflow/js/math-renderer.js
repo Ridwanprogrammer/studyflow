@@ -84,6 +84,18 @@ export function parseAndRenderMath(text) {
 
   let result = text;
 
+  // Repair common TeX commands whose leading slash was lost in older course strings.
+  result = result.replace(/\$([^$\n]+)\$/g, (_, expression) => {
+    const repaired = expression
+      .replace(/\\?mathbb(?=\{)/g, String.raw`\mathbb`)
+      .replace(
+        /(^|[^A-Za-z\\])\\?(infty|dots)\b/g,
+        (_, prefix, command) => `${prefix}\\${command}`,
+      )
+      .replace(/(?:\\rightarrow|\\r?ightarrow|\r?ightarrow)/g, String.raw`\rightarrow`);
+    return `$${repaired}$`;
+  });
+
   // 1. Block math $$...$$
   result = result.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => {
     return `<div class="sf-math-block-wrap">${renderMathExpression(math, true)}</div>`;

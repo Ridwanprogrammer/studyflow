@@ -25,3 +25,14 @@ $glow: rgba(117, 217, 255, 0.15);
 
 $shadow-soft: rgba(0, 0, 0, 0.12);
 $shadow-strong: rgba(0, 0, 0, 0.22);
+
+$warning-amber: #f59e0b;
+$warning-bg: rgba(245, 158, 11, 0.12);
+$warning-border: rgba(245, 158, 11, 0.28);
+
+$success-emerald: #10b981;
+$success-bg: rgba(16, 185, 129, 0.12);
+$success-border: rgba(16, 185, 129, 0.28);
+
+$transition-snappy: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+$transition-smooth: 260ms cubic-bezier(0.16, 1, 0.3, 1);

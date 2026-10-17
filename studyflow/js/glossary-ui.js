@@ -48,7 +48,11 @@ function ensurePopoverElement() {
   popoverEl.innerHTML = `
     <div class="sf-popover-header">
       <span class="sf-popover-discipline-tag" id="sf-popover-discipline">Mathematics</span>
-      <button class="sf-popover-close-btn" id="sf-popover-close" aria-label="Close popover">✕</button>
+      <button class="sf-popover-close-btn" id="sf-popover-close" aria-label="Close popover">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
     <div class="sf-popover-term-title" id="sf-popover-term-name">Domain</div>
     <div class="sf-popover-def-label">Brief definition</div>

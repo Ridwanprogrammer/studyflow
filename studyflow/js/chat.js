@@ -1,5 +1,7 @@
 import { coursesData, getCourseById, getTopicById } from "./courses.js";
 import { sendGlobalChatMessage } from "./api/ai.js";
+import { parseAndRenderMath } from "./math-renderer.js";
+import { initCommandPalette, showToast } from "./command-palette.js";
 
 // ─── Storage Keys ─────────────────────────────────────────────────────────────
 const SESSIONS_KEY = "studyflow_chat_sessions";
@@ -28,6 +30,7 @@ const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
 const sidebarOpenBtn = document.getElementById("sidebar-open-btn");
 const newChatBtn = document.getElementById("new-chat-btn");
 const topNewChatBtn = document.getElementById("top-new-chat-btn");
+const exportChatBtn = document.getElementById("export-chat-btn");
 const conversationsList = document.getElementById("conversations-list");
 const sidebarCoursePills = document.getElementById("sidebar-course-pills");
 
@@ -75,6 +78,14 @@ function parseMarkdown(md) {
     return key;
   });
 
+  const inlineCodeSnippets = [];
+  html = html.replace(/`([^`]+)`/g, (_, code) => {
+    const key = `__INLINE_CODE_${inlineCodeSnippets.length}__`;
+    inlineCodeSnippets.push(code);
+    return key;
+  });
+  html = parseAndRenderMath(html);
+
   // Headings
   html = html.replace(/^#### (.*$)/gim, "<h4>$1</h4>");
   html = html.replace(/^### (.*$)/gim, "<h3>$1</h3>");
@@ -87,9 +98,6 @@ function parseMarkdown(md) {
   // Bold & Italics
   html = html.replace(/\*\*([^\*]+)\*\*/gim, "<strong>$1</strong>");
   html = html.replace(/\*([^\*]+)\*/gim, "<em>$1</em>");
-
-  // Inline Code
-  html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
 
   // Tables
   const lines = html.split("\n");
@@ -138,7 +146,7 @@ function parseMarkdown(md) {
     .map(p => {
       p = p.trim();
       if (!p) return "";
-      if (p.startsWith("<h") || p.startsWith("<ul") || p.startsWith("<ol") || p.startsWith("<blockquote") || p.startsWith("<details") || p.startsWith("<table") || p.startsWith("__CODE_")) {
+      if (p.startsWith("<h") || p.startsWith("<ul") || p.startsWith("<ol") || p.startsWith("<blockquote") || p.startsWith("<details") || p.startsWith("<table") || p.startsWith("<div class=\"sf-math-block-wrap\"") || p.startsWith("__CODE_")) {
         return p;
       }
       return `<p>${p.replace(/\n/g, "<br>")}</p>`;
@@ -163,6 +171,10 @@ function parseMarkdown(md) {
       <pre><code>${escaped}</code></pre>
     </div>`;
     html = html.replace(`__CODE_${i}__`, block);
+  });
+
+  inlineCodeSnippets.forEach((code, i) => {
+    html = html.replace(`__INLINE_CODE_${i}__`, `<code>${escapeHtml(code)}</code>`);
   });
 
   return html;
@@ -341,7 +353,7 @@ function loadActiveSessionIntoView() {
   messageRows.forEach(r => r.remove());
 
   if (!session.messages || session.messages.length === 0) {
-    emptyStateHero.style.display = "flex";
+    emptyStateHero.style.display = "grid";
   } else {
     emptyStateHero.style.display = "none";
     session.messages.forEach(msg => {
@@ -522,6 +534,14 @@ function renderAssistantMessage(markdownContent, onComplete = null) {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <span>Copy</span>
           </button>
+          <button class="action-icon-btn listen-msg-btn" title="Listen to response">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+            <span>Listen</span>
+          </button>
+          <button class="action-icon-btn simpler-msg-btn" title="Ask AI to simplify this explanation">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Simplify</span>
+          </button>
           <button class="action-icon-btn regen-msg-btn" title="Regenerate response">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             <span>Regenerate</span>
@@ -551,6 +571,14 @@ function streamAssistantResponse(fullMarkdown, onComplete) {
           <button class="action-icon-btn copy-msg-btn" title="Copy response">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <span>Copy</span>
+          </button>
+          <button class="action-icon-btn listen-msg-btn" title="Listen to response">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+            <span>Listen</span>
+          </button>
+          <button class="action-icon-btn simpler-msg-btn" title="Ask AI to simplify this explanation">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Simplify</span>
           </button>
           <button class="action-icon-btn regen-msg-btn" title="Regenerate response">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -598,10 +626,27 @@ function attachMessageActions(row, fullText) {
     copyBtn.addEventListener("click", () => {
       navigator.clipboard.writeText(fullText).then(() => {
         copyBtn.innerHTML = "✓ Copied";
+        showToast("Response copied to clipboard!", "success");
         setTimeout(() => {
           copyBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
         }, 2000);
       });
+    });
+  }
+
+  // Audio Speech Synthesis (Listen)
+  const listenBtn = row.querySelector(".listen-msg-btn");
+  if (listenBtn) {
+    listenBtn.addEventListener("click", () => {
+      handleAudioSpeak(fullText, listenBtn);
+    });
+  }
+
+  // Simplify Explanation Button
+  const simplerBtn = row.querySelector(".simpler-msg-btn");
+  if (simplerBtn) {
+    simplerBtn.addEventListener("click", () => {
+      handleSendMessage("Can you break that down in simpler terms with a familiar, concrete real-world analogy?");
     });
   }
 
@@ -630,6 +675,35 @@ function attachMessageActions(row, fullText) {
       });
     });
   });
+}
+
+function handleAudioSpeak(text, btn) {
+  if (!("speechSynthesis" in window)) {
+    showToast("Speech synthesis is not supported in this browser.", "info");
+    return;
+  }
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg><span>Listen</span>`;
+    return;
+  }
+
+  // Clean markdown and latex
+  const clean = text
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/```[\s\S]*?```/g, "Code snippet omitted.")
+    .replace(/\$[^$]+\$/g, "")
+    .replace(/[*_#`]/g, "");
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 1.0;
+  utterance.onstart = () => {
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span>`;
+  };
+  utterance.onend = utterance.onerror = () => {
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg><span>Listen</span>`;
+  };
+  window.speechSynthesis.speak(utterance);
 }
 
 function setGeneratingUI(generating) {
@@ -798,18 +872,44 @@ function init() {
 
   // Sidebar toggle
   const isCollapsed = localStorage.getItem(SIDEBAR_STATE_KEY) === "true";
+  const dashboardLayout = sidebar.closest(".sf-dashboard-layout");
   if (isCollapsed) {
     sidebar.classList.add("collapsed");
+    dashboardLayout?.classList.add("sidebar-collapsed");
   }
 
   sidebarCloseBtn.addEventListener("click", () => {
     sidebar.classList.add("collapsed");
+    sidebar.classList.remove("sidebar-open");
+    dashboardLayout?.classList.add("sidebar-collapsed");
+    sidebarOpenBtn.setAttribute("aria-expanded", "false");
     localStorage.setItem(SIDEBAR_STATE_KEY, "true");
   });
 
   sidebarOpenBtn.addEventListener("click", () => {
     sidebar.classList.remove("collapsed");
+    sidebar.classList.add("sidebar-open");
+    dashboardLayout?.classList.remove("sidebar-collapsed");
+    sidebarOpenBtn.setAttribute("aria-expanded", "true");
     localStorage.setItem(SIDEBAR_STATE_KEY, "false");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !contextMenu.classList.contains("hidden")) {
+      contextMenu.classList.add("hidden");
+      modelPillBtn.setAttribute("aria-expanded", "false");
+      modelPillBtn.focus();
+      return;
+    }
+
+    if (event.key === "Escape" && sidebar.classList.contains("sidebar-open")) {
+      sidebar.classList.add("collapsed");
+      sidebar.classList.remove("sidebar-open");
+      dashboardLayout?.classList.add("sidebar-collapsed");
+      sidebarOpenBtn.setAttribute("aria-expanded", "false");
+      localStorage.setItem(SIDEBAR_STATE_KEY, "true");
+      sidebarOpenBtn.focus();
+    }
   });
 
   // New Chat Buttons
@@ -840,12 +940,14 @@ function init() {
   // Top Bar Context Menu Toggle
   modelPillBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    contextMenu.classList.toggle("hidden");
+    const isOpen = contextMenu.classList.toggle("hidden") === false;
+    modelPillBtn.setAttribute("aria-expanded", String(isOpen));
   });
 
   document.addEventListener("click", (e) => {
     if (!contextMenu.contains(e.target) && !modelPillBtn.contains(e.target)) {
       contextMenu.classList.add("hidden");
+      modelPillBtn.setAttribute("aria-expanded", "false");
     }
   });
 
@@ -895,6 +997,30 @@ function init() {
     card.addEventListener("click", () => {
       const prompt = card.getAttribute("data-prompt");
       handleSendMessage(prompt);
+    });
+  });
+
+  // Quick Prompt Chips Bar
+  document.querySelectorAll(".sf-quick-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const prompt = chip.dataset.prompt;
+      if (prompt) {
+        handleSendMessage(prompt);
+      }
+    });
+  });
+
+  // Hero Subject Chips (Quick Course Switcher)
+  document.querySelectorAll(".sf-hero-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const course = chip.dataset.course;
+      document.querySelectorAll(".sf-hero-chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      const session = getActiveSession();
+      session.courseId = course;
+      session.topicId = "ALL";
+      syncContextPill(course, "ALL");
+      saveSessions();
     });
   });
 
@@ -950,6 +1076,63 @@ function init() {
   document.addEventListener("drop", async (e) => {
     await addPendingFiles(e.dataTransfer.files);
   });
+
+  // Export Chat
+  if (exportChatBtn) {
+    exportChatBtn.addEventListener("click", exportConversationToMarkdown);
+  }
+
+  // Pre-load prompt from other pages (Glossary / Dashboard / Topic / Course)
+  const autoPrompt = localStorage.getItem("studyflow_auto_prompt");
+  if (autoPrompt) {
+    localStorage.removeItem("studyflow_auto_prompt");
+    chatTextarea.value = autoPrompt;
+    chatTextarea.style.height = "auto";
+    chatTextarea.style.height = Math.min(chatTextarea.scrollHeight, 180) + "px";
+    updateSendButtonState();
+    chatTextarea.focus();
+    showToast("Prompt loaded! Press Send or edit.", "info");
+  }
+
+  // Global command palette
+  initCommandPalette();
+}
+
+function exportConversationToMarkdown() {
+  const session = getActiveSession();
+  if (!session || !session.messages || session.messages.length === 0) {
+    showToast("No messages in this session to export yet!", "info");
+    return;
+  }
+
+  const courseTitle = session.courseId !== "ALL" ? (getCourseById(session.courseId)?.title || session.courseId) : "General Assistant";
+  const dateStr = new Date().toLocaleString();
+
+  let md = `# StudyFlow AI - Study Session Notes\n\n`;
+  md += `**Course:** ${courseTitle} (${session.courseId || "ALL"})\n\n`;
+  if (session.topicId && session.topicId !== "ALL") {
+    md += `**Topic Focus:** ${session.topicId}\n\n`;
+  }
+  md += `**Date:** ${dateStr}\n\n`;
+  md += `---\n\n`;
+
+  session.messages.forEach((msg) => {
+    const roleTitle = msg.role === "user" ? "### 👤 Student Question" : "### ✦ StudyFlow AI Tutor";
+    md += `${roleTitle}\n\n${msg.content}\n\n---\n\n`;
+  });
+
+  const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const safeTitle = (session.title || "study_session").replace(/[^a-z0-9_-]/gi, "_").toLowerCase();
+  a.download = `StudyFlow_${session.courseId || "Chat"}_${safeTitle}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast("Exported session notes to Markdown! 📥", "success");
 }
 
 document.addEventListener("DOMContentLoaded", init);

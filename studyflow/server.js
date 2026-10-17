@@ -346,9 +346,4 @@ app.listen(PORT, () => {
   console.log("  ███████║   ██║   ╚██████╔╝██████╔╝   ██║   ");
   console.log("  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝    ╚═╝   ");
   console.log("");
-  console.log(`  ✅  StudyFlow server running at http://localhost:${PORT}`);
-  console.log(`  🤖  AI Model   : ${MODEL_NAME}`);
-  console.log(`  🔑  API Key    : ${NVIDIA_API_KEY.slice(0, 14)}...`);
-  console.log(`  📂  Serving    : ${__dirname}`);
-  console.log("");
 });
