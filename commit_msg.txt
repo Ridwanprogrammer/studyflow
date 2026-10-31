@@ -1,13 +1,6 @@
-fix: calendar page and notification bell with real FUGUS semester dates
+fix: consistent topbar across all pages + redesigned calendar page
 
-- Calendar page: updated with all 11 real semester events from FUGUS academic calendar:
-  - Resumption Date (Aug 16, 2026)
-  - Registration Begins/Ends (Aug 17-29, 2026)
-  - Lectures Begin/End (Aug 31 - Dec 12, 2026)
-  - CA Results Submission (Dec 7-11, 2026)
-  - Examinations Begin/End (Dec 14, 2026 - Jan 9, 2027)
-  - First Semester Break (Jan 11-24, 2027)
-
-- TopBar notification: updated assessment dates to match real calendar for accurate countdown
-
-Build passes
+- TopBar: consistent quick actions (Search, Notification Bell, AI Tutor, User Avatar) on ALL pages including calendar
+- Calendar page: complete redesign with clean month grid, upcoming events list, proper event colors
+- Removed unused assessment countdown logic from TopBar
+- Build passes
