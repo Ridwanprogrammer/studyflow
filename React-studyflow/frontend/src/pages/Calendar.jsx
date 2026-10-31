@@ -13,14 +13,20 @@ export function CalendarPage() {
   ];
   const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-  // Real 1st-semester dates (2026-2027)
+  // Real 1st-semester dates (2026-2027) - from FUGUS academic calendar
   const semesterEvents = useMemo(() => {
     return [
-      { date: new Date(2026, 7, 16), title: 'Semester Starts', type: 'milestone' },
-      { date: new Date(2026, 11, 7), title: 'CA Test 2', type: 'test' },
-      { date: new Date(2026, 11, 14), title: 'Final Exams Start', type: 'exam' },
-      { date: new Date(2027, 0, 9), title: 'Final Exams Continue', type: 'exam' },
-      { date: new Date(2027, 0, 11), title: 'First Semester Break', type: 'holiday' },
+      { date: new Date(2026, 7, 16), title: 'Resumption Date', type: 'milestone' },
+      { date: new Date(2026, 7, 17), title: 'Registration Begins', type: 'milestone' },
+      { date: new Date(2026, 7, 29), title: 'Registration Ends', type: 'milestone' },
+      { date: new Date(2026, 7, 31), title: 'Lectures Begin', type: 'milestone' },
+      { date: new Date(2026, 11, 7), title: 'CA Results Submission Starts', type: 'test' },
+      { date: new Date(2026, 11, 11), title: 'CA Results Submission Ends', type: 'test' },
+      { date: new Date(2026, 11, 12), title: 'Lectures End', type: 'milestone' },
+      { date: new Date(2026, 11, 14), title: 'Examinations Begin', type: 'exam' },
+      { date: new Date(2027, 0, 9), title: 'Examinations End', type: 'exam' },
+      { date: new Date(2027, 0, 11), title: 'First Semester Break Begins', type: 'holiday' },
+      { date: new Date(2027, 0, 24), title: 'First Semester Break Ends', type: 'holiday' },
     ];
   }, [currentDate]);
 

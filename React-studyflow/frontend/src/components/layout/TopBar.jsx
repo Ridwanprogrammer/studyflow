@@ -26,15 +26,20 @@ function pageMeta(pathname) {
 // Calculate next test/exam countdown
 function getNextAssessment() {
   const now = new Date()
-  const currentYear = now.getFullYear()
   
-  // Real 1st‑semester assessment dates (2026‑2027)
+  // Real 1st-semester assessment dates (2026-2027) - from FUGUS academic calendar
   const assessments = [
-    { date: new Date(currentYear, 7, 16), label: 'Semester Starts', type: 'milestone' },
-    { date: new Date(currentYear, 11, 7), label: 'CA Test 2', type: 'test' },
-    { date: new Date(currentYear, 11, 14), label: 'Final Exams Start', type: 'exam' },
-    { date: new Date(currentYear + 1, 0, 9), label: 'Final Exams Continue', type: 'exam' },
-    { date: new Date(currentYear + 1, 0, 11), label: 'First Semester Break', type: 'holiday' },
+    { date: new Date(2026, 7, 16), label: 'Resumption Date', type: 'milestone' },
+    { date: new Date(2026, 7, 17), label: 'Registration Begins', type: 'milestone' },
+    { date: new Date(2026, 7, 29), label: 'Registration Ends', type: 'milestone' },
+    { date: new Date(2026, 7, 31), label: 'Lectures Begin', type: 'milestone' },
+    { date: new Date(2026, 11, 7), label: 'CA Results Submission Starts', type: 'test' },
+    { date: new Date(2026, 11, 11), label: 'CA Results Submission Ends', type: 'test' },
+    { date: new Date(2026, 11, 12), label: 'Lectures End', type: 'milestone' },
+    { date: new Date(2026, 11, 14), label: 'Examinations Begin', type: 'exam' },
+    { date: new Date(2027, 0, 9), label: 'Examinations End', type: 'exam' },
+    { date: new Date(2027, 0, 11), label: 'First Semester Break Begins', type: 'holiday' },
+    { date: new Date(2027, 0, 24), label: 'First Semester Break Ends', type: 'holiday' },
   ]
   
   // Find next upcoming assessment

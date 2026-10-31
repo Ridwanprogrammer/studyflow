@@ -1,9 +1,13 @@
-fix: glossary term definition sizes to match vanilla
+fix: calendar page and notification bell with real FUGUS semester dates
 
-- MarkdownRenderer: switched from inline styles to CSS classes matching vanilla glossary
-  - sf-markdown-body: 1.02rem, line-height 1.75, color #cbd5e1
-  - sf-md-p: 1.02rem, line-height 1.75, color #cbd5e1
-  - sf-md-h1/h2/h3: matching vanilla sizes
-  - sf-md-p/ul/ol/blockquote/link/strong/inline-code: vanilla sizes
-- Added CSS classes for all markdown components in index.css
-- Glossary definitions now match vanilla glossary term sizes exactly
+- Calendar page: updated with all 11 real semester events from FUGUS academic calendar:
+  - Resumption Date (Aug 16, 2026)
+  - Registration Begins/Ends (Aug 17-29, 2026)
+  - Lectures Begin/End (Aug 31 - Dec 12, 2026)
+  - CA Results Submission (Dec 7-11, 2026)
+  - Examinations Begin/End (Dec 14, 2026 - Jan 9, 2027)
+  - First Semester Break (Jan 11-24, 2027)
+
+- TopBar notification: updated assessment dates to match real calendar for accurate countdown
+
+Build passes
