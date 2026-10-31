@@ -51,11 +51,11 @@ export function CalendarPage() {
   // Color mapping for event types
   const getEventColors = (type) => {
     switch (type) {
-      case 'exam': return { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', dot: 'bg-red-400', light: 'bg-red-500/10', ring: 'ring-red-500/20' }
-      case 'test': return { bg: 'bg-amber-500', text: 'text-white', border: 'border-amber-500', dot: 'bg-amber-400', light: 'bg-amber-500/10', ring: 'ring-amber-500/20' }
-      case 'milestone': return { bg: 'bg-cyan-500', text: 'text-white', border: 'border-cyan-500', dot: 'bg-cyan-400', light: 'bg-cyan-500/10', ring: 'ring-cyan-500/20' }
-      case 'holiday': return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20' }
-      default: return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20' }
+      case 'exam': return { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', dot: 'bg-red-400', light: 'bg-red-500/10', ring: 'ring-red-500/20', badge: 'bg-red-500', badgeText: 'EXAM' }
+      case 'test': return { bg: 'bg-amber-500', text: 'text-white', border: 'border-amber-500', dot: 'bg-amber-400', light: 'bg-amber-500/10', ring: 'ring-amber-500/20', badge: 'bg-amber-500', badgeText: 'TEST' }
+      case 'milestone': return { bg: 'bg-cyan-500', text: 'text-white', border: 'border-cyan-500', dot: 'bg-cyan-400', light: 'bg-cyan-500/10', ring: 'ring-cyan-500/20', badge: 'bg-cyan-500', badgeText: 'EVNT' }
+      case 'holiday': return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20', badge: 'bg-slate-500', badgeText: 'HOL' }
+      default: return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20', badge: 'bg-slate-500', badgeText: 'EVNT' }
     }
   }
 
@@ -109,12 +109,12 @@ export function CalendarPage() {
           {dayNames.map((d) => <div key={d} className="text-[10px] font-bold text-slate-400 uppercase py-3 px-2 text-center">{d}</div>)}
         </div>
 
-        {/* Calendar Grid - Improved with better event visualization */}
-        <div className="grid grid-cols-7 gap-0.5 p-2 min-h-[600px]">
+        {/* Calendar Grid - Smaller cells, better event marking */}
+        <div className="grid grid-cols-7 gap-0.5 p-2 min-h-[500px]">
           {/* Empty cells before 1st */}
           {[...Array(firstDay)].map((_, i) => <div key={`empty-${i}`} className="aspect-square bg-slate-900/30" />)}
 
-          {/* Days - Improved with colored backgrounds and dots for events */}
+          {/* Days - Smaller cells, enhanced event marking with corner badges */}
           {[...Array(daysInMonth)].map((_, i) => {
             const day = i + 1
             const events = getEventsForDay(day)
@@ -123,10 +123,10 @@ export function CalendarPage() {
             const colors = primaryType ? getEventColors(primaryType) : null
             const hasEvents = events.length > 0
             
-            // Build day cell classes
+            // Build day cell classes - smaller cells
             const dayClasses = [
               'aspect-square',
-              'min-h-[120px]',
+              'min-h-[80px]',
               'rounded-xl',
               'bg-white/[0.02]',
               'border',
@@ -152,51 +152,42 @@ export function CalendarPage() {
                 className={dayClasses.join(' ')}
                 title={hasEvents ? events.map(e => e.title).join(', ') : ''}
               >
-                {/* Day number */}
-                <span className="absolute top-1.5 left-1.5 text-sm font-medium">
+                {/* Day number - top left */}
+                <span className="absolute top-1 left-1 text-xs font-medium">
                   {isTodayDay ? <span className="text-cyan-400">{day}</span> : <span className="text-slate-300">{day}</span>}
                 </span>
                 
-                {/* Event indicators - colored dots at top right */}
+                {/* Corner badge - top right (shows primary event type) */}
                 {hasEvents && (
-                  <div className="absolute top-1.5 right-1.5 flex gap-0.5 flex-wrap justify-end">
+                  <span className={`absolute top-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${colors.badge} ${colors.text}`}>
+                    {colors.badgeText}
+                  </span>
+                )}
+                
+                {/* Event dots - bottom center (shows all events for the day) */}
+                {hasEvents && (
+                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1 flex-wrap justify-center">
                     {events.slice(0, 4).map((event) => {
                       const c = getEventColors(event.type)
                       return (
                         <span
                           key={event.title}
-                          className={`w-1.5 h-1.5 rounded-full ${c.dot} ring-1 ring-slate-950`}
+                          className={`w-2 h-2 rounded-full ${c.dot} ring-1 ring-slate-950`}
                           title={event.title}
                         />
                       )
                     })}
                     {events.length > 4 && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/30 ring-1 ring-slate-950" title={`+${events.length - 4} more`} />
+                      <span className="w-2 h-2 rounded-full bg-white/30 ring-1 ring-slate-950" title={`+${events.length - 4} more`} />
                     )}
                   </div>
                 )}
                 
-                {/* Event labels at bottom */}
-                {hasEvents && (
-                  <div className="flex-1 mt-auto px-1.5 pb-1.5 overflow-hidden space-y-0.5">
-                    {events.slice(0, 2).map((event) => {
-                      const c = getEventColors(event.type)
-                      return (
-                        <div
-                          key={event.title}
-                          className={`h-5 rounded px-1.5 text-[10px] font-medium flex items-center gap-1 ${c.bg} ${c.border} ${c.text} truncate`}
-                          title={event.title}
-                        >
-                          <span className="flex-shrink-0">{event.title}</span>
-                        </div>
-                      )
-                    })}
-                    {events.length > 2 && (
-                      <div className="h-5 rounded bg-white/10 text-[10px] font-medium text-center text-slate-400 flex items-center justify-center">
-                        +{events.length - 2} more
-                      </div>
-                    )}
-                  </div>
+                {/* Event count indicator - bottom left when many events */}
+                {hasEvents && events.length > 1 && (
+                  <span className="absolute bottom-1 left-1 text-[9px] font-medium text-white/70 bg-black/30 px-1 rounded">
+                    {events.length} event{events.length > 1 ? 's' : ''}
+                  </span>
                 )}
               </button>
             )

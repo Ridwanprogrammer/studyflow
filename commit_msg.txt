@@ -1,18 +1,11 @@
-fix: notification bell with upcoming events + improved calendar month view
+fix: smaller calendar cells + enhanced event marking with corner badges
 
-- TopBar: Notification bell now shows upcoming events from semester calendar (5 events max)
-  - Bell badge shows count of upcoming events
-  - Popover displays each event with days remaining, date, and type badge
-  - Events: Resumption, Registration, Lectures, CA Results, Exams, Break
-  - Urgent events (<=14 days) tracked for badge count
+- Day cells: min-h-[80px] (was 120px) for denser grid
+- Corner badge: shows primary event type (EXAM/TEST/EVNT/HOL) top-right
+- Event dots: larger (w-2 h-2) at bottom center, shows all events
+- Event count: shows N events at bottom-left when multiple
+- Today ring: cyan ring preserved
+- System date: uses new Date() for today - always reflects real time
+- Today button: resets to current system date
 
-- Calendar page: Improved month view with better event visualization
-  - Day cells now show colored dots for events (red=exam, amber=test, cyan=milestone, slate=holiday)
-  - Event labels at bottom of each day cell
-  - Today highlighted with cyan ring
-  - Upcoming events list below calendar
-  - Legend included
-
-- Single source of truth for semester events used by both TopBar and Calendar
-
-Build passes ✅
+Build passes
