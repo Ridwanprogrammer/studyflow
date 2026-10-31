@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, AlertCircle, Calendar, BookOpen, GraduationCap, MapPin, Sparkles } from '../components/ui/Icons'
+import { ChevronLeft, ChevronRight, Calendar, AlertCircle, BookOpen, GraduationCap, MapPin } from '../components/ui/Icons'
 import { useAuth } from '../stores/authStore'
 
 export function CalendarPage() {
@@ -51,12 +51,19 @@ export function CalendarPage() {
   // Color mapping for event types
   const getEventColors = (type) => {
     switch (type) {
-      case 'exam': return { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', dot: 'bg-red-400' }
-      case 'test': return { bg: 'bg-amber-500', text: 'text-white', border: 'border-amber-500', dot: 'bg-amber-400' }
-      case 'milestone': return { bg: 'bg-cyan-500', text: 'text-white', border: 'border-cyan-500', dot: 'bg-cyan-400' }
-      case 'holiday': return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400' }
-      default: return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400' }
+      case 'exam': return { bg: 'bg-red-500', text: 'text-white', border: 'border-red-500', dot: 'bg-red-400', light: 'bg-red-500/10', ring: 'ring-red-500/20' }
+      case 'test': return { bg: 'bg-amber-500', text: 'text-white', border: 'border-amber-500', dot: 'bg-amber-400', light: 'bg-amber-500/10', ring: 'ring-amber-500/20' }
+      case 'milestone': return { bg: 'bg-cyan-500', text: 'text-white', border: 'border-cyan-500', dot: 'bg-cyan-400', light: 'bg-cyan-500/10', ring: 'ring-cyan-500/20' }
+      case 'holiday': return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20' }
+      default: return { bg: 'bg-slate-500', text: 'text-white', border: 'border-slate-500', dot: 'bg-slate-400', light: 'bg-slate-500/10', ring: 'ring-slate-500/20' }
     }
+  }
+
+  // Get the most important event type for a day (exam > test > milestone > holiday)
+  const getPrimaryEventType = (events) => {
+    if (!events.length) return null
+    const priority = { exam: 4, test: 3, milestone: 2, holiday: 1 }
+    return events.reduce((a, b) => priority[b.type] > priority[a.type] ? b : a).type
   }
 
   return (
@@ -102,41 +109,91 @@ export function CalendarPage() {
           {dayNames.map((d) => <div key={d} className="text-[10px] font-bold text-slate-400 uppercase py-3 px-2 text-center">{d}</div>)}
         </div>
 
-        {/* Calendar Grid */}
+        {/* Calendar Grid - Improved with better event visualization */}
         <div className="grid grid-cols-7 gap-0.5 p-2 min-h-[600px]">
           {/* Empty cells before 1st */}
           {[...Array(firstDay)].map((_, i) => <div key={`empty-${i}`} className="aspect-square bg-slate-900/30" />)}
 
-          {/* Days */}
+          {/* Days - Improved with colored backgrounds and dots for events */}
           {[...Array(daysInMonth)].map((_, i) => {
             const day = i + 1
             const events = getEventsForDay(day)
             const isTodayDay = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()
+            const primaryType = getPrimaryEventType(events)
+            const colors = primaryType ? getEventColors(primaryType) : null
+            const hasEvents = events.length > 0
+            
+            // Build day cell classes
+            const dayClasses = [
+              'aspect-square',
+              'min-h-[120px]',
+              'rounded-xl',
+              'bg-white/[0.02]',
+              'border',
+              'border-white/5',
+              'hover:border-white/10',
+              'transition-all',
+              'flex',
+              'flex-col',
+              'relative',
+              'overflow-hidden'
+            ]
+            
+            if (isTodayDay) {
+              dayClasses.push('ring-2', 'ring-cyan-500/50', 'bg-cyan-500/10')
+            }
+            if (hasEvents && colors) {
+              dayClasses.push(colors.light, colors.ring)
+            }
             
             return (
               <button
                 key={day}
-                className={`aspect-square min-h-[120px] rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all flex flex-col ${isTodayDay ? 'ring-2 ring-cyan-500/50 bg-cyan-500/10' : ''}`}
+                className={dayClasses.join(' ')}
+                title={hasEvents ? events.map(e => e.title).join(', ') : ''}
               >
-                <span className="absolute top-1.5 left-1.5 text-sm font-medium">{isTodayDay ? <span className="text-cyan-400">{day}</span> : <span className="text-slate-300">{day}</span>}</span>
+                {/* Day number */}
+                <span className="absolute top-1.5 left-1.5 text-sm font-medium">
+                  {isTodayDay ? <span className="text-cyan-400">{day}</span> : <span className="text-slate-300">{day}</span>}
+                </span>
                 
-                {events.length > 0 && (
-                  <div className="flex-1 mt-6 px-1.5 overflow-hidden space-y-1">
-                    {events.slice(0, 3).map((event) => {
-                      const colors = getEventColors(event.type)
+                {/* Event indicators - colored dots at top right */}
+                {hasEvents && (
+                  <div className="absolute top-1.5 right-1.5 flex gap-0.5 flex-wrap justify-end">
+                    {events.slice(0, 4).map((event) => {
+                      const c = getEventColors(event.type)
+                      return (
+                        <span
+                          key={event.title}
+                          className={`w-1.5 h-1.5 rounded-full ${c.dot} ring-1 ring-slate-950`}
+                          title={event.title}
+                        />
+                      )
+                    })}
+                    {events.length > 4 && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white/30 ring-1 ring-slate-950" title={`+${events.length - 4} more`} />
+                    )}
+                  </div>
+                )}
+                
+                {/* Event labels at bottom */}
+                {hasEvents && (
+                  <div className="flex-1 mt-auto px-1.5 pb-1.5 overflow-hidden space-y-0.5">
+                    {events.slice(0, 2).map((event) => {
+                      const c = getEventColors(event.type)
                       return (
                         <div
                           key={event.title}
-                          className={`h-5 rounded px-1.5 text-[10px] font-medium flex items-center gap-1 ${colors.bg} ${colors.border} ${colors.text}`}
+                          className={`h-5 rounded px-1.5 text-[10px] font-medium flex items-center gap-1 ${c.bg} ${c.border} ${c.text} truncate`}
                           title={event.title}
                         >
-                          <span>{event.title}</span>
+                          <span className="flex-shrink-0">{event.title}</span>
                         </div>
                       )
                     })}
-                    {events.length > 3 && (
+                    {events.length > 2 && (
                       <div className="h-5 rounded bg-white/10 text-[10px] font-medium text-center text-slate-400 flex items-center justify-center">
-                        +{events.length - 3} more
+                        +{events.length - 2} more
                       </div>
                     )}
                   </div>
@@ -152,8 +209,9 @@ export function CalendarPage() {
 
       {/* ─── Upcoming Events List ─── */}
       <div className="bg-slate-950/50 border border-white/5 rounded-2xl overflow-hidden">
-        <div className="p-4 border-b border-white/5 bg-slate-900/50">
+        <div className="p-4 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
           <h2 className="text-lg font-bold text-white">Upcoming Events</h2>
+          <NavLink to="/calendar" className="text-xs text-cyan-400 hover:text-cyan-300">View All</NavLink>
         </div>
         <div className="p-4 space-y-3">
           {semesterEvents

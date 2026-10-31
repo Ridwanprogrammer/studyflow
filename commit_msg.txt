@@ -1,6 +1,18 @@
-fix: consistent topbar across all pages + redesigned calendar page
+fix: notification bell with upcoming events + improved calendar month view
 
-- TopBar: consistent quick actions (Search, Notification Bell, AI Tutor, User Avatar) on ALL pages including calendar
-- Calendar page: complete redesign with clean month grid, upcoming events list, proper event colors
-- Removed unused assessment countdown logic from TopBar
-- Build passes
+- TopBar: Notification bell now shows upcoming events from semester calendar (5 events max)
+  - Bell badge shows count of upcoming events
+  - Popover displays each event with days remaining, date, and type badge
+  - Events: Resumption, Registration, Lectures, CA Results, Exams, Break
+  - Urgent events (<=14 days) tracked for badge count
+
+- Calendar page: Improved month view with better event visualization
+  - Day cells now show colored dots for events (red=exam, amber=test, cyan=milestone, slate=holiday)
+  - Event labels at bottom of each day cell
+  - Today highlighted with cyan ring
+  - Upcoming events list below calendar
+  - Legend included
+
+- Single source of truth for semester events used by both TopBar and Calendar
+
+Build passes ✅

@@ -26,10 +26,105 @@ function pageMeta(pathname) {
   return { title: 'StudyFlow', subtitle: 'Your adaptive university learning workspace.' }
 }
 
+// Shared semester events - single source of truth
+function getSemesterEvents() {
+  return [
+    { date: new Date(2026, 7, 16), title: 'Resumption Date', type: 'milestone' },
+    { date: new Date(2026, 7, 17), title: 'Registration Begins', type: 'milestone' },
+    { date: new Date(2026, 7, 29), title: 'Registration Ends', type: 'milestone' },
+    { date: new Date(2026, 7, 31), title: 'Lectures Begin', type: 'milestone' },
+    { date: new Date(2026, 11, 7), title: 'CA Results Submission Starts', type: 'test' },
+    { date: new Date(2026, 11, 11), title: 'CA Results Submission Ends', type: 'test' },
+    { date: new Date(2026, 11, 12), title: 'Lectures End', type: 'milestone' },
+    { date: new Date(2026, 11, 14), title: 'Examinations Begin', type: 'exam' },
+    { date: new Date(2027, 0, 9), title: 'Examinations End', type: 'exam' },
+    { date: new Date(2027, 0, 11), title: 'First Semester Break Begins', type: 'holiday' },
+    { date: new Date(2027, 0, 24), title: 'First Semester Break Ends', type: 'holiday' },
+  ]
+}
+
+function getUpcomingEvents() {
+  const now = new Date()
+  const events = getSemesterEvents()
+  return events
+    .filter(e => e.date > now)
+    .sort((a, b) => a.date - b.date)
+    .slice(0, 5)
+}
+
+function getEventColors(type) {
+  switch (type) {
+    case 'exam': return { bg: 'bg-red-500', text: 'text-white', dot: 'bg-red-400', label: 'Exam' }
+    case 'test': return { bg: 'bg-amber-500', text: 'text-white', dot: 'bg-amber-400', label: 'Test' }
+    case 'milestone': return { bg: 'bg-cyan-500', text: 'text-white', dot: 'bg-cyan-400', label: 'Milestone' }
+    case 'holiday': return { bg: 'bg-slate-500', text: 'text-white', dot: 'bg-slate-400', label: 'Holiday' }
+    default: return { bg: 'bg-slate-500', text: 'text-white', dot: 'bg-slate-400', label: 'Event' }
+  }
+}
+
+// Notification content component to avoid parser issues with ternary
+function NotificationContent({ upcomingEvents, onClose }) {
+  if (upcomingEvents.length === 0) {
+    return <p className="text-slate-400 text-center py-4">No upcoming events</p>
+  }
+  return (
+    <>
+      {upcomingEvents.map((event) => {
+        const colors = getEventColors(event.type)
+        const diff = event.date - new Date()
+        const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+        return (
+          <button
+            key={event.title}
+            className="w-full p-3 flex items-center gap-3 text-left hover:bg-white/5 transition-colors rounded-xl"
+            onClick={onClose}
+          >
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${colors.bg} ${colors.text} flex-shrink-0`}>
+              <span className="text-lg">{days}d</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-white">{event.title}</p>
+              <p className="text-xs text-slate-400">
+                {event.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                &bull; in {days} day{days !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${colors.bg} ${colors.text}`}>
+              {colors.label}
+            </span>
+          </button>
+        )
+      })}
+    </>
+  )
+}
+
 export function TopBar({ onMenuClick, onSearchClick, pathname }) {
   const { user } = useAuth()
   const meta = pageMeta(pathname)
   const initials = (user?.full_name || user?.username || 'Student').charAt(0).toUpperCase()
+  const [showNotifications, setShowNotifications] = useState(false)
+  const notificationRef = useRef(null)
+
+  // Get upcoming events for notifications
+  const upcomingEvents = useMemo(() => getUpcomingEvents(), [])
+  const urgentCount = upcomingEvents.filter(e => {
+    const diff = e.date - new Date()
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+    return days <= 14
+  }).length
+
+  const handleCloseNotifications = () => setShowNotifications(false)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setShowNotifications(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <header className="sf-top-header">
@@ -69,21 +164,51 @@ export function TopBar({ onMenuClick, onSearchClick, pathname }) {
           </button>
         </Tooltip>
 
-        {/* Notification Bell */}
-        <Tooltip content="Notifications" position="bottom">
-          <button
-            type="button"
-            className="top-action-btn relative"
-            id="notification-btn"
-            title="Notifications"
-            aria-label="Open notifications"
-          >
-            <Bell size={18} />
-            <span className="absolute -top-[1px] -right-[2px] w-4 h-4 rounded-full bg-red-500 text-[9px] font-bold flex items-center justify-center border border-slate-950">
-              3
-            </span>
-          </button>
-        </Tooltip>
+        {/* Notification Bell with Upcoming Events */}
+        <div className="relative">
+          <Tooltip content={`Notifications${upcomingEvents.length > 0 ? ` (${upcomingEvents.length})` : ''}`} position="bottom">
+            <button
+              type="button"
+              onClick={() => setShowNotifications(!showNotifications)}
+              className={`top-action-btn relative ${showNotifications ? 'text-cyan-400' : 'text-slate-400'}`}
+              id="notification-btn"
+              title="Notifications"
+              aria-label="Open notifications"
+              aria-expanded={showNotifications}
+            >
+              <Bell size={18} />
+              {(upcomingEvents.length > 0 || urgentCount > 0) && (
+                <span className="absolute -top-[1px] -right-[2px] w-4 h-4 rounded-full bg-red-500 text-[9px] font-bold flex items-center justify-center border border-slate-950">
+                  {upcomingEvents.length > 9 ? '9+' : upcomingEvents.length}
+                </span>
+              )}
+            </button>
+          </Tooltip>
+
+          {/* Notification Popover with Upcoming Events */}
+          {showNotifications && (
+            <div
+              className="fixed top-16 right-0 z-50 w-80 bg-slate-950/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-0 animate-fadeIn"
+              ref={notificationRef}
+              role="dialog"
+              aria-label="Notifications"
+            >
+              <div className="p-3 border-b border-white/10 flex items-center justify-between">
+                <h3 className="font-bold text-white">Upcoming Events</h3>
+                <button onClick={handleCloseNotifications} className="p-1 rounded text-slate-400 hover:text-white hover:bg-white/5"><ChevronRight size={16} className="rotate-90" /></button>
+              </div>
+              <div className="max-h-[400px] overflow-y-auto p-2">
+                <NotificationContent upcomingEvents={upcomingEvents} onClose={handleCloseNotifications} />
+              </div>
+              <div className="p-3 border-t border-white/10">
+                <NavLink to="/calendar" className="sf-view-all-link text-sm gap-1 justify-center" onClick={handleCloseNotifications}>
+                  <span>View Full Calendar</span>
+                  <ChevronRight size={14} />
+                </NavLink>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Ask AI Tutor Button - visible on ALL pages except chat */}
         {pathname !== '/chat' && (
