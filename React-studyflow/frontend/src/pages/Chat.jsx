@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams, NavLink } from 'react-router-dom';
-import { useAuth } from '../stores/authStore';
-import { api, unwrapList } from '../lib/api';
-import { MarkdownRenderer } from '../components/MarkdownRenderer';
+import { useState, useEffect, useRef, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useSearchParams, NavLink } from 'react-router-dom'
+import { useAuth } from '../stores/authStore'
+import { api, unwrapList } from '../lib/api'
+import { MarkdownRenderer } from '../components/MarkdownRenderer'
 import { 
   Plus, Bot, Sparkles, Sparkle, ChevronLeft, ChevronRight, 
   MessageSquare, Copy, Loader2, X, BookOpen, Brain, 
   ArrowRight, Download, Send, Search, Paperclip, ChevronDown, Check,
-  FileQuestion, Zap, Globe, User, Menu
-} from '../components/ui/Icons';
+  FileQuestion, Zap, Globe, User, Menu, Trash2, MoreHorizontal
+} from '../components/ui/Icons'
 
 // Course emoji mapping
 const courseEmojis = {
@@ -20,7 +20,7 @@ const courseEmojis = {
   'MTH201': '📐',
   'ENT211': '💼',
   'CSC299': '🏭',
-};
+}
 
 const courseDisplayNames = {
   'COS201': 'Programming',
@@ -29,7 +29,7 @@ const courseDisplayNames = {
   'MTH201': 'Calculus II',
   'ENT211': 'Entrepreneurship',
   'CSC299': 'SIWES',
-};
+}
 
 const PRESET_SUGGESTIONS = [
   {
@@ -60,7 +60,7 @@ const PRESET_SUGGESTIONS = [
     iconBg: 'icon-revision',
     prompt: 'Create a high-yield revision summary sheet with key formulas, laws, and common exam traps.',
   },
-];
+]
 
 const QUICK_CHIPS = [
   { label: '5 Exam Questions', prompt: 'Generate 5 exam practice questions for this subject with worked solutions.' },
@@ -68,7 +68,7 @@ const QUICK_CHIPS = [
   { label: 'Flashcards', prompt: 'Create 5 question-and-answer flashcard pairs for quick revision.' },
   { label: 'Formula Sheet', prompt: 'List all key mathematical formulas and definitions for this topic.' },
   { label: 'Local Example', prompt: 'Give me a Nigerian real-world application of this concept.' },
-];
+]
 
 export function Chat() {
   const [searchParams] = useSearchParams()
@@ -84,6 +84,10 @@ export function Chat() {
   const [attachments, setAttachments] = useState([])
   const [copiedIndex, setCopiedIndex] = useState(null)
   const [sendButtonState, setSendButtonState] = useState('send') // 'send' | 'stop'
+  
+  // Context menu for delete session
+  const [contextMenuSessionId, setContextMenuSessionId] = useState(null)
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
 
   const messagesEndRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -145,16 +149,20 @@ export function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages.length, isLoading])
 
-  // Close context menu when clicking outside
+  // Close context menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
         setContextMenuOpen(false)
       }
+      // Close session context menu
+      if (contextMenuSessionId) {
+        setContextMenuSessionId(null)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [contextMenuSessionId])
 
   // Create a new chat session
   const handleNewChat = async () => {
@@ -177,6 +185,32 @@ export function Chat() {
     } catch (error) {
       console.error('Failed to create new session:', error)
     }
+  }
+
+  // Delete a chat session
+  const handleDeleteSession = async (sessionId) => {
+    if (!window.confirm('Delete this conversation? This cannot be undone.')) return
+    
+    try {
+      await api.delete(`/chat/sessions/${sessionId}/`)
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId))
+      if (currentSessionId === sessionId) {
+        const remaining = sessions.filter((s) => s.id !== sessionId)
+        setCurrentSessionId(remaining.length > 0 ? remaining[0].id : null)
+      }
+      setContextMenuSessionId(null)
+    } catch (error) {
+      console.error('Failed to delete session:', error)
+      alert('Failed to delete session. Please try again.')
+    }
+  }
+
+  // Open context menu for session
+  const openSessionContextMenu = (e, sessionId) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setContextMenuSessionId(sessionId)
+    setContextMenuPosition({ x: e.clientX, y: e.clientY })
   }
 
   // Handle file uploads (image / text)
@@ -306,7 +340,7 @@ export function Chat() {
     }
   }
 
-  // Export current chat to Markdown
+  // Export current chat to Markdown (moved from topbar)
   const handleExportMarkdown = () => {
     if (!messages.length) return
     let md = `# StudyFlow AI Tutor Session\n**Course:** ${selectedCourseCode}\n**Date:** ${new Date().toLocaleDateString()}\n\n---\n\n`
@@ -343,8 +377,7 @@ export function Chat() {
 
   const contextDisplay = getContextDisplay()
 
-  // Compute chat title for the header - modern AI app style
-  // Use session title if available, otherwise generate from first user message, otherwise "New Chat"
+  // Compute chat title for the header
   const chatTitle = currentSession?.title || 
     (messages.length > 0 ? messages.find(m => m.role === 'user')?.content?.slice(0, 40) || '' : '') || 'New Chat'
 
@@ -400,6 +433,7 @@ export function Chat() {
               ) : (
                 sessions.map((sess) => {
                   const isActive = sess.id === currentSessionId
+                  const isContextMenuOpen = contextMenuSessionId === sess.id
                   return (
                     <div
                       key={sess.id}
@@ -407,10 +441,18 @@ export function Chat() {
                         setCurrentSessionId(sess.id)
                         if (window.innerWidth < 1024) setSidebarOpen(false)
                       }}
-                      className={`conversation-item ${isActive ? 'active' : ''}`}
+                      onContextMenu={(e) => openSessionContextMenu(e, sess.id)}
+                      className={`conversation-item ${isActive ? 'active' : ''} ${isContextMenuOpen ? 'context-open' : ''}`}
                     >
                       <MessageSquare size={14} className={isActive ? 'text-cyan-400' : 'text-slate-500'} />
                       <span className="truncate flex-1 max-w-0">{sess.title || 'Conversation'}</span>
+                      <button
+                        onClick={(e) => openSessionContextMenu(e, sess.id)}
+                        className="session-menu-btn"
+                        aria-label="Session options"
+                      >
+                        <MoreHorizontal size={14} />
+                      </button>
                     </div>
                   )
                 })
@@ -445,6 +487,23 @@ export function Chat() {
               <div className="sidebar-user-school">Federal University, Gusau</div>
             </div>
           </div>
+
+          {/* Session Context Menu (Delete) */}
+          {contextMenuSessionId && (
+            <div
+              className="session-context-menu"
+              style={{ left: contextMenuPosition.x, top: contextMenuPosition.y }}
+              ref={contextMenuRef}
+            >
+              <button
+                onClick={() => handleDeleteSession(contextMenuSessionId)}
+                className="context-menu-item text-red-400"
+              >
+                <Trash2 size={14} />
+                <span>Delete</span>
+              </button>
+            </div>
+          )}
         </aside>
 
         {/* ─── Main Chat Stage ────────────────────────────────────────────────── */}
@@ -466,6 +525,19 @@ export function Chat() {
                   <line x1="9" y1="3" x2="9" y2="21" />
                 </svg>
               </button>
+
+              {/* Prominent Back to Dashboard Button */}
+              <NavLink
+                to="/"
+                className="back-to-dashboard-btn"
+                title="Back to Dashboard"
+                aria-label="Back to main app"
+              >
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Dashboard</span>
+              </NavLink>
 
               {/* Context Dropdown Pill */}
               <div className="context-pill-dropdown" id="context-pill-dropdown" ref={contextMenuRef}>
@@ -538,16 +610,7 @@ export function Chat() {
             </div>
 
             <div className="top-bar-right">
-              <NavLink
-                to="/"
-                className="top-action-btn"
-                title="Back to Dashboard"
-                aria-label="Back to main app"
-              >
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-              </NavLink>
+              {/* Quick Search Button - ONLY button in topbar right now */}
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
                 className="sf-search-cmd-btn sf-cmd-trigger"
@@ -560,29 +623,6 @@ export function Chat() {
                 </svg>
                 <span>Search</span>
                 <kbd>Ctrl+K</kbd>
-              </button>
-              <button
-                onClick={handleExportMarkdown}
-                disabled={!messages.length}
-                className="top-action-btn"
-                id="export-chat-btn"
-                title="Export conversation as Markdown"
-                aria-label="Export chat"
-              >
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-              </button>
-              <button
-                onClick={handleNewChat}
-                className="top-action-btn"
-                id="top-new-chat-btn"
-                title="New chat"
-                aria-label="Start a new chat"
-              >
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
               </button>
             </div>
           </header>
@@ -617,7 +657,7 @@ export function Chat() {
                     ))}
                   </div>
 
-                  {/* Suggested study prompts - matching vanilla */}
+                  {/* Suggested study prompts */}
                   <div className="gemini-suggestions-grid" id="suggestions-grid">
                     {PRESET_SUGGESTIONS.map((suggestion, idx) => (
                       <button
@@ -627,12 +667,26 @@ export function Chat() {
                         onClick={() => handleSend(suggestion.prompt)}
                         disabled={isLoading}
                       >
-                        <div className={`card-icon-circle ${suggestion.iconBg}`} aria-hidden="true">
-                          <suggestion.icon size={18} />
+                        <div className="card-icon-circle icon-exam" aria-hidden="true">
+                          <suggestion.icon size={22} className={suggestion.iconBg} />
                         </div>
                         <div className="card-prompt-text">
                           {suggestion.title}<span>{suggestion.subtitle}</span>
                         </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Quick Chips Row */}
+                  <div className="gemini-quick-chips" role="list" aria-label="Quick actions">
+                    {QUICK_CHIPS.map((chip, idx) => (
+                      <button
+                        key={idx}
+                        className="gemini-chip"
+                        onClick={() => handleSend(chip.prompt)}
+                        disabled={isLoading}
+                      >
+                        {chip.label}
                       </button>
                     ))}
                   </div>
@@ -661,10 +715,10 @@ export function Chat() {
             </div>
           </div>
 
-          {/* Input Composer - matching vanilla design */}
+          {/* Input Composer */}
           <div className="gpt-input-dock">
             <div className="gpt-input-capsule-wrapper">
-              {/* Quick Prompt Pills Bar - matching vanilla */}
+              {/* Quick Prompt Pills Bar */}
               <div className="sf-quick-prompt-chips" id="sf-quick-prompt-chips">
                 <button
                   type="button"
@@ -750,7 +804,7 @@ export function Chat() {
                   aria-label="Chat input"
                 />
 
-                {/* Morphing Circular Send / Stop Button - matching vanilla */}
+                {/* Morphing Circular Send / Stop Button */}
                 <button
                   type="button"
                   onClick={() => {
@@ -764,33 +818,17 @@ export function Chat() {
                   disabled={(!input.trim() && attachments.length === 0) || isLoading}
                   aria-label={sendButtonState === 'stop' ? 'Stop generating' : 'Send message'}
                 >
-                  {/* Up-arrow icon */}
-                  <svg
-                    id="send-icon-svg"
-                    width="18"
-                    height="18"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                  </svg>
-                  {/* Stop icon (hidden by default) */}
-                  <svg
-                    id="stop-icon-svg"
-                    style={{ display: sendButtonState === 'stop' ? 'block' : 'none' }}
-                    width="14"
-                    height="14"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <rect x="4" y="4" width="16" height="16" rx="2" />
-                  </svg>
+                  {sendButtonState === 'stop' ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <rect x="6" y="4" width="4" height="16" rx="1" />
+                      <rect x="14" y="4" width="4" height="16" rx="1" />
+                    </svg>
+                  ) : (
+                    <Send size={20} />
+                  )}
                 </button>
               </div>
 
-              {/* Attachment tray */}
               <div className={`attachment-tray ${attachments.length > 0 ? '' : 'hidden'}`} id="attachment-tray">
                 {attachments.map((att, idx) => (
                   <div key={idx} className="gpt-attachment-chip">
@@ -806,8 +844,6 @@ export function Chat() {
                   </div>
                 ))}
               </div>
-
-              {/* Quick tools menu */}
               <div className={`quick-tools-menu ${contextMenuOpen ? '' : 'hidden'}`} id="quick-tools-menu">
                 <button
                   type="button"

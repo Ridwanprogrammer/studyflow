@@ -1,9 +1,9 @@
-fix: very small calendar cells + today highly visible
+feat: chat improvements - delete sessions, prominent back button, clean topbar
 
-- Day cells: min-h-[50px] (was 80px) - very compact grid
-- Today: thick cyan border (2px), cyan bg (20%), glow shadow, white text - impossible to miss
-- Cell size: min-h-[50px] with aspect-square for perfect cubes
-- Event badges: still work with smaller cells
-- System date: uses new Date() - always real time
+- Chat page: Added delete session via right-click context menu on sidebar conversations
+- Chat page: Prominent 'Back to Dashboard' button in topbar left (next to sidebar toggle) with label
+- Chat page: Removed export and new chat buttons from topbar (only Search remains)
+- TopBar: Removed export/new chat buttons - consistent across all pages (Search, Notification, AI Tutor, User)
+- Chat topbar: Only Search button remains on right side
 
-Build passes ✅
+Build passes
