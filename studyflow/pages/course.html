@@ -18,7 +18,15 @@
       <aside class="sf-sidebar" id="sf-sidebar">
         <!-- App Logo & Brand -->
         <div class="sf-sidebar-brand">
-          <a href="../index.html" style="display:flex; align-items:center; gap:0.75rem; text-decoration:none;">
+          <a
+            href="../index.html"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              text-decoration: none;
+            "
+          >
             <img
               src="../assets/icons/logo.png"
               alt="StudyFlow Logo"
@@ -134,17 +142,34 @@
                 />
               </svg>
             </button>
-            <div class="sf-greeting-block">
-              <nav aria-label="Breadcrumb" style="margin-bottom: 0.2rem;">
-                <a href="../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.76rem; font-weight: 600;">Dashboard</a>
-                <span style="color: var(--border-strong); margin: 0 0.35rem; font-size: 0.76rem;">/</span>
-                <span id="course-breadcrumb-code" style="color: var(--brand-cyan); font-size: 0.76rem; font-weight: 700;">Course</span>
+            <!-- <div class="sf-greeting-block"> -->
+              <!-- <nav aria-label="Breadcrumb" style="margin-bottom: 0.2rem"> -->
+                <!-- <a href="../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.76rem; font-weight: 600;">Dashboard</a> -->
+                 <!-- <span
+                  style="
+                    color: var(--border-strong);
+                    margin: 0 0.35rem;
+                    font-size: 0.76rem;
+                  "
+                  >/</span
+                > 
+                <span
+                  id="course-breadcrumb-code"
+                  style="
+                    color: var(--brand-cyan);
+                    font-size: 0.76rem;
+                    font-weight: 700;
+                  "
+                  >Course</span
+                >
               </nav>
-              <h1 id="course-title" class="sf-greeting-title">Loading Course...</h1>
+              <h1 id="course-title" class="sf-greeting-title">
+                Loading Course...
+              </h1>
             </div>
-          </div>
+          </div> -->
 
-          <div class="sf-header-actions">
+          <!-- <div class="sf-header-actions">
             <button
               class="sf-search-cmd-btn sf-cmd-trigger"
               id="global-search-btn"
@@ -178,7 +203,7 @@
               <span>Course AI Tutor</span>
             </a>
             <div class="sf-user-avatar" title="Ridwan • FUGUS Student">R</div>
-          </div>
+          </div> -->
         </header>
 
         <!-- Course Content Body -->
@@ -187,21 +212,70 @@
             <div class="course-main-column">
               <!-- Course Hero Card -->
               <div class="course-hero">
-                <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom: 0.5rem; flex-wrap:wrap;">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    margin-bottom: 0.5rem;
+                    flex-wrap: wrap;
+                  "
+                >
                   <span class="course-eyebrow" id="course-code"></span>
-                  <span class="sf-sub-tag" id="course-badge-level">FUGUS · 200 Level · Second Semester</span>
+                  <span class="sf-sub-tag" id="course-badge-level"
+                    >FUGUS · 200 Level · Second Semester</span
+                  >
                 </div>
-                <h1 id="course-hero-title" class="course-title">Course Title</h1>
+                <h1 id="course-hero-title" class="course-title">
+                  Course Title
+                </h1>
                 <p id="course-desc" class="course-description">
                   Course description loading...
                 </p>
 
                 <!-- Course Action Quick Chips -->
-                <div style="display:flex; align-items:center; gap:0.6rem; margin-top: 1.25rem; flex-wrap:wrap;">
-                  <a id="hero-ai-study-btn" href="chat.html" class="sf-callout-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; border-radius:10px; font-size:0.82rem;">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    margin-top: 1.25rem;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <a
+                    id="hero-ai-study-btn"
+                    href="chat.html"
+                    class="sf-callout-btn"
+                    style="
+                      text-decoration: none;
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 0.4rem;
+                      padding: 0.55rem 1rem;
+                      border-radius: 10px;
+                      font-size: 0.82rem;
+                    "
+                  >
                     <span>✦ Ask AI Tutor About This Course</span>
                   </a>
-                  <a href="glossary.html" class="action-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; border-radius:10px; font-size:0.82rem; background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);">
+                  <a
+                    href="glossary.html"
+                    class="action-btn"
+                    style="
+                      text-decoration: none;
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 0.4rem;
+                      padding: 0.55rem 1rem;
+                      margin-top: 0.65rem;
+                      border-radius: 10px;
+                      font-size: 0.82rem;
+                      background: rgba(255, 255, 255, 0.05);
+                      color: #cbd5e1;
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                    "
+                  >
                     <span>📖 Course Terminology in Glossary</span>
                   </a>
                 </div>
@@ -212,7 +286,9 @@
                 <div class="course-section-heading">
                   <div>
                     <h2>Curriculum Topics</h2>
-                    <span id="course-topic-count">Choose a topic to begin studying</span>
+                    <span id="course-topic-count"
+                      >Choose a topic to begin studying</span
+                    >
                   </div>
                 </div>
 

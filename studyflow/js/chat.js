@@ -67,7 +67,7 @@ function parseMarkdown(md) {
     <details class="think-block" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; padding: 0.6rem 0.9rem; margin: 0.85rem 0;">
       <summary style="cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #94a3b8;">🤔 Thought Process</summary>
       <div style="margin-top: 0.65rem; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; white-space: pre-wrap;">${t.trim()}</div>
-    </details>`
+    </details>`,
   );
 
   // Preserve Code Blocks
@@ -110,15 +110,36 @@ function parseMarkdown(md) {
     if (l.startsWith("|") && l.endsWith("|")) {
       if (!inTable) {
         inTable = true;
-        tableMarkup = "<table style='width:100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem;'>";
+        tableMarkup =
+          "<table style='width:100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem;'>";
       }
       if (l.includes("---")) continue;
-      const cells = l.split("|").slice(1, -1).map(c => c.trim());
-      const isH = !tableMarkup.includes("<tbody>") && !tableMarkup.includes("<tr>");
+      const cells = l
+        .split("|")
+        .slice(1, -1)
+        .map((c) => c.trim());
+      const isH =
+        !tableMarkup.includes("<tbody>") && !tableMarkup.includes("<tr>");
       if (isH) {
-        tableMarkup += "<thead><tr>" + cells.map(c => `<th style='border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0.8rem; background: rgba(255,255,255,0.06); color: #fff;'>${c}</th>`).join("") + "</tr></thead><tbody>";
+        tableMarkup +=
+          "<thead><tr>" +
+          cells
+            .map(
+              (c) =>
+                `<th style='border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0.8rem; background: rgba(255,255,255,0.06); color: #fff;'>${c}</th>`,
+            )
+            .join("") +
+          "</tr></thead><tbody>";
       } else {
-        tableMarkup += "<tr>" + cells.map(c => `<td style='border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 0.8rem;'>${c}</td>`).join("") + "</tr>";
+        tableMarkup +=
+          "<tr>" +
+          cells
+            .map(
+              (c) =>
+                `<td style='border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 0.8rem;'>${c}</td>`,
+            )
+            .join("") +
+          "</tr>";
       }
     } else {
       if (inTable) {
@@ -143,10 +164,19 @@ function parseMarkdown(md) {
   // Paragraphs
   html = html
     .split("\n\n")
-    .map(p => {
+    .map((p) => {
       p = p.trim();
       if (!p) return "";
-      if (p.startsWith("<h") || p.startsWith("<ul") || p.startsWith("<ol") || p.startsWith("<blockquote") || p.startsWith("<details") || p.startsWith("<table") || p.startsWith("<div class=\"sf-math-block-wrap\"") || p.startsWith("__CODE_")) {
+      if (
+        p.startsWith("<h") ||
+        p.startsWith("<ul") ||
+        p.startsWith("<ol") ||
+        p.startsWith("<blockquote") ||
+        p.startsWith("<details") ||
+        p.startsWith("<table") ||
+        p.startsWith('<div class="sf-math-block-wrap"') ||
+        p.startsWith("__CODE_")
+      ) {
         return p;
       }
       return `<p>${p.replace(/\n/g, "<br>")}</p>`;
@@ -174,7 +204,10 @@ function parseMarkdown(md) {
   });
 
   inlineCodeSnippets.forEach((code, i) => {
-    html = html.replace(`__INLINE_CODE_${i}__`, `<code>${escapeHtml(code)}</code>`);
+    html = html.replace(
+      `__INLINE_CODE_${i}__`,
+      `<code>${escapeHtml(code)}</code>`,
+    );
   });
 
   return html;
@@ -190,7 +223,7 @@ function loadSessions() {
   }
 
   currentSessionId = localStorage.getItem(ACTIVE_SESSION_KEY);
-  if (!currentSessionId || !sessions.find(s => s.id === currentSessionId)) {
+  if (!currentSessionId || !sessions.find((s) => s.id === currentSessionId)) {
     if (sessions.length > 0) {
       currentSessionId = sessions[0].id;
     } else {
@@ -205,7 +238,7 @@ function saveSessions() {
 }
 
 function getActiveSession() {
-  return sessions.find(s => s.id === currentSessionId) || sessions[0];
+  return sessions.find((s) => s.id === currentSessionId) || sessions[0];
 }
 
 function createNewSession(courseId = "ALL", topicId = "ALL") {
@@ -217,7 +250,7 @@ function createNewSession(courseId = "ALL", topicId = "ALL") {
     topicId: topicId,
     messages: [],
     createdAt: Date.now(),
-    updatedAt: Date.now()
+    updatedAt: Date.now(),
   };
   sessions.unshift(newSession);
   currentSessionId = newId;
@@ -229,7 +262,7 @@ function createNewSession(courseId = "ALL", topicId = "ALL") {
 
 function deleteSession(id, e) {
   if (e) e.stopPropagation();
-  sessions = sessions.filter(s => s.id !== id);
+  sessions = sessions.filter((s) => s.id !== id);
   if (currentSessionId === id) {
     if (sessions.length > 0) {
       currentSessionId = sessions[0].id;
@@ -246,13 +279,15 @@ function deleteSession(id, e) {
 function renderSidebarConversations() {
   conversationsList.innerHTML = "";
   if (sessions.length === 0) {
-    conversationsList.innerHTML = '<div style="padding: 0.5rem 0.75rem; font-size: 0.8rem; color: #64748b;">No recent chats</div>';
+    conversationsList.innerHTML =
+      '<div style="padding: 0.5rem 0.75rem; font-size: 0.8rem; color: #64748b;">No recent chats</div>';
     return;
   }
 
-  sessions.forEach(sess => {
+  sessions.forEach((sess) => {
     const item = document.createElement("div");
-    item.className = "conversation-item" + (sess.id === currentSessionId ? " active" : "");
+    item.className =
+      "conversation-item" + (sess.id === currentSessionId ? " active" : "");
     item.innerHTML = `
       <span class="conversation-title-text">${sess.title}</span>
       <button class="conversation-delete-btn" title="Delete chat">
@@ -269,9 +304,11 @@ function renderSidebarConversations() {
       }
     });
 
-    item.querySelector(".conversation-delete-btn").addEventListener("click", (e) => {
-      deleteSession(sess.id, e);
-    });
+    item
+      .querySelector(".conversation-delete-btn")
+      .addEventListener("click", (e) => {
+        deleteSession(sess.id, e);
+      });
 
     conversationsList.appendChild(item);
   });
@@ -284,11 +321,12 @@ function syncContextPill(courseId, topicId) {
     pillTopicTitle.textContent = "(General Assistant)";
     modalCourseSelect.value = "ALL";
     updateModalTopicSelect("ALL");
-    sidebarCoursePills.querySelectorAll(".sidebar-course-chip").forEach(c => {
+    sidebarCoursePills.querySelectorAll(".sidebar-course-chip").forEach((c) => {
       c.classList.toggle("active", c.dataset.course === "ALL");
     });
     if (heroSubGreeting) {
-      heroSubGreeting.textContent = "Where should we start your FUGUS study session today?";
+      heroSubGreeting.textContent =
+        "Where should we start your FUGUS study session today?";
     }
     return;
   }
@@ -298,7 +336,7 @@ function syncContextPill(courseId, topicId) {
   modalCourseSelect.value = courseId;
   updateModalTopicSelect(courseId, topicId);
 
-  sidebarCoursePills.querySelectorAll(".sidebar-course-chip").forEach(c => {
+  sidebarCoursePills.querySelectorAll(".sidebar-course-chip").forEach((c) => {
     c.classList.toggle("active", c.dataset.course === courseId);
   });
 
@@ -321,7 +359,8 @@ function syncContextPill(courseId, topicId) {
 
 function updateModalTopicSelect(courseId, selectedTopicId = "ALL") {
   if (!courseId || courseId === "ALL") {
-    modalTopicSelect.innerHTML = '<option value="ALL">📚 Select a course first</option>';
+    modalTopicSelect.innerHTML =
+      '<option value="ALL">📚 Select a course first</option>';
     modalTopicSelect.disabled = true;
     return;
   }
@@ -332,7 +371,7 @@ function updateModalTopicSelect(courseId, selectedTopicId = "ALL") {
   modalTopicSelect.disabled = false;
   modalTopicSelect.innerHTML = `<option value="ALL">📚 All Topics in ${course.id}</option>`;
 
-  course.topics.forEach(t => {
+  course.topics.forEach((t) => {
     const opt = document.createElement("option");
     opt.value = t.id;
     opt.textContent = t.title;
@@ -350,13 +389,13 @@ function loadActiveSessionIntoView() {
 
   // Clear existing rendered messages
   const messageRows = messagesInner.querySelectorAll(".msg-row");
-  messageRows.forEach(r => r.remove());
+  messageRows.forEach((r) => r.remove());
 
   if (!session.messages || session.messages.length === 0) {
     emptyStateHero.style.display = "grid";
   } else {
     emptyStateHero.style.display = "none";
-    session.messages.forEach(msg => {
+    session.messages.forEach((msg) => {
       if (msg.role === "user") {
         renderUserMessageWithAttachments(msg.content, msg.attachments || []);
       } else {
@@ -384,7 +423,9 @@ function renderUserMessage(text) {
 function renderUserMessageWithAttachments(text, attachments = []) {
   const row = document.createElement("div");
   row.className = "msg-row user fade-in";
-  const safeText = text ? escapeHtml(text) : "<span class=\"muted-msg\">Attached file for analysis</span>";
+  const safeText = text
+    ? escapeHtml(text)
+    : '<span class="muted-msg">Attached file for analysis</span>';
   const attachmentMarkup = renderAttachmentSummary(attachments);
   row.innerHTML = `<div class="user-msg-bubble">${safeText}${attachmentMarkup}</div>`;
   messagesInner.appendChild(row);
@@ -398,9 +439,10 @@ function renderAttachmentSummary(attachments = []) {
       ${attachments
         .map((file) => {
           const isImage = file.kind === "image";
-          const thumb = isImage && file.dataUrl
-            ? `<img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" />`
-            : `<span class="attachment-file-icon">${file.kind === "text" ? "TXT" : "FILE"}</span>`;
+          const thumb =
+            isImage && file.dataUrl
+              ? `<img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" />`
+              : `<span class="attachment-file-icon">${file.kind === "text" ? "TXT" : "FILE"}</span>`;
           return `
             <div class="message-attachment-chip">
               ${thumb}
@@ -415,7 +457,8 @@ function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error || new Error("Could not read file."));
+    reader.onerror = () =>
+      reject(reader.error || new Error("Could not read file."));
     reader.readAsDataURL(file);
   });
 }
@@ -424,7 +467,8 @@ function readFileAsText(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error || new Error("Could not read file."));
+    reader.onerror = () =>
+      reject(reader.error || new Error("Could not read file."));
     reader.readAsText(file);
   });
 }
@@ -451,7 +495,9 @@ async function addPendingFiles(fileList) {
         continue;
       }
       pendingAttachments.push({
-        id: crypto.randomUUID ? crypto.randomUUID() : `att_${Date.now()}_${Math.random()}`,
+        id: crypto.randomUUID
+          ? crypto.randomUUID()
+          : `att_${Date.now()}_${Math.random()}`,
         kind: "image",
         name: file.name,
         type: file.type,
@@ -467,7 +513,9 @@ async function addPendingFiles(fileList) {
         continue;
       }
       pendingAttachments.push({
-        id: crypto.randomUUID ? crypto.randomUUID() : `att_${Date.now()}_${Math.random()}`,
+        id: crypto.randomUUID
+          ? crypto.randomUUID()
+          : `att_${Date.now()}_${Math.random()}`,
         kind: "text",
         name: file.name,
         type: file.type || "text/plain",
@@ -477,7 +525,9 @@ async function addPendingFiles(fileList) {
       continue;
     }
 
-    rejected.push(`${file.name} is not supported yet. Use images, txt, md, csv, or json.`);
+    rejected.push(
+      `${file.name} is not supported yet. Use images, txt, md, csv, or json.`,
+    );
   }
 
   renderAttachmentTray();
@@ -500,9 +550,10 @@ function renderAttachmentTray() {
   attachmentTray.classList.toggle("hidden", pendingAttachments.length === 0);
   attachmentTray.innerHTML = pendingAttachments
     .map((file) => {
-      const preview = file.kind === "image" && file.dataUrl
-        ? `<img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" />`
-        : `<span class="attachment-file-icon">${file.kind === "text" ? "TXT" : "FILE"}</span>`;
+      const preview =
+        file.kind === "image" && file.dataUrl
+          ? `<img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" />`
+          : `<span class="attachment-file-icon">${file.kind === "text" ? "TXT" : "FILE"}</span>`;
       return `
         <div class="attachment-chip" data-attachment-id="${file.id}">
           ${preview}
@@ -526,7 +577,7 @@ function renderAssistantMessage(markdownContent, onComplete = null) {
 
   row.innerHTML = `
     <div class="assistant-msg-flow">
-      <div class="assistant-avatar-gemini">✦</div>
+     
       <div class="assistant-content-pane">
         <div class="assistant-text-target">${parseMarkdown(markdownContent)}</div>
         <div class="msg-action-bar">
@@ -564,7 +615,7 @@ function streamAssistantResponse(fullMarkdown, onComplete) {
 
   row.innerHTML = `
     <div class="assistant-msg-flow">
-      <div class="assistant-avatar-gemini">✦</div>
+      
       <div class="assistant-content-pane">
         <div class="assistant-text-target"></div>
         <div class="msg-action-bar" style="display: none;">
@@ -615,7 +666,8 @@ function streamAssistantResponse(fullMarkdown, onComplete) {
 
     currentIdx = Math.min(words.length, currentIdx + chunkSize);
     const partialText = words.slice(0, currentIdx).join(" ");
-    textTarget.innerHTML = parseMarkdown(partialText) + '<span class="typing-stream-cursor"></span>';
+    textTarget.innerHTML =
+      parseMarkdown(partialText) + '<span class="typing-stream-cursor"></span>';
     scrollToBottom();
   }, 22);
 }
@@ -646,7 +698,9 @@ function attachMessageActions(row, fullText) {
   const simplerBtn = row.querySelector(".simpler-msg-btn");
   if (simplerBtn) {
     simplerBtn.addEventListener("click", () => {
-      handleSendMessage("Can you break that down in simpler terms with a familiar, concrete real-world analogy?");
+      handleSendMessage(
+        "Can you break that down in simpler terms with a familiar, concrete real-world analogy?",
+      );
     });
   }
 
@@ -655,16 +709,22 @@ function attachMessageActions(row, fullText) {
     regenBtn.addEventListener("click", () => {
       const session = getActiveSession();
       if (session && session.messages.length > 0) {
-        const lastUserMsg = [...session.messages].reverse().find(m => m.role === "user");
+        const lastUserMsg = [...session.messages]
+          .reverse()
+          .find((m) => m.role === "user");
         if (lastUserMsg) {
-          handleSendMessage(lastUserMsg.content, true, lastUserMsg.attachments || []);
+          handleSendMessage(
+            lastUserMsg.content,
+            true,
+            lastUserMsg.attachments || [],
+          );
         }
       }
     });
   }
 
   // Code snippet copy buttons
-  row.querySelectorAll(".copy-code-btn").forEach(btn => {
+  row.querySelectorAll(".copy-code-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const code = decodeURIComponent(btn.getAttribute("data-code"));
       navigator.clipboard.writeText(code).then(() => {
@@ -730,9 +790,14 @@ function escapeHtml(text) {
 }
 
 // ─── Sending Messages ─────────────────────────────────────────────────────────
-async function handleSendMessage(customPrompt = null, isRegen = false, customAttachments = null) {
+async function handleSendMessage(
+  customPrompt = null,
+  isRegen = false,
+  customAttachments = null,
+) {
   const text = (customPrompt || chatTextarea.value).trim();
-  const attachmentsForMessage = customAttachments ?? (customPrompt ? [] : [...pendingAttachments]);
+  const attachmentsForMessage =
+    customAttachments ?? (customPrompt ? [] : [...pendingAttachments]);
   if (!text && attachmentsForMessage.length === 0) return;
 
   if (isGenerating) {
@@ -746,9 +811,10 @@ async function handleSendMessage(customPrompt = null, isRegen = false, customAtt
   const lastUserIndex = isRegen
     ? session.messages.map((message) => message.role).lastIndexOf("user")
     : -1;
-  const historyForRequest = isRegen && lastUserIndex >= 0
-    ? session.messages.slice(0, lastUserIndex).slice(-8)
-    : session.messages.slice(-8);
+  const historyForRequest =
+    isRegen && lastUserIndex >= 0
+      ? session.messages.slice(0, lastUserIndex).slice(-8)
+      : session.messages.slice(-8);
 
   if (!customPrompt) {
     chatTextarea.value = "";
@@ -769,8 +835,10 @@ async function handleSendMessage(customPrompt = null, isRegen = false, customAtt
 
     // Auto-update session title from first message
     if (session.title === "New Study Chat") {
-      const titleSource = text || attachmentsForMessage[0]?.name || "Attached file";
-      session.title = titleSource.slice(0, 30) + (titleSource.length > 30 ? "..." : "");
+      const titleSource =
+        text || attachmentsForMessage[0]?.name || "Attached file";
+      session.title =
+        titleSource.slice(0, 30) + (titleSource.length > 30 ? "..." : "");
       renderSidebarConversations();
     }
   }
@@ -781,10 +849,9 @@ async function handleSendMessage(customPrompt = null, isRegen = false, customAtt
   thinkingRow.id = "active-thinking-indicator";
   thinkingRow.innerHTML = `
     <div class="assistant-msg-flow">
-      <div class="assistant-avatar-gemini">✦</div>
+      
       <div class="gemini-thinking-shimmer">
-        <span class="shimmer-sparkle">✦</span>
-        <span>Antigravity AI is thinking...</span>
+        <span>...</span>
       </div>
     </div>
   `;
@@ -816,7 +883,9 @@ async function handleSendMessage(customPrompt = null, isRegen = false, customAtt
       topicTitle,
       topicNotes,
       chatHistory: historyForRequest,
-      userMessage: text || "Please analyze the attached file and explain what I should learn from it.",
+      userMessage:
+        text ||
+        "Please analyze the attached file and explain what I should learn from it.",
       attachments: attachmentsForMessage,
     });
 
@@ -828,10 +897,9 @@ async function handleSendMessage(customPrompt = null, isRegen = false, customAtt
       session.updatedAt = Date.now();
       saveSessions();
     });
-
   } catch (err) {
     thinkingRow.remove();
-    const errorMsg = `⚠️ **Could not connect to the AI engine.**\n\nError: ${err.message}\n\nMake sure your StudyFlow server is running at http://localhost:3001.`;
+    const errorMsg = `**Could not send message.**\n\nMake sure you are online.`;
     renderAssistantMessage(errorMsg);
     session.messages.push({ role: "assistant", content: errorMsg });
     saveSessions();
@@ -926,16 +994,18 @@ function init() {
   });
 
   // Sidebar course quick filter chips
-  sidebarCoursePills.querySelectorAll(".sidebar-course-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      const course = chip.dataset.course;
-      const session = getActiveSession();
-      session.courseId = course;
-      session.topicId = "ALL";
-      syncContextPill(course, "ALL");
-      saveSessions();
+  sidebarCoursePills
+    .querySelectorAll(".sidebar-course-chip")
+    .forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const course = chip.dataset.course;
+        const session = getActiveSession();
+        session.courseId = course;
+        session.topicId = "ALL";
+        syncContextPill(course, "ALL");
+        saveSessions();
+      });
     });
-  });
 
   // Top Bar Context Menu Toggle
   modelPillBtn.addEventListener("click", (e) => {
@@ -993,7 +1063,7 @@ function init() {
   });
 
   // Gemini-style suggestion cards click
-  document.querySelectorAll(".gemini-suggestion-card").forEach(card => {
+  document.querySelectorAll(".gemini-suggestion-card").forEach((card) => {
     card.addEventListener("click", () => {
       const prompt = card.getAttribute("data-prompt");
       handleSendMessage(prompt);
@@ -1014,7 +1084,9 @@ function init() {
   document.querySelectorAll(".sf-hero-chip").forEach((chip) => {
     chip.addEventListener("click", () => {
       const course = chip.dataset.course;
-      document.querySelectorAll(".sf-hero-chip").forEach((c) => c.classList.remove("active"));
+      document
+        .querySelectorAll(".sf-hero-chip")
+        .forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
       const session = getActiveSession();
       session.courseId = course;
@@ -1041,7 +1113,8 @@ function init() {
       if (prompt) {
         chatTextarea.value = prompt;
         chatTextarea.style.height = "auto";
-        chatTextarea.style.height = Math.min(chatTextarea.scrollHeight, 180) + "px";
+        chatTextarea.style.height =
+          Math.min(chatTextarea.scrollHeight, 180) + "px";
         updateSendButtonState();
         chatTextarea.focus();
       }
@@ -1049,7 +1122,10 @@ function init() {
   });
 
   document.addEventListener("click", (e) => {
-    if (!quickToolsMenu.contains(e.target) && !capsuleToolBtn.contains(e.target)) {
+    if (
+      !quickToolsMenu.contains(e.target) &&
+      !capsuleToolBtn.contains(e.target)
+    ) {
       quickToolsMenu.classList.add("hidden");
     }
   });
@@ -1105,7 +1181,10 @@ function exportConversationToMarkdown() {
     return;
   }
 
-  const courseTitle = session.courseId !== "ALL" ? (getCourseById(session.courseId)?.title || session.courseId) : "General Assistant";
+  const courseTitle =
+    session.courseId !== "ALL"
+      ? getCourseById(session.courseId)?.title || session.courseId
+      : "General Assistant";
   const dateStr = new Date().toLocaleString();
 
   let md = `# StudyFlow AI - Study Session Notes\n\n`;
@@ -1117,7 +1196,10 @@ function exportConversationToMarkdown() {
   md += `---\n\n`;
 
   session.messages.forEach((msg) => {
-    const roleTitle = msg.role === "user" ? "### 👤 Student Question" : "### ✦ StudyFlow AI Tutor";
+    const roleTitle =
+      msg.role === "user"
+        ? "### 👤 Student Question"
+        : "### ✦ StudyFlow AI Tutor";
     md += `${roleTitle}\n\n${msg.content}\n\n---\n\n`;
   });
 
@@ -1125,7 +1207,9 @@ function exportConversationToMarkdown() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  const safeTitle = (session.title || "study_session").replace(/[^a-z0-9_-]/gi, "_").toLowerCase();
+  const safeTitle = (session.title || "study_session")
+    .replace(/[^a-z0-9_-]/gi, "_")
+    .toLowerCase();
   a.download = `StudyFlow_${session.courseId || "Chat"}_${safeTitle}.md`;
   document.body.appendChild(a);
   a.click();

@@ -112,7 +112,7 @@ function parseNotes(md) {
         <strong>Verified Solution:</strong>
         <p>${ans.trim()}</p>
       </div>
-    </details>`
+    </details>`,
   );
 
   // Headings with IDs for on-page jump navigation
@@ -184,7 +184,12 @@ function renderDashboard() {
   const greetingEl = document.querySelector(".sf-greeting-title");
   if (greetingEl) {
     const hour = new Date().getHours();
-    const timeGreeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+    const timeGreeting =
+      hour < 12
+        ? "Good morning"
+        : hour < 17
+          ? "Good afternoon"
+          : "Good evening";
     greetingEl.innerHTML = `${timeGreeting}, Student! 👋`;
   }
 
@@ -202,12 +207,13 @@ function renderDashboard() {
   const resumeWrap = document.getElementById("dashboard-resume-wrap");
   if (resumeWrap) {
     try {
-      const lastTopicData = JSON.parse(localStorage.getItem("studyflow_last_topic") || "null");
+      const lastTopicData = JSON.parse(
+        localStorage.getItem("studyflow_last_topic") || "null",
+      );
       if (lastTopicData && lastTopicData.courseId && lastTopicData.topicTitle) {
         resumeWrap.style.display = "block";
         resumeWrap.innerHTML = `
           <div style="display:inline-flex; align-items:center; gap:0.6rem; padding:0.5rem 0.9rem; border-radius:10px; background:rgba(1,169,254,0.12); border:1px solid rgba(1,169,254,0.3); font-size:0.82rem; color:#d9f5ff;">
-            <span style="color:var(--brand-lime)">⚡ Pick up where you left off:</span>
             <strong>${lastTopicData.courseId} · ${lastTopicData.topicTitle}</strong>
             <a href="${topicPrefix}?c=${encodeURIComponent(lastTopicData.courseId)}&t=${encodeURIComponent(lastTopicData.topicId)}" style="color:var(--brand-cyan); font-weight:700; text-decoration:none; margin-left:0.25rem;">Continue &rarr;</a>
           </div>
@@ -234,7 +240,8 @@ function renderDashboard() {
     let filtered = coursesData.filter((course) => {
       // Discipline filter
       const meta = courseCategories[course.id] || { discipline: "gen" };
-      const matchesDiscipline = activeDiscipline === "all" || meta.discipline === activeDiscipline;
+      const matchesDiscipline =
+        activeDiscipline === "all" || meta.discipline === activeDiscipline;
       if (!matchesDiscipline) return false;
 
       // Search query filter
@@ -243,7 +250,9 @@ function renderDashboard() {
       const inId = course.id.toLowerCase().includes(q);
       const inTitle = course.title.toLowerCase().includes(q);
       const inDesc = course.description.toLowerCase().includes(q);
-      const inTopics = course.topics?.some((t) => t.title.toLowerCase().includes(q));
+      const inTopics = course.topics?.some((t) =>
+        t.title.toLowerCase().includes(q),
+      );
       return inId || inTitle || inDesc || inTopics;
     });
 
@@ -261,14 +270,18 @@ function renderDashboard() {
           <button type="button" id="reset-courses-filter">Reset Filters</button>
         </div>
       `;
-      document.getElementById("reset-courses-filter")?.addEventListener("click", () => {
-        if (searchInput) searchInput.value = "";
-        searchQuery = "";
-        activeDiscipline = "all";
-        disciplineTabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.discipline === "all"));
-        if (clearBtn) clearBtn.style.display = "none";
-        filterAndRenderCourses();
-      });
+      document
+        .getElementById("reset-courses-filter")
+        ?.addEventListener("click", () => {
+          if (searchInput) searchInput.value = "";
+          searchQuery = "";
+          activeDiscipline = "all";
+          disciplineTabs.forEach((tab) =>
+            tab.classList.toggle("active", tab.dataset.discipline === "all"),
+          );
+          if (clearBtn) clearBtn.style.display = "none";
+          filterAndRenderCourses();
+        });
       return;
     }
 
@@ -278,7 +291,10 @@ function renderDashboard() {
       card.setAttribute("role", "article");
       card.setAttribute("aria-label", `${course.id}: ${course.title}`);
 
-      const meta = courseCategories[course.id] || { tag: "General", discipline: "gen" };
+      const meta = courseCategories[course.id] || {
+        tag: "General",
+        discipline: "gen",
+      };
       const total = course.topics?.length ?? 0;
 
       // Topics peek items
@@ -289,7 +305,7 @@ function renderDashboard() {
             `<a href="${topicPrefix}?c=${encodeURIComponent(course.id)}&t=${encodeURIComponent(t.id)}" class="peek-topic-link">
               <span>${t.title}</span>
               <span style="color:var(--brand-cyan)">&rarr;</span>
-            </a>`
+            </a>`,
         )
         .join("");
 
@@ -343,10 +359,12 @@ function renderDashboard() {
       });
 
       // Quick Ask AI button
-      card.querySelector(".course-ai-quick-btn")?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        window.location.href = `${chatPrefix}?course=${encodeURIComponent(course.id)}`;
-      });
+      card
+        .querySelector(".course-ai-quick-btn")
+        ?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.location.href = `${chatPrefix}?course=${encodeURIComponent(course.id)}`;
+        });
 
       container.appendChild(card);
     });
@@ -377,13 +395,15 @@ function renderDashboard() {
   });
 
   // Wire AI Exam Prep Callout Button
-  document.getElementById("quick-exam-prep-btn")?.addEventListener("click", () => {
-    localStorage.setItem(
-      "studyflow_auto_prompt",
-      "Give me 5 high-yield FUGUS 200-level exam practice questions across my enrolled courses with full step-by-step solutions."
-    );
-    window.location.href = "pages/chat.html";
-  });
+  document
+    .getElementById("quick-exam-prep-btn")
+    ?.addEventListener("click", () => {
+      localStorage.setItem(
+        "studyflow_auto_prompt",
+        "Give me 5 high-yield FUGUS 200-level exam practice questions across my enrolled courses with full step-by-step solutions.",
+      );
+      window.location.href = "pages/chat.html";
+    });
 
   filterAndRenderCourses();
   initCalendar();
@@ -516,8 +536,10 @@ function renderCourseView() {
   // Wire AI tutor links
   const aiTutorBtn = document.getElementById("course-ai-tutor-btn");
   const heroAiBtn = document.getElementById("hero-ai-study-btn");
-  if (aiTutorBtn) aiTutorBtn.href = `chat.html?course=${encodeURIComponent(course.id)}`;
-  if (heroAiBtn) heroAiBtn.href = `chat.html?course=${encodeURIComponent(course.id)}`;
+  if (aiTutorBtn)
+    aiTutorBtn.href = `chat.html?course=${encodeURIComponent(course.id)}`;
+  if (heroAiBtn)
+    heroAiBtn.href = `chat.html?course=${encodeURIComponent(course.id)}`;
 
   const container = document.getElementById("topics-container");
   if (!container) return;
@@ -561,13 +583,16 @@ function renderCourseView() {
         : "";
 
       el.innerHTML = `
-        <div style="display:flex; align-items:center; gap:1rem; min-width:0;">
+        <div style="display:flex; align-items:center; justify-content:start; gap:1rem; min-width:0;">
           <span style="display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:10px; background:rgba(1,169,254,0.12); color:var(--brand-cyan); font-weight:800; font-size:0.82rem; flex-shrink:0;">${formattedNum}</span>
           <div style="min-width:0;">
             <h4 style="margin:0 0 0.25rem; color:#fff; font-size:1.05rem; font-weight:700;">${escapeHtml(topic.title)}</h4>
             <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
               <span style="color:#94a3b8; font-size:0.75rem;">⏱ ~${readMin} min read</span>
-              ${mathBadge}
+              
+
+
+              
             </div>
           </div>
         </div>
@@ -595,7 +620,7 @@ function renderCourseView() {
         e.stopPropagation();
         localStorage.setItem(
           "studyflow_auto_prompt",
-          `Test my knowledge on "${topic.title}" from ${course.id}. Give me 3 exam-style questions with detailed step-by-step explanations.`
+          `Test my knowledge on "${topic.title}" from ${course.id}. Give me 3 exam-style questions with detailed step-by-step explanations.`,
         );
         window.location.href = `chat.html?course=${encodeURIComponent(course.id)}&topic=${encodeURIComponent(topic.id)}`;
       });
@@ -630,7 +655,7 @@ function renderTopicView() {
         courseTitle: currentCourse.title,
         topicTitle: currentTopic.title,
         timestamp: Date.now(),
-      })
+      }),
     );
   } catch (e) {
     // Ignore storage quota
@@ -644,7 +669,8 @@ function renderTopicView() {
   const titleEl = document.getElementById("topic-title");
   if (titleEl) titleEl.textContent = currentTopic.title;
   const courseLabel = document.getElementById("topic-course-label");
-  if (courseLabel) courseLabel.textContent = `${currentCourse.id} · ${currentCourse.title}`;
+  if (courseLabel)
+    courseLabel.textContent = `${currentCourse.id} · ${currentCourse.title}`;
 
   // Reading time badge
   const words = (currentTopic.notes || "").trim().split(/\s+/).length;
@@ -658,11 +684,17 @@ function renderTopicView() {
   // Reading progress bar on scroll
   const progressBar = document.getElementById("sf-reading-progress");
   if (progressBar) {
-    window.addEventListener("scroll", () => {
-      const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = scrollTotal > 0 ? (window.scrollY / scrollTotal) * 100 : 0;
-      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        const scrollTotal =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const progress =
+          scrollTotal > 0 ? (window.scrollY / scrollTotal) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      },
+      { passive: true },
+    );
   }
 
   renderNotesArea();
@@ -687,7 +719,9 @@ function buildTopicOutline() {
 
   headings.forEach((heading) => {
     if (!heading.id) return;
-    const text = heading.textContent.replace(/^Section\s*\d+\s*—\s*/i, "").trim();
+    const text = heading.textContent
+      .replace(/^Section\s*\d+\s*—\s*/i, "")
+      .trim();
     if (!text) return;
 
     const chip = document.createElement("a");
@@ -704,24 +738,33 @@ function buildTopicOutline() {
 
 function wireFontScaling() {
   let fontStep = 1; // 0: small, 1: normal, 2: large, 3: xlarge
-  const fontClasses = ["font-small", "font-normal", "font-large", "font-xlarge"];
+  const fontClasses = [
+    "font-small",
+    "font-normal",
+    "font-large",
+    "font-xlarge",
+  ];
   const notesContainer = document.getElementById("notes-container");
 
-  document.getElementById("font-decrease-btn")?.addEventListener("click", () => {
-    if (fontStep > 0) {
-      fontStep--;
-      notesContainer.className = `notes-content ${fontClasses[fontStep]}`;
-      showToast("Font size decreased", "info", 1400);
-    }
-  });
+  document
+    .getElementById("font-decrease-btn")
+    ?.addEventListener("click", () => {
+      if (fontStep > 0) {
+        fontStep--;
+        notesContainer.className = `notes-content ${fontClasses[fontStep]}`;
+        showToast("Font size decreased", "info", 1400);
+      }
+    });
 
-  document.getElementById("font-increase-btn")?.addEventListener("click", () => {
-    if (fontStep < fontClasses.length - 1) {
-      fontStep++;
-      notesContainer.className = `notes-content ${fontClasses[fontStep]}`;
-      showToast("Font size increased", "info", 1400);
-    }
-  });
+  document
+    .getElementById("font-increase-btn")
+    ?.addEventListener("click", () => {
+      if (fontStep < fontClasses.length - 1) {
+        fontStep++;
+        notesContainer.className = `notes-content ${fontClasses[fontStep]}`;
+        showToast("Font size increased", "info", 1400);
+      }
+    });
 }
 
 function renderNotesArea() {
@@ -761,13 +804,15 @@ function renderNotesArea() {
 // ─────────────────────────────────────────────────────────────────────────────
 function wireTopicButtons() {
   // Study with AI button
-  document.getElementById("ask-assistant-btn")?.addEventListener("click", () => {
-    if (currentCourse && currentTopic) {
-      window.location.href = `chat.html?course=${encodeURIComponent(currentCourse.id)}&topic=${encodeURIComponent(currentTopic.id)}`;
-    } else {
-      window.location.href = "chat.html";
-    }
-  });
+  document
+    .getElementById("ask-assistant-btn")
+    ?.addEventListener("click", () => {
+      if (currentCourse && currentTopic) {
+        window.location.href = `chat.html?course=${encodeURIComponent(currentCourse.id)}&topic=${encodeURIComponent(currentTopic.id)}`;
+      } else {
+        window.location.href = "chat.html";
+      }
+    });
 
   document
     .getElementById("close-chat-btn")

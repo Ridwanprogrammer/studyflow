@@ -66,7 +66,9 @@ const NVIDIA_BASE =
   process.env.DEEPSEEK_ENDPOINT || "https://integrate.api.nvidia.com/v1";
 const CHAT_ENDPOINT = `${NVIDIA_BASE.replace(/\/$/, "")}/chat/completions`;
 const MODEL_NAME = process.env.MODEL_NAME || "google/gemma-4-31b-it";
-const MODEL_FALLBACKS = (process.env.MODEL_FALLBACKS || "meta/llama-3.1-8b-instruct")
+const MODEL_FALLBACKS = (
+  process.env.MODEL_FALLBACKS || "meta/llama-3.1-8b-instruct"
+)
   .split(",")
   .map((model) => model.trim())
   .filter(Boolean);
@@ -119,14 +121,22 @@ function asChatCompletion(payload, modelName) {
 }
 
 function modelSupportsImages(modelName) {
-  return /vision|vlm|vila|neva|fuyu|kosmos|deplot|phi-3-vision/i.test(modelName);
+  return /vision|vlm|vila|neva|fuyu|kosmos|deplot|phi-3-vision/i.test(
+    modelName,
+  );
 }
 
-function buildMessagesForNvidia(messages, attachments = [], includeImages = true) {
+function buildMessagesForNvidia(
+  messages,
+  attachments = [],
+  includeImages = true,
+) {
   if (!attachments.length) return messages;
 
   const safeMessages = messages.map((message) => ({ ...message }));
-  const lastUserMessage = [...safeMessages].reverse().find((message) => message.role === "user");
+  const lastUserMessage = [...safeMessages]
+    .reverse()
+    .find((message) => message.role === "user");
   if (!lastUserMessage) return safeMessages;
 
   const textAttachments = [];
@@ -177,7 +187,8 @@ function buildMessagesForNvidia(messages, attachments = [], includeImages = true
     contentParts[0].text += textAttachments.join("");
   }
 
-  lastUserMessage.content = contentParts.length > 1 ? contentParts : contentParts[0].text;
+  lastUserMessage.content =
+    contentParts.length > 1 ? contentParts : contentParts[0].text;
   return safeMessages;
 }
 
@@ -292,9 +303,7 @@ app.post("/api/admin/test", async (req, res) => {
   const { models, base } = req.body || {};
   const baseUrl = (base || NVIDIA_BASE).replace(/\/$/, "");
   const candidates =
-    Array.isArray(models) && models.length
-      ? models
-      : MODEL_CANDIDATES;
+    Array.isArray(models) && models.length ? models : MODEL_CANDIDATES;
 
   const results = [];
 
@@ -345,5 +354,7 @@ app.listen(PORT, () => {
   console.log("  ╚════██║   ██║   ██║   ██║██║  ██║  ╚██╔╝  ");
   console.log("  ███████║   ██║   ╚██████╔╝██████╔╝   ██║   ");
   console.log("  ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝    ╚═╝   ");
+  console.log("");
+  console.log("server opens at http://localhost:3001/");
   console.log("");
 });

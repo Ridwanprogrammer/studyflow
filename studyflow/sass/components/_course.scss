@@ -1,6 +1,5 @@
 /* Course page theme */
 .course-page {
-
   .sf-main-workspace {
     min-height: 100vh;
   }
@@ -93,7 +92,7 @@
 
   .topic-list {
     gap: 0.7rem;
-    margin-top: 0;
+    margin-top: 1rem;
   }
 
   .topic-item {
@@ -159,7 +158,7 @@
 
   .course-content {
     max-width: 1080px;
-    padding-top: clamp(1rem, 3vw, 2rem);
+    padding-top: clamp(0.5rem, 1.5vw, 1rem);
   }
 
   .course-back-link {
@@ -171,7 +170,7 @@
 
   .course-hero {
     position: relative;
-    padding: 1.5rem 0 2.4rem 1.5rem;
+    padding: 0.8rem 0 2.4rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     &::before {
@@ -242,23 +241,23 @@
     background: transparent;
     transform: none;
 
-    &::before {
-      color: var(--brand-cyan);
-      content: counter(topic-row, decimal-leading-zero);
-      counter-increment: topic-row;
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-    }
+    // &::before {
+    //   color: var(--brand-cyan);
+    //   content: counter(topic-row, decimal-leading-zero);
+    //   counter-increment: topic-row;
+    //   font-size: 0.7rem;
+    //   font-weight: 800;
+    //   letter-spacing: 0.06em;
+    // }
 
-    &::after {
-      color: var(--text-secondary);
-      content: "→";
-      font-size: 1rem;
-      transition:
-        color 0.2s ease,
-        transform 0.2s ease;
-    }
+    // &::after {
+    //   color: var(--text-secondary);
+    //   content: "→";
+    //   font-size: 1rem;
+    //   transition:
+    //     color 0.2s ease,
+    //     transform 0.2s ease;
+    // }
 
     &:hover {
       border-color: rgba(255, 255, 255, 0.1);

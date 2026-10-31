@@ -10,6 +10,14 @@
 @use "components/chat";
 @use "components/glossary";
 
+@font-face {
+  src: url(../fonts/Lemon-Regular.ttf);
+  font-family: "Lemon";
+}
+@font-face {
+  src: url(../fonts/Poppins-Medium.ttf);
+  font-family: "Poppins";
+}
 :root {
   --brand-cyan: #{$brand-cyan};
   --brand-blue: #{$brand-blue};
@@ -44,11 +52,7 @@
 
 body {
   margin: 0;
-  font-family:
-    "Inter",
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: "Poppins";
   background-color: var(--bg);
   background-image: var(--bg-gradient);
   background-attachment: fixed;

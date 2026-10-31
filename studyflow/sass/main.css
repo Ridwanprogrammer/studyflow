@@ -938,7 +938,7 @@
   min-height: 96px;
   padding: 1.15rem 0;
   border-bottom: 1px solid var(--border);
-  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  margin-bottom: 1rem;
 }
 
 .sf-top-header > div:first-child {
@@ -1126,7 +1126,7 @@
 .sf-dashboard-intro h2 {
   margin: 0;
   color: #f7fbff;
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(1rem, 2vw, 1.625rem);
   font-weight: 800;
   letter-spacing: -0.055em;
   line-height: 1.04;
@@ -1495,7 +1495,7 @@
 }
 .course-page .topic-list {
   gap: 0.7rem;
-  margin-top: 0;
+  margin-top: 1rem;
 }
 .course-page .topic-item {
   padding: 1rem 1.1rem;
@@ -1547,7 +1547,7 @@
 }
 .course-page .course-content {
   max-width: 1080px;
-  padding-top: clamp(1rem, 3vw, 2rem);
+  padding-top: clamp(0.5rem, 1.5vw, 1rem);
 }
 .course-page .course-back-link {
   margin: 0 0 1.75rem;
@@ -1557,7 +1557,7 @@
 }
 .course-page .course-hero {
   position: relative;
-  padding: 1.5rem 0 2.4rem 1.5rem;
+  padding: 0.8rem 0 2.4rem 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .course-page .course-hero::before {
@@ -1618,20 +1618,6 @@
   border-radius: 0;
   background: transparent;
   transform: none;
-}
-.course-page .topic-item::before {
-  color: var(--brand-cyan);
-  content: counter(topic-row, decimal-leading-zero);
-  counter-increment: topic-row;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-.course-page .topic-item::after {
-  color: var(--text-secondary);
-  content: "→";
-  font-size: 1rem;
-  transition: color 0.2s ease, transform 0.2s ease;
 }
 .course-page .topic-item:hover {
   border-color: rgba(255, 255, 255, 0.1);
@@ -1739,6 +1725,7 @@
   top: 72px;
   z-index: 90;
   padding: 0.75rem 0;
+  width: 100%;
 }
 
 .topic-action-bar .container {
@@ -1809,6 +1796,11 @@
   background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
   color: #fff;
   box-shadow: 0 4px 14px rgba(1, 169, 254, 0.35);
+}
+
+#glossary-btn {
+  color: #fff;
+  border: 1px solid var(--border);
 }
 
 /* ─── Topic Layout ───────────────────────────────────────────────────────── */
@@ -2527,7 +2519,7 @@
 
 .chat-page-body .sf-sidebar {
   position: relative;
-  z-index: 2;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -2708,6 +2700,16 @@
   text-align: left;
 }
 
+.chat-page-body .conversation-item:hover .conversation-delete-btn {
+  color: white;
+}
+
+.chat-page-body .conversation-item .conversation-delete-btn {
+  background: transparent;
+  border: none;
+  color: transparent;
+}
+
 .chat-page-body .conversation-item::before {
   display: inline-flex;
   width: 7px;
@@ -2767,8 +2769,7 @@
   border-top: 1px solid var(--chat-line);
 }
 
-.chat-page-body .sidebar-avatar,
-.chat-page-body .assistant-avatar-gemini {
+.chat-page-body .sidebar-avatar {
   display: grid;
   flex: 0 0 auto;
   place-items: center;
@@ -3167,21 +3168,14 @@
 }
 
 .chat-page-body .assistant-msg-flow {
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
   width: min(780px, 100%);
   padding: 1rem 1.1rem;
   border: 1px solid rgba(180, 205, 226, 0.12);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.035);
-}
-
-.chat-page-body .assistant-avatar-gemini {
-  width: 30px;
-  height: 30px;
-  font-size: 0.9rem;
-  border-radius: 9px;
 }
 
 .chat-page-body .assistant-text-target {
@@ -3754,7 +3748,7 @@
   border: 1px solid rgba(1, 169, 254, 0.25);
   padding: 0.25rem 0.75rem;
   border-radius: 99px;
-  margin-bottom: 0.4rem;
+  margin-bottom: 1.5rem;
 }
 
 .sf-origin-return-bar {
@@ -4906,6 +4900,14 @@
     scroll-behavior: auto !important;
   }
 }
+@font-face {
+  src: url(../fonts/Lemon-Regular.ttf);
+  font-family: "Lemon";
+}
+@font-face {
+  src: url(../fonts/Poppins-Medium.ttf);
+  font-family: "Poppins";
+}
 :root {
   --brand-cyan: #01a9fe;
   --brand-blue: #004ada;
@@ -4937,7 +4939,7 @@
 
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Poppins";
   background-color: var(--bg);
   background-image: var(--bg-gradient);
   background-attachment: fixed;

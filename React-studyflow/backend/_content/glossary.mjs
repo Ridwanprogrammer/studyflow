@@ -1,0 +1,434 @@
+/**
+ * StudyFlow Global Glossary System
+ * Reusable global entities across all courses & disciplines.
+ */
+
+export const globalGlossary = [
+  // ─── MATHEMATICS GLOSSARY TERMS ─────────────────────────────────────────────
+  {
+    id: "function",
+    term: "Function",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "A mathematical relationship where each allowed input is assigned exactly one unique output.",
+    fullDefinition: "A **function** $f$ from a set $A$ to a set $B$ (denoted $f: A \\rightarrow B$) is a rule or mapping that assigns to each element $x \\in A$ exactly one element $y \\in B$, written as $y = f(x)$. The set $A$ is the domain, and the set of resulting output values is the range.",
+    formalDefinition: "\\[ \\forall x \\in A, \\quad \\exists! y \\in B \\quad \\text{such that} \\quad y = f(x) \\]",
+    examples: [
+      "Square function: $f(x) = x^2$. For input $x = 3$, output is $f(3) = 9$.",
+      "Linear function: $g(x) = 2x + 1$. For input $x = 0$, output is $g(0) = 1$.",
+      "Absolute value function: $h(x) = |x|$, which turns any real number into its non-negative magnitude."
+    ],
+    relatedTerms: ["domain", "range", "variable", "mapping", "relation", "real-valued"]
+  },
+  {
+    id: "domain",
+    term: "Domain",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The set of all allowed input values for which a function is defined.",
+    fullDefinition: "The **domain** of a real-valued function $f(x)$ is the set of all real numbers $x$ for which the expression $f(x)$ produces a real, mathematically valid output. In real analysis, inputs that cause division by zero, square roots of negative numbers, or logarithms of non-positive numbers must be excluded from the domain.",
+    formalDefinition: "\\[ \\text{Dom}(f) = \\{ x \\in \\mathbb{R} \\mid f(x) \\in \\mathbb{R} \\]",
+    examples: [
+      "For $f(x) = x^2 + 5$, any real number can be squared and added to 5, so $\\text{Dom}(f) = \\mathbb{R} = (-\\infty, \\infty)$.",
+      "For $f(x) = \\frac{1}{x - 3}$, division by zero occurs when $x = 3$. Thus, $\\text{Dom}(f) = \\mathbb{R} \\setminus \\{3\\} = (-\\infty, 3) \\cup (3, \\infty)$.",
+      "For $f(x) = \\sqrt{x - 2}$, the expression under the square root must be non-negative ($x - 2 \\ge 0$). Thus, $\\text{Dom}(f) = [2, \\infty)$."
+    ],
+    relatedTerms: ["function", "range", "variable", "real-number", "input"]
+  },
+  {
+    id: "range",
+    term: "Range",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The set of all actual output values produced by a function from its domain.",
+    fullDefinition: "The **range** (or image) of a function $f: A \\rightarrow B$ is the set of all values $y$ in the target set $B$ that are actually attained by applying $f$ to elements of the domain $A$. It is a subset of the codomain.",
+    formalDefinition: "\\[ \\text{Ran}(f) = f(A) = \\{ y \\in B \\mid \\exists x \\in A \\text{ such that } y = f(x) \\} \\]",
+    examples: [
+      "For $f(x) = x^2$ with domain $\\mathbb{R}$, since squares of real numbers are non-negative, $\\text{Ran}(f) = [0, \\infty)$.",
+      "For $g(x) = \\sin(x)$ with domain $\\mathbb{R}$, the output values oscillate between -1 and 1, so $\\text{Ran}(g) = [-1, 1]$.",
+      "For $h(x) = e^x$, output values are strictly positive real numbers, so $\\text{Ran}(h) = (0, \\infty)$."
+    ],
+    relatedTerms: ["function", "domain", "codomain", "output", "real-valued"]
+  },
+  {
+    id: "variable",
+    term: "Variable",
+    discipline: "Mathematics",
+    category: "Algebra & Calculus",
+    shortDefinition: "A symbol (such as x or y) representing an unspecified element from a set of values.",
+    fullDefinition: "A **variable** is a quantity that can change or assume different values within a given mathematical context. In function notation $y = f(x)$, $x$ is the **independent variable** (the input), and $y$ is the **dependent variable** (the output whose value depends on $x$).",
+    formalDefinition: "\\[ x \\in S \\quad \\text{where } S \\subseteq \\mathbb{R} \\]",
+    examples: [
+      "In $f(x) = 3x^2 - 2$, $x$ is the independent variable.",
+      "In economic modeling, $P(t)$ represents price as a variable dependent on time $t$."
+    ],
+    relatedTerms: ["function", "domain", "real-number", "input", "output"]
+  },
+  {
+    id: "real-number",
+    term: "Real Number",
+    discipline: "Mathematics",
+    category: "Number Theory & Analysis",
+    shortDefinition: "Any value along the continuous number line, including integers, fractions, and irrationals.",
+    fullDefinition: "The set of **real numbers** (symbolized by $\\mathbb{R}$) encompasses all rational numbers (integers like $-5, 0, 4$ and fractions like $\\frac{3}{4}$) as well as irrational numbers (non-repeating decimals like $\\sqrt{2}, \\pi, e$). Real numbers form a complete, continuous metric space representing distance along a continuous line.",
+    formalDefinition: "\\[ \\mathbb{R} = \\mathbb{Q} \\cup \\mathbb{I} \\]",
+    examples: [
+      "Integer: $-7 \\in \\mathbb{R}$",
+      "Rational fraction: $\\frac{22}{7} \\in \\mathbb{R}$",
+      "Irrational constant: $\\pi \\approx 3.14159... \\in \\mathbb{R}$"
+    ],
+    relatedTerms: ["real-valued", "domain", "variable", "function"]
+  },
+  {
+    id: "input",
+    term: "Input",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The independent value supplied to a function or process.",
+    fullDefinition: "The **input** (or argument) of a function $f$ is an element chosen from the function's domain. When evaluated, the function transforms the input value according to its prescribed mathematical rule to yield an output.",
+    formalDefinition: "\\[ x \\in \\text{Dom}(f) \\]",
+    examples: [
+      "In $f(x) = 2x + 5$, if input is $x = 4$, the function evaluates $2(4) + 5 = 13$."
+    ],
+    relatedTerms: ["function", "output", "domain", "variable"]
+  },
+  {
+    id: "output",
+    term: "Output",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The resulting value produced by evaluating a function at a specific input.",
+    fullDefinition: "The **output** (or function value) is the result $y = f(x)$ obtained after performing a function's rule on an input $x$. All possible outputs together form the range of the function.",
+    formalDefinition: "\\[ y = f(x) \\in \\text{Ran}(f) \\]",
+    examples: [
+      "For input $x = -3$ into $f(x) = x^2$, the output is $9$."
+    ],
+    relatedTerms: ["function", "input", "range", "variable"]
+  },
+  {
+    id: "relation",
+    term: "Relation",
+    discipline: "Mathematics",
+    category: "Set Theory & Algebra",
+    shortDefinition: "A collection of ordered pairs relating elements from one set to another.",
+    fullDefinition: "A **relation** $R$ between sets $A$ and $B$ is any subset of the Cartesian product $A \\times B$. While a relation can pair a single input with multiple outputs, a **function** is a special restricted relation where each input is paired with exactly one output.",
+    formalDefinition: "\\[ R \\subseteq A \\times B = \\{ (x, y) \\mid x \\in A, y \\in B \\} \\]",
+    examples: [
+      "The unit circle equation $x^2 + y^2 = 1$ defines a relation. For $x=0$, $y=1$ and $y=-1$, so it is not a function (fails the vertical line test).",
+      "The set of ordered pairs $\{(1, 2), (2, 4), (3, 6)\}$ is both a relation and a function."
+    ],
+    relatedTerms: ["function", "mapping", "domain", "range"]
+  },
+  {
+    id: "mapping",
+    term: "Mapping",
+    discipline: "Mathematics",
+    category: "Set Theory & Algebra",
+    shortDefinition: "An action or rule that pairs elements of one set with elements of another set.",
+    fullDefinition: "A **mapping** (or map) is a mathematical rule that assigns elements of a domain set to target elements in a codomain set. The terms 'mapping' and 'function' are frequently used interchangeably.",
+    formalDefinition: "\\[ f: A \\to B \\]",
+    examples: [
+      "A mapping from student ID numbers to CGPA scores.",
+      "Geometric transformation mapping 2D plane points $(x,y)$ to rotated coordinates $(x', y')$."
+    ],
+    relatedTerms: ["function", "relation", "domain", "codomain"]
+  },
+  {
+    id: "real-valued",
+    term: "Real-Valued",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "Describing a function whose output values are real numbers.",
+    fullDefinition: "A function $f: A \\to B$ is called **real-valued** if its codomain $B$ is a subset of the real numbers $\\mathbb{R}$. That is, for every valid input $x \\in A$, the value $f(x)$ is a real number.",
+    formalDefinition: "\\[ f(x) \\in \\mathbb{R} \\quad \\forall x \\in \\text{Dom}(f) \\]",
+    examples: [
+      "Polynomial functions $f(x) = a_n x^n + ... + a_0$ are real-valued.",
+      "In contrast, functions that yield complex numbers $z = a + bi$ are complex-valued."
+    ],
+    relatedTerms: ["function", "real-number", "domain", "range"]
+  },
+  {
+    id: "codomain",
+    term: "Codomain",
+    discipline: "Mathematics",
+    category: "Set Theory & Calculus",
+    shortDefinition: "The target set into which all output values of a function are declared to fall.",
+    fullDefinition: "The **codomain** of a function $f: A \\to B$ is the target set $B$. The range of $f$ consists of the output values that are actually achieved, making the range a subset of the codomain ($\\text{Ran}(f) \\subseteq B$).",
+    formalDefinition: "\\[ f: A \\to B \\implies B \\text{ is the codomain} \\]",
+    examples: [
+      "For $f: \\mathbb{R} \\to \\mathbb{R}$ defined by $f(x) = x^2$, the codomain is $\\mathbb{R}$, whereas the range is $[0, \\infty)$."
+    ],
+    relatedTerms: ["function", "domain", "range", "mapping"]
+  },
+  {
+    id: "piecewise-function",
+    term: "Piecewise Function",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "A function defined by different sub-rules over distinct sub-intervals of its domain.",
+    fullDefinition: "A **piecewise function** is a function specified by different formulas for different intervals of the independent variable $x$. It allows modeling situations where behavior changes abruptly or conditionally.",
+    formalDefinition: "\\[ f(x) = \\begin{cases} g(x), & x \\in I_1 \\\\ h(x), & x \\in I_2 \\end{cases} \\]",
+    examples: [
+      "Absolute value: $f(x) = |x| = \\begin{cases} x, & x \\ge 0 \\\\ -x, & x < 0 \\end{cases}$",
+      "Heaviside step function: $H(x) = \\begin{cases} 1, & x \\ge 0 \\\\ 0, & x < 0 \\end{cases}$"
+    ],
+    relatedTerms: ["function", "domain", "real-valued"]
+  },
+  {
+    id: "limit",
+    term: "Limit",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The value that a function approaches as its input gets closer to a specified target point.",
+    fullDefinition: "The **limit** of a function $f(x)$ as $x$ approaches $c$ is the value $L$ that $f(x)$ gets arbitrarily close to as $x$ gets infinitely close to $c$ (from both sides, without necessarily requiring $f(c) = L$). Limits provide the foundation for continuity, derivatives, and integrals.",
+    formalDefinition: "\\[ \\lim_{x \\to c} f(x) = L \\iff \\forall \\varepsilon > 0, \\, \\exists \\delta > 0 \\text{ s.t. } 0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon \\]",
+    examples: [
+      "$\\lim_{x \\to 2} (3x + 1) = 7$",
+      "$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$"
+    ],
+    relatedTerms: ["function", "derivative", "integral", "domain"]
+  },
+  {
+    id: "derivative",
+    term: "Derivative",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The instantaneous rate of change of a function with respect to its variable.",
+    fullDefinition: "The **derivative** of a function $f(x)$ at a point $x$ measures how rapidly $f(x)$ changes as $x$ changes. Geometrically, it represents the slope of the tangent line to the curve $y = f(x)$ at that point.",
+    formalDefinition: "\\[ f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h} \\]",
+    examples: [
+      "If $f(x) = x^2$, then derivative $f'(x) = 2x$. At $x = 3$, the rate of change is 6.",
+      "In physics, position $s(t)$ has derivative $v(t) = s'(t)$, which is instantaneous velocity."
+    ],
+    relatedTerms: ["function", "limit", "integral", "variable"]
+  },
+  {
+    id: "integral",
+    term: "Integral",
+    discipline: "Mathematics",
+    category: "Calculus & Analysis",
+    shortDefinition: "The continuous accumulation or net area under a curve bounded by a function.",
+    fullDefinition: "An **integral** accumulates infinitesimal quantities. A **definite integral** calculates the net signed area bounded by $y = f(x)$ between $x = a$ and $x = b$, while an **indefinite integral** finds the antiderivative family of functions.",
+    formalDefinition: "\\[ \\int_a^b f(x) \\, dx = \\lim_{n \\to \\infty} \\sum_{i=1}^n f(x_i^*) \\Delta x \\]",
+    examples: [
+      "Definite integral: $\\int_0^2 x \\, dx = \\left[ \\frac{x^2}{2} \\right]_0^2 = 2 - 0 = 2$",
+      "Indefinite integral: $\\int x^2 \\, dx = \\frac{x^3}{3} + C$"
+    ],
+    relatedTerms: ["function", "derivative", "limit", "domain"]
+  },
+
+  // ─── COMPUTER SCIENCE GLOSSARY TERMS ───────────────────────────────────────
+  {
+    id: "algorithm",
+    term: "Algorithm",
+    discipline: "Computer Science",
+    category: "Algorithms & Data Structures",
+    shortDefinition: "A finite, step-by-step procedure designed to perform a task or solve a problem.",
+    fullDefinition: "An **algorithm** is an unambiguous, ordered sequence of computational steps that takes an input (or set of inputs) and produces a desired output in a finite number of steps.",
+    formalDefinition: "\\[ \\text{Algorithm: } \\text{Input} \\xrightarrow{\\text{Finite unambiguous steps}} \\text{Output} \\]",
+    examples: [
+      "Euclid's algorithm for finding the Greatest Common Divisor (GCD) of two integers.",
+      "Binary search algorithm to find an item in a sorted array in $O(\\log n)$ time."
+    ],
+    relatedTerms: ["recursion", "function", "abstraction", "array"]
+  },
+  {
+    id: "recursion",
+    term: "Recursion",
+    discipline: "Computer Science",
+    category: "Programming Concepts",
+    shortDefinition: "A method where a solution depends on solutions to smaller instances of the same problem.",
+    fullDefinition: "In computer science and mathematics, **recursion** occurs when a function calls itself directly or indirectly. A valid recursive procedure must have at least one base case that terminates execution and a recursive step that moves toward the base case.",
+    formalDefinition: "\\[ f(n) = \\begin{cases} \\text{Base Value}, & n = 0 \\\\ g(n, f(n-1)), & n > 0 \\end{cases} \\]",
+    examples: [
+      "Factorial: $n! = n \\times (n-1)!$ with base case $0! = 1$.",
+      "Fibonacci sequence: $F(n) = F(n-1) + F(n-2)$ with base cases $F(0)=0, F(1)=1$."
+    ],
+    relatedTerms: ["algorithm", "function", "domain"]
+  },
+  {
+    id: "abstraction",
+    term: "Abstraction",
+    discipline: "Computer Science",
+    category: "Software Engineering",
+    shortDefinition: "Hiding internal complexity behind a clear, simplified interface.",
+    fullDefinition: " **Abstraction** is the technique of managing software complexity by hiding non-essential implementation details while exposing only essential properties and interfaces to the user or programmer.",
+    formalDefinition: "\\[ \\text{Interface} \\leftarrow [\\text{Hidden Implementation Details}] \\]",
+    examples: [
+      "A car steering wheel abstracts away the mechanical linkage and hydraulic pumps turning the wheels.",
+      "Calling `array.sort()` abstracts the sorting algorithm implementation."
+    ],
+    relatedTerms: ["algorithm", "data-type", "function"]
+  },
+  {
+    id: "data-type",
+    term: "Data Type",
+    discipline: "Computer Science",
+    category: "Programming Concepts",
+    shortDefinition: "An attribute of data which tells the compiler or interpreter how the programmer intends to use the data.",
+    fullDefinition: "A **data type** constrains the values an expression (such as a variable or function call) might take, and defines the operations that can be performed on those values.",
+    formalDefinition: "\\[ T = (V, O) \\quad \\text{where } V = \\text{Values}, O = \\text{Operations} \\]",
+    examples: [
+      "Integer (`int`): whole numbers like -5, 0, 42.",
+      "String (`str`): sequences of text characters like \"Hello StudyFlow\"."
+    ],
+    relatedTerms: ["variable", "array", "function"]
+  },
+  {
+    id: "array",
+    term: "Array",
+    discipline: "Computer Science",
+    category: "Data Structures",
+    shortDefinition: "An ordered collection of elements stored at contiguous memory locations.",
+    fullDefinition: "An **array** is a central data structure consisting of a collection of elements, each identified by at least one array index or key.",
+    formalDefinition: "\\[ A[i] \\quad \\text{for } 0 \\le i < n \\]",
+    examples: [
+      "`const scores = [75, 88, 92, 60];` accessed by `scores[0] = 75`."
+    ],
+    relatedTerms: ["data-type", "algorithm", "variable"]
+  },
+
+  // ─── PHYSICS GLOSSARY TERMS ─────────────────────────────────────────────────
+  {
+    id: "velocity",
+    term: "Velocity",
+    discipline: "Physics",
+    category: "Mechanics",
+    shortDefinition: "The rate of change of displacement with respect to time.",
+    fullDefinition: " **Velocity** is a vector quantity describing both the speed and direction of motion of an object. Instantaneous velocity is the derivative of position vector $\\mathbf{r}(t)$ with respect to time $t$.",
+    formalDefinition: "\\[ \\mathbf{v}(t) = \\frac{d\\mathbf{r}}{dt} = \\lim_{\\Delta t \\to 0} \\frac{\\Delta \\mathbf{r}}{\\Delta t} \\]",
+    examples: [
+      "A car moving north at $25 \\text{ m/s}$ has velocity $+25 \\text{ m/s \\hat{j}}$."
+    ],
+    relatedTerms: ["displacement", "derivative", "function", "momentum"]
+  },
+  {
+    id: "momentum",
+    term: "Momentum",
+    discipline: "Physics",
+    category: "Mechanics",
+    shortDefinition: "The product of an object's mass and its velocity.",
+    fullDefinition: " **Linear momentum** is a vector quantity that measures an object's resistance to stopping. In a closed system with no external forces, total momentum is conserved.",
+    formalDefinition: "\\[ \\mathbf{p} = m \\mathbf{v} \\]",
+    examples: [
+      "A heavy truck moving at low speed can have the same momentum as a fast light car."
+    ],
+    relatedTerms: ["velocity", "displacement", "variable"]
+  },
+  {
+    id: "displacement",
+    term: "Displacement",
+    discipline: "Physics",
+    category: "Mechanics",
+    shortDefinition: "The straight-line vector distance from an object's initial to final position.",
+    fullDefinition: " **Displacement** is a vector quantity representing the shortest distance and direction from an initial position $\\mathbf{r}_1$ to a final position $\\mathbf{r}_2$.",
+    formalDefinition: "\\[ \\Delta \\mathbf{r} = \\mathbf{r}_2 - \\mathbf{r}_1 \\]",
+    examples: [
+      "Running one full lap around a 400m circular track results in a distance of 400m but a displacement of 0m."
+    ],
+    relatedTerms: ["velocity", "function", "real-number"]
+  },
+
+  // ─── CHEMISTRY GLOSSARY TERMS ───────────────────────────────────────────────
+  {
+    id: "molarity",
+    term: "Molarity",
+    discipline: "Chemistry",
+    category: "Physical Chemistry",
+    shortDefinition: "The concentration of a solution expressed as moles of solute per liter of solution.",
+    fullDefinition: " **Molarity** ($M$) is a measure of chemical concentration defined as the number of moles of solute dissolved per liter ($L$) of final solution volume.",
+    formalDefinition: "\\[ M = \\frac{n \\text{ (moles of solute)}}{V \\text{ (liters of solution)}} \\]",
+    examples: [
+      "A $1.0 M \\text{ NaCl}$ solution contains 1 mole ($58.44 \\text{ g}$) of sodium chloride per liter of water."
+    ],
+    relatedTerms: ["variable", "ratio", "function"]
+  },
+  {
+    id: "oxidation",
+    term: "Oxidation",
+    discipline: "Chemistry",
+    category: "Inorganic & Physical Chemistry",
+    shortDefinition: "The loss of electrons during a reaction by a molecule, atom, or ion.",
+    fullDefinition: " **Oxidation** is the chemical process involving the loss of one or more electrons by a substance, resulting in an increase in its oxidation state. It is always coupled with reduction (Redox reactions).",
+    formalDefinition: "\\[ \\text{Zn(s)} \\to \\text{Zn}^{2+}(aq) + 2e^- \\]",
+    examples: [
+      "Iron rusting in moisture: $4\\text{Fe} + 3\\text{O}_2 \\to 2\\text{Fe}_2\\text{O}_3$."
+    ],
+    relatedTerms: ["ion", "molarity"]
+  },
+  {
+    id: "ion",
+    term: "Ion",
+    discipline: "Chemistry",
+    category: "General Chemistry",
+    shortDefinition: "An atom or molecule with a net electric charge due to the loss or gain of electrons.",
+    fullDefinition: "An **ion** is a charged chemical species. Positively charged ions are cations (lost electrons), while negatively charged ions are anions (gained electrons).",
+    formalDefinition: "\\[ \\text{Na} \\to \\text{Na}^+ + e^- \\quad (\\text{Cation}) \\]",
+    examples: [
+      "Sodium cation $\\text{Na}^+$ and Chloride anion $\\text{Cl}^-$ in table salt."
+    ],
+    relatedTerms: ["oxidation", "molarity"]
+  }
+];
+
+/**
+ * Get term by ID or slug (case-insensitive)
+ */
+export function getGlossaryTerm(termIdOrName) {
+  if (!termIdOrName) return null;
+  const cleanKey = String(termIdOrName).trim().toLowerCase();
+  return globalGlossary.find(
+    (t) => t.id.toLowerCase() === cleanKey || t.term.toLowerCase() === cleanKey
+  ) || null;
+}
+
+/**
+ * Get all terms or filter by discipline
+ */
+export function getAllGlossaryTerms(discipline = "All") {
+  if (!discipline || discipline === "All") return globalGlossary;
+  return globalGlossary.filter(
+    (t) => t.discipline.toLowerCase() === discipline.toLowerCase()
+  );
+}
+
+/**
+ * Search glossary terms by query string
+ */
+export function searchGlossary(query) {
+  if (!query || !query.trim()) return globalGlossary;
+  const q = query.toLowerCase().trim();
+  return globalGlossary.filter(
+    (t) =>
+      t.term.toLowerCase().includes(q) ||
+      t.shortDefinition.toLowerCase().includes(q) ||
+      t.fullDefinition.toLowerCase().includes(q) ||
+      (t.category && t.category.toLowerCase().includes(q)) ||
+      (t.discipline && t.discipline.toLowerCase().includes(q))
+  );
+}
+
+/**
+ * Render Markdown or HTML with interactive glossary term spans.
+ * Transforms `[[term_id]]` or `[[term_id|Label]]` syntax into interactive elements.
+ * Also automatically converts recognized key terminology into interactive term elements.
+ */
+let termCounter = 0;
+export function markGlossaryTermsInHtml(html) {
+  if (!html) return "";
+  termCounter = 0;
+
+  let processed = html;
+
+  // 1. Explicit bracket notation: [[termId|Display Text]] or [[termId]]
+  processed = processed.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/gi, (_, id, label) => {
+    const termObj = getGlossaryTerm(id);
+    const displayText = label || (termObj ? termObj.term : id);
+    const validId = termObj ? termObj.id : id;
+    termCounter++;
+    const anchorId = `sf-term-ref-${validId}-${termCounter}`;
+    return `<span class="sf-glossary-term" data-term-id="${validId}" id="${anchorId}" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" title="Click or hover to view quick definition">${displayText}</span>`;
+  });
+
+  return processed;
+}
