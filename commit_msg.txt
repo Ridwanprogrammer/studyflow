@@ -1,9 +1,9 @@
-feat: chat improvements - delete sessions, prominent back button, clean topbar
+fix: chat improvements - delete sessions via portal, prominent back button, clean topbar
 
-- Chat page: Added delete session via right-click context menu on sidebar conversations
-- Chat page: Prominent 'Back to Dashboard' button in topbar left (next to sidebar toggle) with label
-- Chat page: Removed export and new chat buttons from topbar (only Search remains)
-- TopBar: Removed export/new chat buttons - consistent across all pages (Search, Notification, AI Tutor, User)
-- Chat topbar: Only Search button remains on right side
-
-Build passes
+- Chat page: Delete session via right-click -> portaled context menu (fixed oxc parser issue)
+- Chat page: Prominent 'Back to Dashboard' button in topbar left with proper flex layout
+- Chat page: Removed course-choosing dropdown from topbar (moved to sidebar)
+- Chat page: Commented out search button in topbar (code preserved)
+- Chat topbar: Only back button + title on left, empty right side
+- Context menu: Portaled to document.body with viewport clamping (no more clipping)
+- Build passes
