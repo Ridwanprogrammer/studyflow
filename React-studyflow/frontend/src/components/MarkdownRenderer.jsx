@@ -50,34 +50,24 @@ function CodeBlock({ children, className }) {
 const markdownComponents = {
   code: CodeBlock,
   inlineCode: ({ children }) => (
-    <code style={{
-      background: 'rgba(1, 169, 254, 0.1)',
-      color: 'var(--brand-cyan)',
-      padding: '0.15em 0.4em',
-      borderRadius: '4px',
-      fontSize: '0.9em',
-      fontFamily: 'monospace',
-      border: '1px solid rgba(1, 169, 254, 0.2)',
-    }}>
-      {children}
-    </code>
+    <code className="sf-inline-code">{children}</code>
   ),
-  h1: ({ children }) => <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', margin: '2rem 0 1rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(1, 169, 254, 0.1)' }}>{children}</h1>,
-  h2: ({ children }) => <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--brand-cyan)', margin: '2rem 0 1rem' }}>{children}</h2>,
-  h3: ({ children }) => <h3 style={{ fontSize: '1.25rem', fontWeight: '650', color: '#fff', margin: '1.5rem 0 0.75rem' }}>{children}</h3>,
-  p: ({ children }) => <p style={{ margin: '1rem 0', lineHeight: 1.8, color: '#d3dce7' }}>{children}</p>,
-  ul: ({ children }) => <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', margin: '1rem 0', lineHeight: 1.8 }}>{children}</ul>,
-  ol: ({ children }) => <ol style={{ listStyle: 'decimal', paddingLeft: '1.5rem', margin: '1rem 0', lineHeight: 1.8 }}>{children}</ol>,
-  blockquote: ({ children }) => <blockquote style={{ borderLeft: '3px solid var(--brand-cyan)', paddingLeft: '1rem', margin: '1.5rem 0', color: '#94a3b8', fontStyle: 'italic' }}>{children}</blockquote>,
-  a: ({ href, children }) => <a href={href} style={{ color: 'var(--brand-cyan)', textDecoration: 'none', borderBottom: '1px dashed var(--brand-cyan)' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-  strong: ({ children }) => <strong style={{ color: '#fff' }}>{children}</strong>,
+  h1: ({ children }) => <h1 className="sf-md-h1">{children}</h1>,
+  h2: ({ children }) => <h2 className="sf-md-h2">{children}</h2>,
+  h3: ({ children }) => <h3 className="sf-md-h3">{children}</h3>,
+  p: ({ children }) => <p className="sf-md-p">{children}</p>,
+  ul: ({ children }) => <ul className="sf-md-ul">{children}</ul>,
+  ol: ({ children }) => <ol className="sf-md-ol">{children}</ol>,
+  blockquote: ({ children }) => <blockquote className="sf-md-blockquote">{children}</blockquote>,
+  a: ({ href, children }) => <a href={href} className="sf-md-link" target="_blank" rel="noopener noreferrer">{children}</a>,
+  strong: ({ children }) => <strong className="sf-md-strong">{children}</strong>,
 }
 
 /**
  * Shared Markdown renderer component.
  * Eliminates duplication across Topic, Chat, and Glossary pages.
  */
-export function MarkdownRenderer({ content, className = '' }) {
+export function MarkdownRenderer({ content, className = 'sf-markdown-body' }) {
   if (!content) return null
 
   return (
