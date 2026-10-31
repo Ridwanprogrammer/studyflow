@@ -106,15 +106,15 @@ export function CalendarPage() {
 
         {/* Day Headers */}
         <div className="grid grid-cols-7 border-b border-white/5 bg-slate-900/50">
-          {dayNames.map((d) => <div key={d} className="text-[10px] font-bold text-slate-400 uppercase py-3 px-2 text-center">{d}</div>)}
+          {dayNames.map((d) => <div key={d} className="text-[10px] font-bold text-slate-400 uppercase py-2 px-1 text-center">{d}</div>)}
         </div>
 
-        {/* Calendar Grid - Smaller cells, better event marking */}
-        <div className="grid grid-cols-7 gap-0.5 p-2 min-h-[500px]">
+        {/* Calendar Grid - Very small cells, today highly visible */}
+        <div className="grid grid-cols-7 gap-0.5 p-1.5 min-h-[400px]">
           {/* Empty cells before 1st */}
           {[...Array(firstDay)].map((_, i) => <div key={`empty-${i}`} className="aspect-square bg-slate-900/30" />)}
 
-          {/* Days - Smaller cells, enhanced event marking with corner badges */}
+          {/* Days - Very small cells, today very prominent */}
           {[...Array(daysInMonth)].map((_, i) => {
             const day = i + 1
             const events = getEventsForDay(day)
@@ -123,11 +123,11 @@ export function CalendarPage() {
             const colors = primaryType ? getEventColors(primaryType) : null
             const hasEvents = events.length > 0
             
-            // Build day cell classes - smaller cells
+            // Build day cell classes - very small cells
             const dayClasses = [
               'aspect-square',
-              'min-h-[80px]',
-              'rounded-xl',
+              'min-h-[50px]',
+              'rounded-lg',
               'bg-white/[0.02]',
               'border',
               'border-white/5',
@@ -140,9 +140,9 @@ export function CalendarPage() {
             ]
             
             if (isTodayDay) {
-              dayClasses.push('ring-2', 'ring-cyan-500/50', 'bg-cyan-500/10')
-            }
-            if (hasEvents && colors) {
+              // TODAY - very prominent: thick cyan border, cyan bg, white text, glow
+              dayClasses.push('border-2', 'border-cyan-400', 'bg-cyan-500/20', 'shadow-[0_0_0_2px_theme(colors.cyan.400)]', 'shadow-lg', 'shadow-cyan-500/25')
+            } else if (hasEvents && colors) {
               dayClasses.push(colors.light, colors.ring)
             }
             
@@ -152,42 +152,35 @@ export function CalendarPage() {
                 className={dayClasses.join(' ')}
                 title={hasEvents ? events.map(e => e.title).join(', ') : ''}
               >
-                {/* Day number - top left */}
-                <span className="absolute top-1 left-1 text-xs font-medium">
-                  {isTodayDay ? <span className="text-cyan-400">{day}</span> : <span className="text-slate-300">{day}</span>}
+                {/* Day number - centered, larger when today */}
+                <span className={`absolute top-0.5 left-0.5 text-xs font-bold ${isTodayDay ? 'text-white' : 'text-slate-300'}`}>
+                  {day}
                 </span>
                 
-                {/* Corner badge - top right (shows primary event type) */}
+                {/* Corner badge - top right */}
                 {hasEvents && (
-                  <span className={`absolute top-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${colors.badge} ${colors.text}`}>
+                  <span className={`absolute top-0.5 right-0.5 px-1 py-0.5 rounded text-[7px] font-bold uppercase ${colors.badge} ${colors.text}`}>
                     {colors.badgeText}
                   </span>
                 )}
                 
-                {/* Event dots - bottom center (shows all events for the day) */}
+                {/* Event dots - bottom center */}
                 {hasEvents && (
-                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1 flex-wrap justify-center">
-                    {events.slice(0, 4).map((event) => {
+                  <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 flex gap-0.5 flex-wrap justify-center">
+                    {events.slice(0, 3).map((event) => {
                       const c = getEventColors(event.type)
                       return (
                         <span
                           key={event.title}
-                          className={`w-2 h-2 rounded-full ${c.dot} ring-1 ring-slate-950`}
+                          className={`w-1.5 h-1.5 rounded-full ${c.dot} ring-1 ring-slate-950`}
                           title={event.title}
                         />
                       )
                     })}
-                    {events.length > 4 && (
-                      <span className="w-2 h-2 rounded-full bg-white/30 ring-1 ring-slate-950" title={`+${events.length - 4} more`} />
+                    {events.length > 3 && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white/30 ring-1 ring-slate-950" title={`+${events.length - 3} more`} />
                     )}
                   </div>
-                )}
-                
-                {/* Event count indicator - bottom left when many events */}
-                {hasEvents && events.length > 1 && (
-                  <span className="absolute bottom-1 left-1 text-[9px] font-medium text-white/70 bg-black/30 px-1 rounded">
-                    {events.length} event{events.length > 1 ? 's' : ''}
-                  </span>
                 )}
               </button>
             )

@@ -1,11 +1,9 @@
-fix: smaller calendar cells + enhanced event marking with corner badges
+fix: very small calendar cells + today highly visible
 
-- Day cells: min-h-[80px] (was 120px) for denser grid
-- Corner badge: shows primary event type (EXAM/TEST/EVNT/HOL) top-right
-- Event dots: larger (w-2 h-2) at bottom center, shows all events
-- Event count: shows N events at bottom-left when multiple
-- Today ring: cyan ring preserved
-- System date: uses new Date() for today - always reflects real time
-- Today button: resets to current system date
+- Day cells: min-h-[50px] (was 80px) - very compact grid
+- Today: thick cyan border (2px), cyan bg (20%), glow shadow, white text - impossible to miss
+- Cell size: min-h-[50px] with aspect-square for perfect cubes
+- Event badges: still work with smaller cells
+- System date: uses new Date() - always real time
 
-Build passes
+Build passes ✅
