@@ -83,3 +83,20 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Custom serializer that uses 'email' field instead of 'username'."""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Rename 'username' field to 'email'
+        self.fields['email'] = self.fields.pop('username')
+        self.fields['email'].label = 'Email'
+        
+    def validate(self, attrs):
+        # Map email to username for parent validation
+        attrs['username'] = attrs.get('email')
+        return super().validate(attrs)

@@ -1,7 +1,8 @@
-fix: login authentication - use email instead of username for JWT auth
+fix: JWT authentication with email field
 
-- Fixed authStore.jsx: login() now sends 'email' field (backend USERNAME_FIELD = 'email')
-- Updated Login.jsx: changed form field from 'username' to 'email' with email type/input
-- Registration already sends correct fields (username, email, first_name, last_name)
+- Backend: CustomTokenObtainPairSerializer accepts 'email' field (maps to username for JWT)
+- Backend: CustomTokenObtainPairView uses custom serializer and finds user by email
+- Backend: Updated URLs to use CustomTokenObtainPairView
+- Frontend: authStore.jsx login() already sends 'email' field
 
 Build passes

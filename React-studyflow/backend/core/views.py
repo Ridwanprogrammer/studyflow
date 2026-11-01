@@ -10,6 +10,7 @@ from .serializers import (
     UserSerializer,
     UserRegistrationSerializer,
     ChangePasswordSerializer,
+    CustomTokenObtainPairSerializer,
 )
 
 User = get_user_model()
@@ -59,13 +60,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     """Custom JWT token obtain view with user data in response."""
+    serializer_class = CustomTokenObtainPairSerializer
     
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             # Add user data to response
-            user = User.objects.get(username=request.data.get('username'))
-            user.update_last_active()
-            user_data = UserSerializer(user).data
-            response.data['user'] = user_data
+            # Use email to find user since USERNAME_FIELD = email
+            email = request.data.get('email')
+            if email:
+                user = User.objects.get(email=email)
+                user.update_last_active()
+                user_data = UserSerializer(user).data
+                response.data['user'] = user_data
         return response
