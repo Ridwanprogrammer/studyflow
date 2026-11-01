@@ -1,10 +1,7 @@
-fix: chat page - fixed delete context menu, back button layout, removed course dropdown
+fix: login authentication - use email instead of username for JWT auth
 
-- Fixed delete context menu: portaled to document.body with viewport clamping (fixes clipping in sidebar)
-- Fixed back button layout: added flex items-center gap-3 flex-wrap to top-bar-left, flex items-center gap-1.5 whitespace-nowrap to back button
-- Removed course dropdown from chat topbar (moved to sidebar where it belongs)
-- Commented out search button in chat topbar (code preserved)
-- Context menu now portals to document.body with viewport clamping (no more sidebar clipping)
-- Fixed oxc parser issue by using createPortal variable pattern
+- Fixed authStore.jsx: login() now sends 'email' field (backend USERNAME_FIELD = 'email')
+- Updated Login.jsx: changed form field from 'username' to 'email' with email type/input
+- Registration already sends correct fields (username, email, first_name, last_name)
 
 Build passes

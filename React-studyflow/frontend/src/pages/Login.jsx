@@ -9,7 +9,7 @@ import { Sparkles, Lock, Mail, User } from "../components/ui/Icons";
 export function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,15 +57,15 @@ export function Login() {
             )}
 
             <Input
-              label="Username or Email"
-              name="username"
-              type="text"
-              value={formData.username}
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your username"
-              leftIcon={<User size={18} />}
+              placeholder="Enter your email"
+              leftIcon={<Mail size={18} />}
               required
-              autoComplete="username"
+              autoComplete="email"
               fullWidth
             />
 

@@ -71,9 +71,9 @@ export function AuthProvider({ children }) {
     document.documentElement.classList.add('dark')
   }, [fetchUser])
 
-  const login = async (username, password) => {
-    // Backend uses email as USERNAME_FIELD, so send as email field
-    const response = await api.post('/auth/token/', { email: username, password })
+  const login = async (email, password) => {
+    // Backend uses email as USERNAME_FIELD
+    const response = await api.post('/auth/token/', { email, password })
     const tokens = { access: response.data.access, refresh: response.data.refresh }
     setTokens(tokens)
     await fetchUser()
@@ -81,7 +81,15 @@ export function AuthProvider({ children }) {
   }
 
   const register = async (userData) => {
-    const response = await api.post('/users/register/', userData)
+    // Map frontend fields to backend serializer fields
+    const response = await api.post('/users/register/', {
+      username: userData.username,
+      email: userData.email,
+      password: userData.password,
+      password_confirm: userData.password,
+      first_name: userData.full_name?.split(' ')[0] || '',
+      last_name: userData.full_name?.split(' ').slice(1).join(' ') || '',
+    })
     return response.data
   }
 
