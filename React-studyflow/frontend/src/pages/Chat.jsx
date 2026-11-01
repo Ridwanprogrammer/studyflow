@@ -4,6 +4,7 @@ import { useSearchParams, NavLink } from 'react-router-dom'
 import { useAuth } from '../stores/authStore'
 import { api, unwrapList } from '../lib/api'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
+import { createPortal } from 'react-dom'
 import { 
   Plus, Bot, Sparkles, Sparkle, ChevronLeft, ChevronRight, 
   MessageSquare, Copy, Loader2, X, BookOpen, Brain, 
@@ -83,9 +84,8 @@ export function Chat() {
   const [contextMenuOpen, setContextMenuOpen] = useState(false)
   const [attachments, setAttachments] = useState([])
   const [copiedIndex, setCopiedIndex] = useState(null)
-  const [sendButtonState, setSendButtonState] = useState('send') // 'send' | 'stop'
+  const [sendButtonState, setSendButtonState] = useState('send')
   
-  // Context menu for delete session
   const [contextMenuSessionId, setContextMenuSessionId] = useState(null)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
 
@@ -155,7 +155,6 @@ export function Chat() {
       if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
         setContextMenuOpen(false)
       }
-      // Close session context menu
       if (contextMenuSessionId) {
         setContextMenuSessionId(null)
       }
@@ -340,7 +339,7 @@ export function Chat() {
     }
   }
 
-  // Export current chat to Markdown (moved from topbar)
+  // Export current chat to Markdown
   const handleExportMarkdown = () => {
     if (!messages.length) return
     let md = `# StudyFlow AI Tutor Session\n**Course:** ${selectedCourseCode}\n**Date:** ${new Date().toLocaleDateString()}\n\n---\n\n`
@@ -380,6 +379,29 @@ export function Chat() {
   // Compute chat title for the header
   const chatTitle = currentSession?.title || 
     (messages.length > 0 ? messages.find(m => m.role === 'user')?.content?.slice(0, 40) || '' : '') || 'New Chat'
+
+  // Create portal for session context menu (avoid ternary in JSX for oxc parser)
+  const contextMenuPortal = contextMenuSessionId ? createPortal(
+    <div
+      className="session-context-menu"
+      style={{
+        left: Math.min(contextMenuPosition.x, window.innerWidth - 180),
+        top: Math.min(contextMenuPosition.y, window.innerHeight - 60),
+        position: 'fixed',
+        zIndex: 1000,
+      }}
+      ref={contextMenuRef}
+    >
+      <button
+        onClick={() => handleDeleteSession(contextMenuSessionId)}
+        className="context-menu-item text-red-400"
+      >
+        <Trash2 size={14} />
+        <span>Delete</span>
+      </button>
+    </div>,
+    document.body
+  ) : null
 
   return (
     <div className="sf-app-body chat-page-body">
@@ -488,29 +510,15 @@ export function Chat() {
             </div>
           </div>
 
-          {/* Session Context Menu (Delete) */}
-          {contextMenuSessionId && (
-            <div
-              className="session-context-menu"
-              style={{ left: contextMenuPosition.x, top: contextMenuPosition.y }}
-              ref={contextMenuRef}
-            >
-              <button
-                onClick={() => handleDeleteSession(contextMenuSessionId)}
-                className="context-menu-item text-red-400"
-              >
-                <Trash2 size={14} />
-                <span>Delete</span>
-              </button>
-            </div>
-          )}
+          {/* Session Context Menu (Delete) - Portaled to body for proper positioning */}
+          {contextMenuPortal}
         </aside>
 
         {/* ─── Main Chat Stage ────────────────────────────────────────────────── */}
         <main className="gpt-main-stage" id="main-content">
           {/* StudyFlow chat header */}
           <header className="gpt-top-bar">
-            <div className="top-bar-left">
+            <div className="top-bar-left flex items-center gap-3 flex-wrap">
               <button
                 onClick={() => setSidebarOpen((prev) => !prev)}
                 className="top-sidebar-btn"
@@ -529,7 +537,7 @@ export function Chat() {
               {/* Prominent Back to Dashboard Button */}
               <NavLink
                 to="/"
-                className="back-to-dashboard-btn"
+                className="back-to-dashboard-btn flex items-center gap-1.5 whitespace-nowrap"
                 title="Back to Dashboard"
                 aria-label="Back to main app"
               >
@@ -539,70 +547,6 @@ export function Chat() {
                 <span>Dashboard</span>
               </NavLink>
 
-              {/* Context Dropdown Pill */}
-              <div className="context-pill-dropdown" id="context-pill-dropdown" ref={contextMenuRef}>
-                <button
-                  onClick={() => setContextMenuOpen((prev) => !prev)}
-                  className="model-select-pill"
-                  id="model-pill-btn"
-                  title="Choose course and topic focus"
-                  aria-haspopup="true"
-                  aria-expanded={contextMenuOpen}
-                  aria-controls="context-menu"
-                >
-                  <span className="pill-sparkle">✦</span>
-                  <span className="pill-title">{contextDisplay.title}</span>
-                  <span className="pill-subtitle">({contextDisplay.subtitle})</span>
-                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {/* Context Switcher Dropdown Menu */}
-                <div className={`context-menu ${contextMenuOpen ? '' : 'hidden'}`} id="context-menu">
-                  <div className="context-menu-header">Select Subject Focus</div>
-                  <div className="context-menu-group">
-                    <label htmlFor="modal-course-select">Course</label>
-                    <select
-                      id="modal-course-select"
-                      value={selectedCourseCode}
-                      onChange={(e) => {
-                        setSelectedCourseCode(e.target.value)
-                        setSelectedTopicId('ALL')
-                      }}
-                      className="context-dropdown-select"
-                    >
-                      <option value="ALL">🌐 General Assistant (All Courses)</option>
-                      {courses.map((c) => (
-                        <option key={c.code} value={c.code}>
-                          {c.code}: {c.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {selectedCourseCode !== 'ALL' && courseTopics.length > 0 && (
-                    <div className="context-menu-group">
-                      <label htmlFor="modal-topic-select">Topic</label>
-                      <select
-                        id="modal-topic-select"
-                        value={selectedTopicId}
-                        onChange={(e) => setSelectedTopicId(e.target.value)}
-                        className="context-dropdown-select"
-                        disabled={courseTopics.length === 0}
-                      >
-                        <option value="ALL">📚 Entire Course Workspace</option>
-                        {courseTopics.map((t) => (
-                          <option key={t.topic_id || t.id} value={t.topic_id || t.id}>
-                            {t.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                  <button onClick={() => setContextMenuOpen(false)} className="context-menu-done">Done</button>
-                </div>
-              </div>
-
               {/* Chat Title Display - modern AI app style */}
               <div className="chat-title-display">
                 <span className="chat-title-text">{chatTitle}</span>
@@ -610,8 +554,8 @@ export function Chat() {
             </div>
 
             <div className="top-bar-right">
-              {/* Quick Search Button - ONLY button in topbar right now */}
-              <button
+              {/* Quick Search Button - COMMENTED OUT (might use later) */}
+              {/* <button
                 onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
                 className="sf-search-cmd-btn sf-cmd-trigger"
                 id="global-search-btn"
@@ -623,7 +567,7 @@ export function Chat() {
                 </svg>
                 <span>Search</span>
                 <kbd>Ctrl+K</kbd>
-              </button>
+              </button> */}
             </div>
           </header>
 
@@ -891,7 +835,7 @@ export function Chat() {
         </main>
       </div>
     </div>
-  );
+  )
 }
 
-export default Chat;
+export default Chat
