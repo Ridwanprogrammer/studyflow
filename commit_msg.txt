@@ -1,8 +1,8 @@
 fix: JWT authentication with email field
 
-- Backend: CustomTokenObtainPairSerializer accepts 'email' field (maps to username for JWT)
-- Backend: CustomTokenObtainPairView uses custom serializer and finds user by email
+- Backend: CustomTokenObtainPairSerializer works with USERNAME_FIELD = 'email'
+- Backend: CustomTokenObtainPairView finds user by email
 - Backend: Updated URLs to use CustomTokenObtainPairView
-- Frontend: authStore.jsx login() already sends 'email' field
+- Frontend: authStore.jsx login() sends 'email' field (already correct)
 
 Build passes
