@@ -1,30 +1,46 @@
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Card } from "../components/ui/Card";
-import { Sparkles, Lock, Mail, User } from "../components/ui/Icons";
+import { Lock, Mail } from "../components/ui/Icons";
 
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const registered = params.get("registered");
+    const email = params.get("email");
+
+    if (registered === "true") {
+      setSuccess("Registration successful. Please sign in to continue.");
+    }
+
+    if (email) {
+      setFormData((prev) => ({ ...prev, email }));
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setIsLoading(true);
 
     try {
-      await login(formData.username, formData.password);
+      await login(formData.email.trim(), formData.password);
       navigate("/");
     } catch (err) {
-      setError(
-        err.response?.data?.detail || "Invalid credentials. Please try again.",
-      );
+      const detail = err.response?.data?.detail || err.response?.data?.non_field_errors?.[0];
+      setError(detail || "Invalid email or password. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -39,8 +55,8 @@ export function Login() {
       <div className="w-full max-w-md">
         <Card variant="strong" padding="lg" className="animate-slide-up">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16  rounded-2xl mx-auto mb-4 ">
-              <img src="/icons/logo.png" alt="" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-4 bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_18px_rgba(1,169,254,0.3)]">
+              <img src="/icons/logo.png" alt="StudyFlow logo" className="w-10 h-10 object-contain" />
             </div>
             <h1 className="text-2xl font-extrabold text-white">Welcome back</h1>
             <p className="text-slate-400 mt-2">
@@ -53,6 +69,13 @@ export function Login() {
               <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-sm flex items-center gap-2">
                 <Lock size={16} aria-hidden="true" />
                 {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-300 text-sm flex items-center gap-2">
+                <Mail size={16} aria-hidden="true" />
+                {success}
               </div>
             )}
 
@@ -119,17 +142,6 @@ export function Login() {
             </NavLink>
           </p>
         </Card>
-
-        {/* <p className="mt-6 text-center text-slate-500 text-sm">
-          Demo credentials:{" "}
-          <code className="text-slate-300 bg-slate-800/50 px-2 py-0.5 rounded">
-            admin2
-          </code>{" "}
-          /{" "}
-          <code className="text-slate-300 bg-slate-800/50 px-2 py-0.5 rounded">
-            admin123
-          </code>
-        </p> */}
       </div>
     </div>
   );

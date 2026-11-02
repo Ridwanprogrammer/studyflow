@@ -4,7 +4,7 @@ import { useAuth } from "../stores/authStore";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Card } from "../components/ui/Card";
-import { Sparkles, Lock, Mail, User } from "../components/ui/Icons";
+import { Lock, Mail, User } from "../components/ui/Icons";
 
 export function Register() {
   const navigate = useNavigate();
@@ -24,12 +24,12 @@ export function Register() {
     setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError("Passwords do not match.");
       return;
     }
 
     if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters");
+      setError("Password must be at least 8 characters.");
       return;
     }
 
@@ -37,20 +37,21 @@ export function Register() {
 
     try {
       await register({
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password,
-        full_name: formData.full_name,
+        full_name: formData.full_name.trim(),
       });
-      // After registration, redirect to login
-      navigate("/login?registered=true");
+
+      navigate(`/login?registered=true&email=${encodeURIComponent(formData.email.trim())}`);
     } catch (err) {
-      setError(
+      const apiError =
         err.response?.data?.detail ||
-          err.response?.data?.username?.[0] ||
-          err.response?.data?.email?.[0] ||
-          "Registration failed. Please try again.",
-      );
+        err.response?.data?.username?.[0] ||
+        err.response?.data?.email?.[0] ||
+        err.response?.data?.password_confirm?.[0] ||
+        "Registration failed. Please try again.";
+      setError(apiError);
     } finally {
       setIsLoading(false);
     }
@@ -65,8 +66,8 @@ export function Register() {
       <div className="w-full max-w-md">
         <Card variant="strong" padding="lg" className="animate-slide-up">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16  rounded-2xl mx-auto mb-4 ">
-              <img src="/icons/logo.png" alt="" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mx-auto mb-4 bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_18px_rgba(1,169,254,0.3)]">
+              <img src="/icons/logo.png" alt="StudyFlow logo" className="w-10 h-10 object-contain" />
             </div>
             <h1 className="text-2xl font-extrabold text-white">
               Create your account

@@ -72,7 +72,6 @@ export function AuthProvider({ children }) {
   }, [fetchUser])
 
   const login = async (email, password) => {
-    // Backend uses email as USERNAME_FIELD
     const response = await api.post('/auth/token/', { email, password })
     const tokens = { access: response.data.access, refresh: response.data.refresh }
     setTokens(tokens)
@@ -81,7 +80,6 @@ export function AuthProvider({ children }) {
   }
 
   const register = async (userData) => {
-    // Map frontend fields to backend serializer fields
     const response = await api.post('/users/register/', {
       username: userData.username,
       email: userData.email,
@@ -94,18 +92,10 @@ export function AuthProvider({ children }) {
   }
 
   const logout = async () => {
-    try {
-      const tokens = getTokens()
-      if (tokens?.refresh) {
-        await api.post('/auth/token/refresh/', { refresh: tokens.refresh })
-      }
-    } catch (error) {
-      // Ignore logout errors
-    } finally {
-      clearTokens()
-      setUser(null)
-      setIsAuthenticated(false)
-    }
+    clearTokens()
+    setUser(null)
+    setIsAuthenticated(false)
+    return true
   }
 
   const updateProfile = async (data) => {

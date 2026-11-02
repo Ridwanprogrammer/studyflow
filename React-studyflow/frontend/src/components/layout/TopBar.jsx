@@ -1,6 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../stores/authStore'
-import { Menu, Search, Sparkles, Bell, ChevronRight } from '../ui/Icons'
+import { Menu, Search, Sparkles, Bell, ChevronRight, LogOut, User } from '../ui/Icons'
 import { Tooltip } from '../ui/Tooltip'
 import { useState, useRef, useEffect, useMemo } from 'react'
 
@@ -100,11 +100,14 @@ function NotificationContent({ upcomingEvents, onClose }) {
 }
 
 export function TopBar({ onMenuClick, onSearchClick, pathname }) {
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
   const meta = pageMeta(pathname)
   const initials = (user?.full_name || user?.username || 'Student').charAt(0).toUpperCase()
   const [showNotifications, setShowNotifications] = useState(false)
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
   const notificationRef = useRef(null)
+  const profileMenuRef = useRef(null)
 
   // Get upcoming events for notifications
   const upcomingEvents = useMemo(() => getUpcomingEvents(), [])
@@ -115,11 +118,20 @@ export function TopBar({ onMenuClick, onSearchClick, pathname }) {
   }).length
 
   const handleCloseNotifications = () => setShowNotifications(false)
+  const handleLogout = async () => {
+    await logout()
+    setShowProfileMenu(false)
+    navigate('/login')
+  }
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (notificationRef.current && !notificationRef.current.contains(e.target)) {
         setShowNotifications(false)
+      }
+
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setShowProfileMenu(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -223,11 +235,45 @@ export function TopBar({ onMenuClick, onSearchClick, pathname }) {
         )}
 
         {/* User Profile Avatar */}
-        <Tooltip content={`${user?.full_name || user?.username || 'Student'} · FUGUS 200L`} position="bottom">
-          <div className="sf-user-avatar">
-            {initials}
-          </div>
-        </Tooltip>
+        <div className="relative" ref={profileMenuRef}>
+          <Tooltip content={`${user?.full_name || user?.username || 'Student'} · FUGUS 200L`} position="bottom">
+            <button
+              type="button"
+              onClick={() => setShowProfileMenu((value) => !value)}
+              className="sf-user-avatar cursor-pointer hover:scale-[1.02] transition-transform"
+              aria-label="Open account menu"
+              aria-expanded={showProfileMenu}
+            >
+              {initials}
+            </button>
+          </Tooltip>
+
+          {showProfileMenu && (
+            <div className="absolute right-0 top-full mt-3 w-56 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl backdrop-blur-xl z-50">
+              <div className="px-3 py-2 border-b border-white/10 mb-2">
+                <p className="text-sm font-semibold text-white">{user?.full_name || user?.username || 'Student'}</p>
+                <p className="text-xs text-slate-400">{user?.email || 'student@studyflow.app'}</p>
+              </div>
+
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 hover:bg-white/5 transition-colors"
+              >
+                <User size={16} className="text-cyan-400" />
+                View profile
+              </button>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-rose-300 hover:bg-rose-500/10 transition-colors"
+              >
+                <LogOut size={16} />
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )
