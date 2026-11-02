@@ -99,7 +99,7 @@ function NotificationContent({ upcomingEvents, onClose }) {
   )
 }
 
-export function TopBar({ onMenuClick, onSearchClick, pathname }) {
+export function TopBar({ onMenuClick, onSearchClick, pathname, hideMenu = false, navigation = null }) {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
   const meta = pageMeta(pathname)
@@ -142,14 +142,16 @@ export function TopBar({ onMenuClick, onSearchClick, pathname }) {
     <header className="sf-top-header">
       {/* Left: Mobile Toggle & Page Title */}
       <div className="flex items-center gap-3.5 min-w-0">
-        <button
-          type="button"
-          className="top-sidebar-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 lg:hidden transition-colors cursor-pointer"
-          onClick={onMenuClick}
-          aria-label="Toggle navigation drawer"
-        >
-          <Menu size={20} />
-        </button>
+        {!hideMenu && (
+          <button
+            type="button"
+            className="top-sidebar-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 lg:hidden transition-colors cursor-pointer"
+            onClick={onMenuClick}
+            aria-label="Toggle navigation drawer"
+          >
+            <Menu size={20} />
+          </button>
+        )}
 
         <div className="min-w-0">
           <h1 className="sf-greeting-title">{meta.title}</h1>
@@ -159,6 +161,7 @@ export function TopBar({ onMenuClick, onSearchClick, pathname }) {
 
       {/* Right: Actions - CONSISTENT across all pages */}
       <div className="sf-header-actions">
+        {navigation}
         {/* Quick Search Button */}
         <Tooltip content="Quick Search (Ctrl+K)" position="bottom">
           <button

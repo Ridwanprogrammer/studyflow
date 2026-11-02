@@ -78,7 +78,7 @@ export function Chat() {
   const [currentSessionId, setCurrentSessionId] = useState(null)
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 900)
   const [selectedCourseCode, setSelectedCourseCode] = useState('ALL')
   const [selectedTopicId, setSelectedTopicId] = useState('ALL')
   const [contextMenuOpen, setContextMenuOpen] = useState(false)
@@ -405,18 +405,18 @@ export function Chat() {
 
   return (
     <div className="sf-app-body chat-page-body">
-      <div className="sf-dashboard-layout">
+      <div className={`sf-dashboard-layout ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         {/* ─── Left Collapsible Sidebar ───────────────────────────────────── */}
         <aside
-          className={`sf-sidebar ${sidebarOpen ? 'mobile-open' : ''}`}
+          className={`sf-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}
           id="gpt-sidebar"
           aria-label="Chat history and settings"
         >
           {/* Brand Logo */}
-          <a className="chat-brand" href="/" onClick={() => setSidebarOpen(false)}>
+          <NavLink className="chat-brand" to="/" onClick={() => setSidebarOpen(false)}>
             <img src="/icons/logo.png" alt="StudyFlow Logo" className="sf-brand-logo" />
             <span><strong>Study</strong><span>Flow</span></span>
-          </a>
+          </NavLink>
 
           {/* Sidebar Header: New Chat + Close */}
           <div className="sidebar-header">

@@ -6,6 +6,12 @@ import rehypeKatex from 'rehype-katex'
 import { Copy, Check } from './ui/Icons'
 import 'katex/dist/katex.min.css'
 
+function normalizeWikiText(content = '') {
+  return content
+    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
+    .replace(/\[\[([^\]]+)\]\]/g, '$1')
+}
+
 function CodeBlock({ children, className }) {
   const [copied, setCopied] = useState(false)
   const code = String(children ?? '')
@@ -70,6 +76,8 @@ const markdownComponents = {
 export function MarkdownRenderer({ content, className = 'sf-markdown-body' }) {
   if (!content) return null
 
+  const safeContent = normalizeWikiText(content)
+
   return (
     <div className={className}>
       <ReactMarkdown
@@ -77,7 +85,7 @@ export function MarkdownRenderer({ content, className = 'sf-markdown-body' }) {
         rehypePlugins={[rehypeKatex]}
         components={markdownComponents}
       >
-        {content}
+        {safeContent}
       </ReactMarkdown>
     </div>
   )

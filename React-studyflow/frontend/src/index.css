@@ -555,6 +555,79 @@ body {
   min-height: 100vh;
 }
 
+.sf-learning-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 85% 0%, rgba(1, 169, 254, 0.08), transparent 35rem),
+    linear-gradient(145deg, rgba(15, 29, 43, 0.82), rgba(8, 16, 25, 0.92));
+}
+
+.sf-learning-shell__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 2vw, 2rem) 3rem;
+}
+
+.sf-learning-header {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sf-learning-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.sf-learning-brand img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.sf-learning-brand em {
+  color: var(--brand-cyan);
+  font-style: normal;
+}
+
+.sf-learning-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sf-learning-nav__link {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.sf-learning-nav__link:hover {
+  border-color: rgba(1, 169, 254, 0.2);
+  background: rgba(1, 169, 254, 0.08);
+  color: #fff;
+}
+
+.sf-learning-shell__main {
+  width: 100%;
+  min-width: 0;
+  padding-top: 1rem;
+}
+
 .sf-sidebar {
   position: sticky;
   top: 0;

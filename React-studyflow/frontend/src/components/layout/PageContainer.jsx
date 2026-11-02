@@ -40,26 +40,21 @@ export function PageContainer() {
       </a>
 
       <div className="sf-dashboard-layout">
-        {/* Desktop Sidebar (Fixed Left) & Mobile Slide-over Drawer */}
         <Sidebar
           isOpen={mobileOpen}
           onClose={() => setMobileOpen(false)}
           institutionLabel={getInstitutionLabel()}
         />
-
-        {/* Main Content Column */}
         <div className="sf-main-workspace">
           <TopBar
             onMenuClick={() => setMobileOpen(!mobileOpen)}
             onSearchClick={() => setCmdOpen(true)}
             pathname={location.pathname}
           />
-
           <main id="main-content" className="flex-1 min-w-0" tabIndex={-1}>
             <Outlet />
           </main>
         </div>
-
         <CommandPalette isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
       </div>
     </>
