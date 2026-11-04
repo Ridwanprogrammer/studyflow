@@ -1,195 +1,50 @@
-# MTH 201 Topic 1: Real-valued Functions of a Real Variable — Enhanced
+# Real-valued Functions of a Real Variable
 
-## The Central Idea
+## One input, one output
 
-Before jumping into formal definitions, let us ask a simple question: **What is a function?**
+A [[function|function]] is a rule that assigns exactly one output to each allowed input. Think of it as a dependable measuring instrument: give it the same input under the same conditions, and it returns the same value.
 
-In plain terms, a function is a predictable machine or rule that takes an input, processes it according to a fixed formula, and returns a single, unambiguous output.
+Formally, a real-valued function on a domain $D \subseteq \mathbb{R}$ is a mapping
+$$f:D\to\mathbb{R}, \qquad x\mapsto f(x).$$
+The input set $D$ is the [[domain|domain]]; the codomain is $\mathbb{R}$; the [[range|range]] is the set of outputs the rule actually produces:
+$$f(D)=\{f(x):x\in D\}\subseteq\mathbb{R}.$$
 
----
+The phrase “exactly one” is essential. The rule $y=\sqrt{x}$ assigns one nonnegative output to every $x\ge 0$, so it defines a function. The rule $y=\pm\sqrt{x}$ assigns two outputs to most positive inputs, so it does not define a function of $x$.
 
-## Why It Matters — Past Exam Coverage
+## Find the inputs before using the rule
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "Define: Real valued function, Differentiation" | Definition of real-valued function |
-| "If f(x) = 2^x, show that f(x+3) - f(x-1) = (15/2) f(x)" | Exponential function properties |
+An algebraic formula may not accept every real input. For $f(x)=\sqrt{4-x^2}$, the radicand must be nonnegative:
+$$4-x^2\ge 0 \quad\Longrightarrow\quad -2\le x\le 2.$$
+Thus the natural domain is $[-2,2]$. Since the square root ranges from $0$ to $2$, the range is $[0,2]$.
 
----
+Check restrictions in this order:
+- A denominator must not be zero.
+- An even root must have a nonnegative radicand.
+- A real logarithm must have a positive argument.
+- If restrictions overlap, take their intersection.
 
-## Section 1 — Conceptual Introduction
+For example, $g(x)=\frac{\ln x}{x-2}$ requires both $x>0$ and $x\ne2$, so its domain is $(0,2)\cup(2,\infty)$.
 
-### What is a Function?
+## Reading and combining function rules
 
-Think of a function as a **machine**:
-```
-INPUT → [ FUNCTION ] → OUTPUT
-   x       f(x) = 2x+1      y
-```
+If $f(x)=2x+1$, then $f(3)=7$. Composition means feed one function’s output into another: if $g(x)=x^2$, then
+$$ (f\circ g)(x)=f(g(x))=2x^2+1.$$
+Order matters: $(g\circ f)(x)=(2x+1)^2$, which is a different rule.
 
-**Key Properties:**
-1. **Single-valued** — each input gives exactly one output
-2. **Deterministic** — same input always gives same output
-3. **Defined by a rule** — formula, table, graph, or description
+Functions can also be added, multiplied, or divided pointwise:
+$$ (f+g)(x)=f(x)+g(x), \qquad (fg)(x)=f(x)g(x).$$
+For a quotient, exclude inputs where the denominator function is zero.
 
-### Real-Valued Function
-A **real-valued function** f: ℝ → ℝ maps real numbers to real numbers.
-- Domain ⊆ ℝ (inputs are real)
-- Range ⊆ ℝ (outputs are real)
+### A useful test for an identity
 
----
+Let $f(x)=2^x$. Then
+$$f(x+3)-f(x-1)=2^{x+3}-2^{x-1}=2^x\left(8-\frac12\right)=\frac{15}{2}f(x).$$
+Factoring out $2^x$ exposes the shared input and makes the identity easier to see.
 
-## Section 2 — Required Terminology
+## Before moving on
 
-| Term | Meaning |
-|------|---------|
-| **Function** | Rule assigning each input exactly one output |
-| **Domain** | Set of all allowed inputs |
-| **Range** | Set of all actual outputs |
-| **Independent variable** | Input (usually x) |
-| **Dependent variable** | Output (usually y or f(x)) |
-| **Real-valued** | Outputs are real numbers |
-| **Differentiation** | Process of finding the derivative (rate of change) |
+1. Find the domain and range of $h(x)=\sqrt{9-(x-1)^2}$.
+2. If $f(x)=x+4$ and $g(x)=x^2$, find $f\circ g$ and $g\circ f$.
+3. Explain why $x=\sqrt{y-1}$ defines $x$ as a function of $y$, while $y=\pm\sqrt{x}$ does not define $y$ as a function of $x$.
 
----
-
-## Section 3 — Intuitive Explanation
-
-### Mental Model: The Vending Machine
-
-```
-Select item (input) → Machine processes → Item dispensed (output)
-```
-
-- Same selection → same item (deterministic)
-- Invalid selection → no item (outside domain)
-- Each selection gives exactly one item (single-valued)
-
-### Function Notation
-
-| Notation | Meaning |
-|----------|---------|
-| f: A → B | Function f from set A to set B |
-| y = f(x) | y is the output for input x |
-| f(x) = 2x + 1 | Rule: multiply by 2, add 1 |
-| f(3) = 7 | Input 3 gives output 7 |
-
----
-
-## Section 4 — Formal Definition
-
-A **function** f from a set A to a set B is a relation such that:
-
-\\[ \\forall x \\in A, \\quad \\exists! y \\in B \\text{ such that } (x, y) \\in f \\]
-
-- ∀ = "for all"
-- ∃! = "there exists exactly one"
-- A = domain, B = codomain
-- Range = {f(x) | x ∈ A} ⊆ B
-
----
-
-## Section 5 — Worked Exam Problems
-
-### Problem 1: Definition of Real-Valued Function
-> **Define: Real valued function**
-
-**Answer:**
-A **real-valued function** f is a function whose outputs are real numbers. Formally, f: D → ℝ where D ⊆ ℝ (or D ⊆ ℝⁿ). For each x ∈ D, f(x) ∈ ℝ.
-
-**Example:** f(x) = x² + 3x - 5 maps real numbers to real numbers.
-
----
-
-### Problem 2: Exponential Function Identity
-> **If f(x) = 2ˣ, show that f(x+3) - f(x-1) = (15/2) f(x)**
-
-**Solution:**
-
-**LHS:** f(x+3) - f(x-1)
-= 2ˣ⁺³ - 2ˣ⁻¹
-= 2ˣ · 2³ - 2ˣ · 2⁻¹
-= 2ˣ · 8 - 2ˣ · ½
-= 2ˣ (8 - ½)
-= 2ˣ (16/2 - 1/2)
-= 2ˣ (15/2)
-= (15/2) · 2ˣ
-= (15/2) f(x)
-
-**RHS:** (15/2) f(x) = (15/2) · 2ˣ
-
-**LHS = RHS** ✓
-
----
-
-### Problem 3: Domain and Range
-
-**Example 1:** f(x) = 3x + 1
-- Domain: ℝ (all real numbers)
-- Range: ℝ
-
-**Example 2:** f(x) = x² - 4x + 3
-- Domain: ℝ
-- Range: [-1, ∞) (minimum at vertex x=2, f(2)=-1)
-
-**Example 3:** f(x) = √(x-2)
-- Domain: [2, ∞) (radicand ≥ 0)
-- Range: [0, ∞)
-
-**Example 4:** f(x) = 1/(x-3)
-- Domain: ℝ \ {3} (denominator ≠ 0)
-- Range: ℝ \ {0}
-
----
-
-### Problem 4: Function Operations
-
-**Given f(x) = x², g(x) = x + 1**
-
-| Operation | Formula | Example |
-|-----------|---------|---------|
-| (f+g)(x) | f(x)+g(x) | x²+x+1 |
-| (f-g)(x) | f(x)-g(x) | x²-x-1 |
-| (fg)(x) | f(x)g(x) | x³+x² |
-| (f/g)(x) | f(x)/g(x) | x²/(x+1), x≠-1 |
-| (f∘g)(x) | f(g(x)) | (x+1)² |
-
----
-
-## Section 6 — Types of Functions
-
-| Type | Form | Example |
-|------|------|---------|
-| **Linear** | f(x) = ax + b | f(x) = 3x + 1 |
-| **Quadratic** | f(x) = ax² + bx + c | f(x) = x² - 4x + 3 |
-| **Polynomial** | aₙxⁿ + ... + a₁x + a₀ | f(x) = 2x³ - 5x + 1 |
-| **Rational** | P(x)/Q(x) | f(x) = (x²+1)/(x-2) |
-| **Exponential** | f(x) = aˣ | f(x) = 2ˣ |
-| **Logarithmic** | f(x) = logₐ(x) | f(x) = ln(x) |
-| **Trigonometric** | sin, cos, tan | f(x) = sin(x) |
-
----
-
-## Section 7 — Self-Check Problems
-
-1. If f(x) = 3ˣ, find f(x+2)/f(x).
-2. Find domain of f(x) = √(4-x²).
-3. If f(x) = x³, show f(2x) = 8f(x).
-4. Find f(g(x)) where f(x)=2x+1, g(x)=x².
-5. Is f(x) = ±√x a function? Why/why not?
-
----
-
-## Solutions
-
-1. f(x+2)/f(x) = 3ˣ⁺²/3ˣ = 3² = 9
-2. 4-x² ≥ 0 → x² ≤ 4 → [-2, 2]
-3. f(2x) = (2x)³ = 8x³ = 8f(x) ✓
-4. f(g(x)) = 2(x²) + 1 = 2x² + 1
-5. No — single input x gives two outputs (√x and -√x). Violates single-valued property.
-
----
-
-## Glossary Terms
-
-[[function]], [[domain]], [[range]], [[real-valued-function]], [[independent-variable]], [[dependent-variable]], [[function-notation]], [[composition]], [[linear-function]], [[quadratic-function]], [[polynomial-function]], [[rational-function]], [[exponential-function]], [[logarithmic-function]], [[trigonometric-function]], [[domain]], [[codomain]], [[image]], [[preimage]], [[injective]], [[surjective]], [[bijective]], [[inverse-function]], [[differentiation]], [[derivative]], [[limit]], [[continuity]]
+**Answers:** 1. Domain $[-2,4]$, range $[0,3]$. 2. $x^2+4$ and $(x+4)^2$. 3. Each allowed $y$ gives one $x$ in the first relation; a positive $x$ generally gives two $y$ values in the second.

@@ -128,10 +128,14 @@ class TopicDetailSerializer(serializers.ModelSerializer):
 
 class CourseDetailSerializer(CourseListSerializer):
     """Full course detail with topics."""
-    topics = TopicListSerializer(many=True, read_only=True)
-    
+    topics = serializers.SerializerMethodField()
+
     class Meta(CourseListSerializer.Meta):
         fields = CourseListSerializer.Meta.fields + ['topics']
+
+    def get_topics(self, obj):
+        topics = obj.topics.filter(is_active=True).order_by('order')
+        return TopicListSerializer(topics, many=True, context=self.context).data
 
 
 class UserProgressSerializer(serializers.ModelSerializer):

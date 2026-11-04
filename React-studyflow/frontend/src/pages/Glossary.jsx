@@ -34,6 +34,7 @@ export function Glossary() {
   // Check URL params for direct term lookup or return to topic
   const originTopic = searchParams.get('originTopic')
   const originCourse = searchParams.get('originCourse')
+  const originTopicId = searchParams.get('originTopicId')
   const directTermSlug = searchParams.get('term')
 
   const { data: terms = [], isLoading: termsLoading } = useQuery({
@@ -186,7 +187,13 @@ export function Glossary() {
             id="sf-return-to-topic-btn" 
             className="sf-return-topic-btn secondary-return"
             title="Return to origin lesson (Esc)"
-            onClick={() => navigate(originCourse ? `/courses/${originCourse}` : -1)}
+            onClick={() => navigate(
+              originCourse && originTopicId
+                ? `/courses/${originCourse}/topics/${originTopicId}`
+                : originCourse
+                  ? `/courses/${originCourse}`
+                  : -1
+            )}
           >
             <ChevronLeft size={15} />
             <span>Return to topic</span>
@@ -212,7 +219,7 @@ export function Glossary() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search concepts (e.g. domain, derivative, velocity, recursion, molarity)..."
                 aria-label="Search glossary terms"
-                autocomplete="off"
+                autoComplete="off"
               />
               <kbd className="sf-search-shortcut-hint" id="sf-search-hint" title="Press / to focus">/</kbd>
               {searchQuery && (

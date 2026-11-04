@@ -515,7 +515,7 @@ export function Chat() {
         </aside>
 
         {/* ─── Main Chat Stage ────────────────────────────────────────────────── */}
-        <main className="gpt-main-stage" id="main-content">
+        <div className="gpt-main-stage">
           {/* StudyFlow chat header */}
           <header className="gpt-top-bar">
             <div className="top-bar-left flex items-center gap-3 flex-wrap">
@@ -534,22 +534,21 @@ export function Chat() {
                 </svg>
               </button>
 
-              {/* Prominent Back to Dashboard Button */}
+              {/* Persistent StudyFlow identity and main-app navigation */}
               <NavLink
                 to="/"
-                className="back-to-dashboard-btn flex items-center gap-1.5 whitespace-nowrap"
-                title="Back to Dashboard"
+                className="chat-header-home"
+                title="Back to StudyFlow dashboard"
                 aria-label="Back to main app"
               >
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-                <span>Dashboard</span>
+                <img src="/icons/logo.png" alt="" />
+                <span>Study<em>Flow</em></span>
               </NavLink>
 
-              {/* Chat Title Display - modern AI app style */}
               <div className="chat-title-display">
+                <span className="chat-title-kicker"><Bot size={14} /> AI Tutor</span>
                 <span className="chat-title-text">{chatTitle}</span>
+                <span className="chat-title-context">{contextDisplay.title} · {contextDisplay.subtitle}</span>
               </div>
             </div>
 
@@ -832,7 +831,7 @@ export function Chat() {
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   )

@@ -67,6 +67,20 @@ Read **top-to-bottom: 0.001₂**
 
 ---
 
+### Binary Fraction → Decimal
+
+Digits to the right of the binary point use negative powers of 2.
+
+**Example: 110.10₂**
+
+```text
+1×2² + 1×2¹ + 0×2⁰ + 1×2⁻¹ + 0×2⁻²
+= 4 + 2 + 0 + 0.5 + 0
+= 6.5₁₀
+```
+
+---
+
 ### Binary → Decimal (Positional Weights)
 
 **Example: 1010100101₂ → Decimal**

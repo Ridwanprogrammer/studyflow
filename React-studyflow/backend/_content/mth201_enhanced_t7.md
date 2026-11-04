@@ -1,98 +1,54 @@
-# MTH 201 Topic 7: Chain Rule, Extrema, Lagrange Multipliers -- Enhanced
+# Chain Rule, Extrema, and Lagrange Multipliers
 
-## The Central Idea
+## Changes travel along dependency paths
 
-The multivariable chain rule tracks how changes propagate through dependent variables. Extrema are max/min values. Lagrange multipliers find extrema subject to constraints.
+Suppose $z=f(x,y)$, but $x$ and $y$ both depend on time $t$. A change in $t$ affects $z$ through both routes, so the multivariable chain rule adds their [[derivative|rates of change]]:
+$$\frac{dz}{dt}=f_x\frac{dx}{dt}+f_y\frac{dy}{dt}.$$
+If $x=x(u,v)$ and $y=y(u,v)$, then
+$$\frac{\partial z}{\partial u}=f_x\frac{\partial x}{\partial u}+f_y\frac{\partial y}{\partial u}.$$
+The pattern is “rate along each route, multiplied and added.”
 
----
+For $z=x^2y$, $x=t^2$, $y=\sin t$:
+$$\frac{dz}{dt}=2xy(2t)+x^2\cos t
+=4t^3\sin t+t^4\cos t.$$
 
-## Why It Matters -- Past Exam Coverage
+## Unconstrained peaks, valleys, and saddles
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "Chain rule, extrema, Lagrange multipliers" | All three topics |
-| "Maximize f(x,y)=xy subject to x+y=10" | Lagrange multipliers |
+At an interior local maximum or minimum of a differentiable function, the gradient is zero: $\nabla f=0$. Such points are candidates, not automatic extrema. A saddle can also have zero gradient.
 
----
+For two variables, use
+$$D=f_{xx}f_{yy}-(f_{xy})^2.$$
+At a critical point: if $D>0$ and $f_{xx}>0$, there is a local minimum; if $D>0$ and $f_{xx}<0$, a local maximum; if $D<0$, a saddle; if $D=0$, the test is inconclusive. For a global extremum on a closed bounded region, also check its boundary.
 
-## Section 1 -- Chain Rule
+## When movement is restricted: the multiplier idea
 
-If z = f(x,y), x = x(t), y = y(t):
-dz/dt = f_x dx/dt + f_y dy/dt
+Imagine walking on a contour line of a constraint $g(x,y)=c$. You may move only along that contour. At a constrained optimum, the objective’s level curve just touches the constraint; their gradients point in the same or opposite direction:
+$$\nabla f=\lambda\nabla g,\qquad g(x,y)=c.$$
+The multiplier $\lambda$ measures the rate at which the optimal objective value changes when the constraint value changes, under suitable regularity conditions.
 
-If z = f(x,y), x = x(u,v), y = y(u,v):
-∂z/∂u = f_x ∂x/∂u + f_y ∂y/∂u
+### A complete example
 
----
+Maximize $f(x,y)=xy$ subject to $x+y=10$, with $x,y>0$. Let $g=x+y$:
+$$\nabla f=(y,x),\qquad \nabla g=(1,1).$$
+The multiplier equations and constraint are
+$$y=\lambda,\quad x=\lambda,\quad x+y=10.$$
+Thus $x=y=5$ and $f=25$. To confirm it is a maximum, substitute $y=10-x$:
+$$f(x,10-x)=x(10-x)=25-(x-5)^2\le25.$$
+This last check establishes the global maximum on the allowed interval, not merely a candidate.
 
-## Section 2 -- Extrema
+## A reliable solving routine
 
-Critical points: ∇f = 0 (f_x = 0, f_y = 0)
+1. Name the objective $f$ and write the constraint as $g=c$.
+2. Compute both gradients carefully.
+3. Solve $\nabla f=\lambda\nabla g$ together with the constraint.
+4. Evaluate $f$ at every candidate.
+5. Check endpoints, boundaries, and whether the candidates are maxima, minima, or neither.
 
-Second derivative test:
-D = f_xx f_yy - (f_xy)^2
+For three independent variables, the same equation uses gradients in $\mathbb{R}^3$: $\nabla f=\lambda\nabla g$.
 
-| D | f_xx | Result |
-|---|------|--------|
-| >0 | >0 | Local min |
-| >0 | <0 | Local max |
-| <0 | any | Saddle |
-| =0 | any | Inconclusive |
+## Practice
 
----
+1. Find the critical point of $f=x^2+y^2-4x+6y$ and classify it.
+2. Find the minimum of $x^2+y^2$ subject to $x+2y=5$.
 
-## Section 3 -- Lagrange Multipliers
-
-Max/min f(x,y) subject to g(x,y) = c:
-
-Solve ∇f = λ ∇g together with g(x,y) = c
-
----
-
-## Section 4 -- Worked Exam Problem
-
-### Problem: Maximize f(x,y) = xy subject to x + y = 10, x,y > 0
-
-**Set up:**
-f(x,y) = xy, g(x,y) = x + y = 10
-
-∇f = (y, x), ∇g = (1, 1)
-
-Equations:
-y = λ
-x = λ
-x + y = 10
-
-From first two: x = y = λ
-From third: x + x = 10 → x = 5, y = 5
-
-**Candidate:** (5,5) with value 25
-
-**Check boundary:** x→0 or y→0 → xy→0
-**Maximum:** 25 at (5,5)
-
----
-
-## Section 5 -- Self-Check
-
-1. Use chain rule: z = x^2 y, x = t^2, y = sin t. Find dz/dt.
-2. Find extrema of f(x,y) = x^2 + y^2 - 4x + 6y.
-3. Minimize x^2 + y^2 subject to x + 2y = 5.
-
----
-
-## Solutions
-
-1. dz/dt = 2x y (2t) + x^2 cos t = 2(t^2)(sin t)(2t) + (t^2)^2 cos t = 4t^3 sin t + t^4 cos t
-
-2. f_x = 2x-4=0 → x=2; f_y = 2y+6=0 → y=-3. D = 4 > 0, f_xx=2>0 → local min at (2,-3), value = -13.
-
-3. f = x^2 + y^2, g = x + 2y - 5 = 0
-∇f = (2x, 2y) = λ(1, 2) → 2x=λ, 2y=2λ → y=2x
-x + 4x = 5 → x=1, y=2. Minimum = 1^2 + 2^2 = 5.
-
----
-
-## Glossary Terms
-
-chain-rule-multivariable, extrema, critical-point, lagrange-multipliers, constrained-optimization, gradient, hessian-matrix, second-derivative-test, saddle-point, local-minimum, local-maximum, constrained-extremum, lagrange-multiplier, constraint, gradient-parallel, unconstrained-extremum, boundary-behavior
+**Answers:** 1. $(2,-3)$; the Hessian is positive definite, so it is a minimum, with value $-13$. 2. The multiplier equations give $(x,y)=(1,2)$ and minimum $5$.

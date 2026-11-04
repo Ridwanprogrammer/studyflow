@@ -2,7 +2,6 @@ import { Routes, Route, Navigate, Outlet, useLocation, NavLink } from 'react-rou
 import { AuthProvider } from './stores/authStore'
 import { PageContainer } from './components/layout/PageContainer'
 import { ChatPageContainer } from './components/layout/ChatPageContainer'
-import { TopBar } from './components/layout/TopBar'
 import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute'
 import { Dashboard } from './pages/Dashboard'
 import { Courses } from './pages/Courses'
@@ -23,11 +22,12 @@ function LearningPageLayout() {
   return (
     <div className="sf-learning-shell">
       <div className="sf-learning-shell__inner">
-        <TopBar
-          pathname={location.pathname}
-          hideMenu
-          navigation={(
-            <nav className="sf-learning-nav" aria-label="Learning navigation">
+        <header className="sf-learning-header">
+          <NavLink to="/" className="sf-learning-brand" aria-label="StudyFlow dashboard">
+            <img src="/icons/logo.png" alt="" />
+            <span><strong>Study</strong><em>Flow</em></span>
+          </NavLink>
+          <nav className="sf-learning-nav" aria-label="Learning navigation">
             {isTopic && (
               <NavLink to={`/courses/${courseId}`} className="sf-learning-nav__link">
                 Back to course
@@ -36,9 +36,8 @@ function LearningPageLayout() {
             <NavLink to="/" className="sf-learning-nav__link">
               Dashboard
             </NavLink>
-            </nav>
-          )}
-        />
+          </nav>
+        </header>
         <main id="main-content" className="sf-learning-shell__main" tabIndex={-1}>
           <Outlet />
         </main>

@@ -426,9 +426,3 @@ Counting principles:
 6. What is the difference between {∅} and ∅?
 
 ---
-
-## Glossary Terms Used in This Topic
-
-The following terms are linked throughout this lesson. Click any to see its full definition:
-
-[[set]], [[element]], [[subset]], [[cardinality]], [[empty-set]], [[union]], [[intersection]], [[complement]], [[disjoint]], [[partition]], [[cartesian-product]], [[ordered-pair]], [[product-rule]], [[sum-rule]], [[factorial]], [[permutation]], [[combination]], [[relation]], [[relatively-prime]], [[gcd]], [[implication]], [[logical-equivalence]], [[truth-table]], [[combinatorial-identity]], [[binomial-coefficient]]

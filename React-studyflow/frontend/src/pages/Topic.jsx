@@ -1,7 +1,7 @@
 import { useParams, NavLink, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useState, useEffect, useRef } from 'react'
-import { api } from '../lib/api'
+import { api, unwrapList } from '../lib/api'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
 import { 
   ChevronLeft, Clock, Search, Bot, Sparkles, 
@@ -40,6 +40,14 @@ export function Topic() {
       return response.data
     },
     enabled: !!courseId,
+  })
+
+  const { data: glossaryTerms = [] } = useQuery({
+    queryKey: ['glossary-all'],
+    queryFn: async () => {
+      const response = await api.get('/glossary/?page_size=200')
+      return unwrapList(response.data)
+    },
   })
 
   // Track window scroll progress for reading bar
@@ -240,7 +248,7 @@ export function Topic() {
 
             {/* Glossary Link with Origin tracking */}
             <NavLink
-              to={`/glossary?originTopic=${encodeURIComponent(topic.title)}&originCourse=${encodeURIComponent(courseId)}`}
+              to={`/glossary?originTopic=${encodeURIComponent(topic.title)}&originCourse=${encodeURIComponent(courseId)}&originTopicId=${encodeURIComponent(topicId)}`}
               className="flex items-center gap-1.5 text-xs text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-1.5 rounded-lg hover:bg-purple-500/25 transition-colors"
             >
               <Sparkles size={14} />
@@ -338,7 +346,15 @@ export function Topic() {
             className="prose prose-invert max-w-none text-slate-200 leading-relaxed space-y-4"
             style={{ fontSize: `${fontSize}px` }}
           >
-            <MarkdownRenderer content={topic.notes} />
+            <MarkdownRenderer
+              content={topic.notes}
+              glossaryTerms={glossaryTerms}
+              glossaryContext={{
+                originTopic: topic.title,
+                originCourse: courseId,
+                originTopicId: topicId,
+              }}
+            />
           </div>
         </article>
 

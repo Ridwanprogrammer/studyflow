@@ -1,85 +1,43 @@
-# MTH 201 Topic 5: Functions of Several Variables -- Enhanced
+# Real-valued Functions of Two or More Variables
 
-## The Central Idea
+## From a curve to a landscape
 
-A function of several variables maps multiple inputs to a single output. For two variables: f(x,y) gives a surface in 3D space.
+A real-valued [[function|function]] of several variables takes a point as input and returns one real number. For example, a room’s temperature can depend on position: two coordinates locate a point on a floor, and the function gives the temperature there.
 
----
+For two independent variables,
+$$f:D\subseteq\mathbb{R}^2\to\mathbb{R},\qquad (x,y)\mapsto f(x,y).$$
+For **three independent variables**,
+$$F:D\subseteq\mathbb{R}^3\to\mathbb{R},\qquad (x,y,z)\mapsto F(x,y,z).$$
+Here “independent” means each coordinate can be chosen as an input, subject to the domain. The output is still one real number. A function of three inputs is not the same as a vector-valued function that returns three outputs.
 
-## Why It Matters -- Past Exam Coverage
+## Domain is now a region
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "f(x,y) = sqrt(9-x^2-y^2) domain" | Domain, level curves |
-| "f(x,y) = xy/(x-y) domain" | Domain restrictions |
+The same [[domain|domain]] restrictions apply, but the allowed inputs form a region in a plane or in three-dimensional space.
 
----
+For $f(x,y)=\sqrt{9-x^2-y^2}$, the radicand condition gives
+$$x^2+y^2\le9.$$
+The domain is the closed disk of radius $3$. Its graph is the upper hemisphere $z=\sqrt{9-x^2-y^2}$.
 
-## Section 1 -- Definition
+For $G(x,y,z)=\ln(16-x^2-y^2-z^2)$, the logarithm requires
+$$x^2+y^2+z^2<16,$$
+so the domain is the open ball of radius $4$.
 
-A real-valued function of n variables:
-f: D ⊆ ℝ^n → ℝ
+## How to picture an output you cannot graph directly
 
-For 2 variables: f(x,y) = z
-For 3 variables: f(x,y,z) = w
+The graph of $F(x,y,z)$ would require four coordinates: $(x,y,z,F)$. Instead, use **level surfaces**:
+$$F(x,y,z)=k.$$
+Each fixed $k$ identifies the input points that produce that output. For $F=x^2+y^2+z^2$, the level surface $F=k$ is a sphere of radius $\sqrt{k}$ when $k>0$.
 
----
+For two-input functions, the graph $w=f(x,y)$ fits in ordinary three-dimensional space. Horizontal slices $f(x,y)=k$ are level curves; a collection of them is a contour map. A vertical slice fixes one input, such as $y=b$, and shows how the output changes as $x$ varies.
 
-## Section 2 -- Domain
+## Read a model before calculating
 
-The set of all inputs where the formula produces a real number.
+Consider $T(x,y,z)=20+2x-y+0.5z$, a simple temperature model. The coordinates represent location and $T$ is the measured temperature. At $(1,2,4)$, $T=22$. The coefficient of $x$ describes how the model changes with that coordinate while the others are held fixed; this idea leads to partial derivatives in the next topic.
 
-**Restrictions:**
-- Denominator ≠ 0
-- Radicand ≥ 0 (even roots)
-- Log argument > 0
+## Practice
 
----
+1. Find the domain of $f(x,y)=\ln(4-x^2-y^2)$.
+2. Describe the level surfaces of $F(x,y,z)=x^2+y^2+z^2$.
+3. How many independent inputs and outputs does $F:\mathbb{R}^3\to\mathbb{R}$ have?
 
-## Section 5 -- Worked Exam Problems
-
-### Problem 1: f(x,y) = sqrt(9 - x^2 - y^2)
-
-**Domain:** 9 - x^2 - y^2 ≥ 0 → x^2 + y^2 ≤ 9 (disk radius 3)
-**Graph:** Upper hemisphere of radius 3
-**Level curves:** f(x,y) = k → x^2 + y^2 = 9 - k^2 (concentric circles)
-
----
-
-### Problem 2: f(x,y) = xy/(x-y)
-
-**Domain:** x ≠ y (denominator ≠ 0)
-**Excluded:** Line y = x
-
----
-
-## Section 6 -- Level Curves
-
-Set f(x,y) = k (constant). The curve in xy-plane where output is constant.
-
-**Example:** f(x,y) = x^2 + y^2
-Level curves: x^2 + y^2 = k (circles)
-
-**Contour map:** Collection of level curves for different k values.
-
----
-
-## Section 7 -- Self-Check
-
-1. Find domain of f(x,y) = ln(x^2 + y^2 - 1).
-2. Sketch level curves of f(x,y) = xy.
-3. Find domain of f(x,y) = sqrt(4 - x^2 - y^2).
-
----
-
-## Solutions
-
-1. x^2 + y^2 > 1 (outside unit circle, not including boundary)
-2. f(x,y)=k → xy=k → y = k/x (hyperbolas for k≠0; axes for k=0)
-3. x^2 + y^2 ≤ 4 (disk radius 2)
-
----
-
-## Glossary Terms
-
-multivariable-function, domain, range, level-curve, level-surface, contour-map, partial-derivative, gradient, surface, graph-of-function, domain-restriction, radicand, denominator, logarithm-argument, open-disk, closed-disk, boundary, interior-point
+**Answers:** 1. $x^2+y^2<4$, the open disk of radius $2$. 2. Spheres centered at the origin for positive levels; the origin at level $0$; no points for negative levels. 3. Three inputs and one real output.

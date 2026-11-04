@@ -1,95 +1,62 @@
-# MTH 201 Topic 9: Line and Multiple Integrals -- Enhanced
+# Evaluation of Line and Multiple Integrals
 
-## The Central Idea
+## What is being accumulated?
 
-Line integrals accumulate along curves; multiple integrals accumulate over regions. Both generalize definite integration to higher dimensions.
+A single [[integral|integral]] accumulates a quantity along an interval. A line integral accumulates along a curve; a double or triple integral accumulates over a region or volume. The limits and the integration element tell you what is being traversed.
 
----
+## Follow a curve one parameter at a time
 
-## Why It Matters -- Past Exam Coverage
+Let a smooth curve be parametrized by $\mathbf r(t)$, $a\le t\le b$.
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "int_C xy ds, C: x=cos t, y=sin t" | Scalar line integral |
-| "int_1^3 int_1^3 (2x-4y^3) dy dx" | Double integral |
-| "Volume by rotation" | Volume of revolution |
+For a scalar field $f$, the arc-length line integral is
+$$\int_C f\,ds=\int_a^b f(\mathbf r(t))\,\|\mathbf r'(t)\|\,dt.$$
+The speed factor $\|\mathbf r'(t)\|$ converts a small parameter step $dt$ into a length step $ds$. Omitting it changes what is accumulated.
 
----
+For a vector field $\mathbf F$, the work integral is
+$$\int_C\mathbf F\cdot d\mathbf r
+=\int_a^b\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt.$$
+The dot product keeps only the component of the field along the direction of travel, so reversing the curve orientation can change the sign.
 
-## Section 1 -- Line Integrals
+### Example: scalar accumulation on a quarter circle
 
-### Scalar Line Integral
-int_C f(x,y) ds = int_a^b f(r(t)) |r'(t)| dt
+For $x=\cos t$, $y=\sin t$, $0\le t\le\pi/2$, the speed is $1$ and $xy=\cos t\sin t$. Thus
+$$\int_Cxy\,ds=\int_0^{\pi/2}\cos t\sin t\,dt=\frac12.$$
 
-### Vector Line Integral
-int_C F·dr = int_a^b F(r(t))·r'(t) dt
+## Cover a region with thin slices
 
----
+For a rectangle $R=[a,b]\times[c,d]$,
+$$\iint_R f(x,y)\,dA
+=\int_a^b\int_c^d f(x,y)\,dy\,dx,$$
+when the integrand is suitably integrable. The inner integral accumulates across one direction; the outer integral sweeps those results across the other.
 
-## Section 4 -- Worked Exam Problems
+For a nonrectangular region, sketch the region first and derive bounds that describe it without gaps or overlap. Reversing the integration order can turn complicated bounds into simple ones.
 
-### Problem 1: Scalar Line Integral
-> Evaluate int_C xy ds, where C: x = cos t, y = sin t, 0 ≤ t ≤ π/2
+For a solid $E$,
+$$\iiint_E f(x,y,z)\,dV$$
+accumulates throughout its volume. Setting $f=1$ gives the volume of $E$.
 
-**Solution:**
+## A reliable evaluation routine
 
-r(t) = (cos t, sin t), r'(t) = (-sin t, cos t)
-|r'(t)| = sqrt(sin^2 t + cos^2 t) = 1
+1. Identify the object: curve, planar region, or solid.
+2. Write a parametrization or bounds that cover it exactly once.
+3. Choose the correct element: $ds$, $d\mathbf r$, $dA$, or $dV$.
+4. Substitute the parametrization/bounds before integrating.
+5. Evaluate from the inside outward and check signs, units, and orientation.
 
-f(x,y) = xy = cos t sin t
+### Double-integral example
 
-int_C xy ds = int_0^{π/2} cos t sin t × 1 dt
-= (1/2) int_0^{π/2} sin 2t dt
-= (1/2)[-cos 2t/2]_0^{π/2}
-= (1/4)[-cos π + cos 0]
-= (1/4)[1 + 1] = **1/2**
+$$\int_1^3\int_1^3(2x-4y^3)\,dy\,dx
+=\int_1^3(4x-80)\,dx=-144.$$
+The negative result is valid: the integrand is mostly negative over this rectangle. A double integral is signed accumulation, not automatically a positive area or volume.
 
----
+Volumes formed by rotation are another application of ordinary integration. Rotating $y=f(x)\ge0$ around the $x$-axis gives the disk formula
+$$V=\pi\int_a^b[f(x)]^2\,dx,$$
+provided the region and axis match those assumptions.
 
-### Problem 2: Double Integral
-> Evaluate int_1^3 int_1^3 (2x - 4y^3) dy dx
+## Try a setup before calculating
 
-**Solution:**
+1. Parametrize the quarter-circle arc from $(1,0)$ to $(0,1)$ and identify $ds$.
+2. Set up, but do not evaluate, $\iint_R(x+y)\,dA$ over $0\le x\le2$, $0\le y\le1$.
+3. What does $\iiint_E1\,dV$ represent?
 
-Inner integral (dy):
-int_1^3 (2x - 4y^3) dy = [2xy - y^4]_1^3 = (6x - 81) - (2x - 1) = 4x - 80
-
-Outer integral (dx):
-int_1^3 (4x - 80) dx = [2x^2 - 80x]_1^3 = (18 - 240) - (2 - 80) = -222 + 78 = **-144**
-
----
-
-### Problem 3: Volume of Revolution
-
-#### Disk Method (around x-axis)
-V = π int_a^b [f(x)]^2 dx
-
-#### Shell Method (around y-axis)
-V = 2π int_a^b x f(x) dx
-
-**Example:** y = x+1 from x=1 to x=2, around x-axis
-V = π int_1^2 (x+1)^2 dx = π [ (x+1)^3/3 ]_1^2 = π(27/3 - 8/3) = 19π/3
-
----
-
-## Section 4 -- Self-Check
-
-1. Evaluate int_C x^2 y ds where C: x=t, y=t^2, 0≤t≤1.
-2. Evaluate int_0^2 int_0^1 (x + y) dy dx.
-3. Volume of y = x^2, x=0 to 2, about x-axis.
-
----
-
-## Solutions
-
-1. r(t)=(t,t^2), r'=(1,2t), |r'|=sqrt(1+4t^2). f=t^3. int = int_0^1 t^3 sqrt(1+4t^2) dt. u=1+4t^2 → 1/24(5^{3/2}-1).
-
-2. Inner: int_0^1 (x+y)dy = [xy + y^2/2]_0^1 = x + 1/2. Outer: int_0^2 (x+1/2)dx = [x^2/2 + x/2]_0^2 = 2+1 = 3.
-
-3. V = π int_0^2 (x^2)^2 dx = π int_0^2 x^4 dx = π[32/5] = 32π/5.
-
----
-
-## Glossary Terms
-
-line-integral, scalar-line-integral, vector-line-integral, arc-length, parametrization, double-integral, iterated-integral, fubini-theorem, triple-integral, volume-of-revolution, disk-method, washer-method, shell-method, cylindrical-shells, jacobian, polar-coordinates, change-of-variables, area-element, volume-element, work, circulation, flux, greens-theorem, stokes-theorem, divergence-theorem
+**Answers:** 1. $\mathbf r(t)=(\cos t,\sin t)$, $0\le t\le\pi/2$, and $ds=dt$. 2. $\int_0^2\int_0^1(x+y)\,dy\,dx$. 3. The volume of $E$.
