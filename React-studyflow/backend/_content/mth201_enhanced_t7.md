@@ -9,8 +9,7 @@ $$\frac{\partial z}{\partial u}=f_x\frac{\partial x}{\partial u}+f_y\frac{\parti
 The pattern is “rate along each route, multiplied and added.”
 
 For $z=x^2y$, $x=t^2$, $y=\sin t$:
-$$\frac{dz}{dt}=2xy(2t)+x^2\cos t
-=4t^3\sin t+t^4\cos t.$$
+$$\frac{dz}{dt}=2xy(2t)+x^2\cos t=4t^3\sin t+t^4\cos t.$$
 
 ## Unconstrained peaks, valleys, and saddles
 

@@ -39,7 +39,9 @@ If a task consists of a sequence of **k** steps, where:
 
 Then the total number of ways to complete the task is:
 
-\\[ n_1 \\times n_2 \\times \\cdots \\times n_k \\]
+$$
+ n_1 \times n_2 \times \cdots \times n_k 
+$$
 
 **Example:** A password has 2 letters (A-Z) followed by 3 digits (0-9).
 - Step 1: 26 choices
@@ -71,7 +73,9 @@ A **permutation** of **k** objects chosen from **n** distinct objects is an **or
 
 Notation: P(n, k) or ⁿPₖ or (n)ₖ
 
-\\[ P(n, k) = \\frac{n!}{(n-k)!} = n(n-1)(n-2)\\cdots(n-k+1) \\]
+$$
+ P(n, k) = \frac{n!}{(n-k)!} = n(n-1)(n-2)\cdots(n-k+1) 
+$$
 
 **Key:** Order matters. (A, B, C) ≠ (C, B, A).
 
@@ -95,9 +99,11 @@ P(5, 3) = 5 × 4 × 3 = 60
 
 A **combination** of **k** objects chosen from **n** distinct objects is an **unordered selection** (a subset of size k).
 
-Notation: C(n, k) or ⁿCₖ or \\(\\binom{n}{k}\\)
+Notation: C(n, k) or ⁿCₖ or $\binom{n}{k}$
 
-\\[ C(n, k) = \\binom{n}{k} = \\frac{n!}{k!(n-k)!} = \\frac{P(n,k)}{k!} \\]
+$$
+ C(n, k) = \binom{n}{k} = \frac{n!}{k!(n-k)!} = \frac{P(n,k)}{k!} 
+$$
 
 **Key:** Order does NOT matter. {A, B, C} = {C, B, A}.
 
@@ -105,12 +111,18 @@ Notation: C(n, k) or ⁿCₖ or \\(\\binom{n}{k}\\)
 
 Every combination of k items corresponds to k! permutations (all orderings of those k items).
 
-\\[ P(n, k) = C(n, k) \\times k! \\]
-\\[ C(n, k) = \\frac{P(n, k)}{k!} \\]
+$$
+ P(n, k) = C(n, k) \times k! 
+$$
+$$
+ C(n, k) = \frac{P(n, k)}{k!} 
+$$
 
 ### Symmetry Property
 
-\\[ C(n, k) = C(n, n-k) \\]
+$$
+ C(n, k) = C(n, n-k) 
+$$
 
 **Intuition:** Choosing k items to *include* is the same as choosing n-k items to *exclude*.
 
@@ -118,7 +130,9 @@ Every combination of k items corresponds to k! permutations (all orderings of th
 
 ### Pascal's Identity (Recursive Formula)
 
-\\[ C(n, k) = C(n-1, k-1) + C(n-1, k) \\]
+$$
+ C(n, k) = C(n-1, k-1) + C(n-1, k) 
+$$
 
 **Proof:** Consider a specific element x. Either x is in the k-subset (choose k-1 from remaining n-1) or x is not (choose k from remaining n-1).
 
@@ -162,7 +176,9 @@ with n₁ + n₂ + ... + nₖ = n
 
 Number of distinct permutations:
 
-\\[ \\frac{n!}{n_1! \\, n_2! \\, \\cdots \\, n_k!} \\]
+$$
+ \frac{n!}{n_1! \, n_2! \, \cdots \, n_k!} 
+$$
 
 **Example:** Arrange the letters of "MISSISSIPPI"
 - M: 1, I: 4, S: 4, P: 2
@@ -172,7 +188,9 @@ Number of distinct permutations:
 
 If we choose k items from n types, **repetition allowed**, **order matters**:
 
-\\[ n^k \\]
+$$
+ n^k 
+$$
 
 **Example:** 3-digit PIN from digits 0-9: 10³ = 1,000 possibilities.
 
@@ -185,16 +203,20 @@ If we choose k items from n types, **repetition allowed**, **order matters**:
 Choose k items from n types, **repetition allowed**, **order does NOT matter**.
 
 Equivalently: Number of non-negative integer solutions to:
-\\[ x_1 + x_2 + \\cdots + x_n = k \\]
+$$
+ x_1 + x_2 + \cdots + x_n = k 
+$$
 
 ### Stars and Bars Method
 
 Represent k identical items as **stars** (★). Separate into n types using n-1 **bars** (│).
 
 Total symbols: k stars + (n-1) bars = k + n - 1 positions.
-Choose which n-1 positions hold bars: \\(\\binom{k+n-1}{n-1}\\)
+Choose which n-1 positions hold bars: $\binom{k+n-1}{n-1}$
 
-\\[ C(n+k-1, k) = C(n+k-1, n-1) = \\binom{n+k-1}{k} \\]
+$$
+ C(n+k-1, k) = C(n+k-1, n-1) = \binom{n+k-1}{k} 
+$$
 
 **Example:** Distribute 10 identical candies to 3 children (each can get 0).
 - x₁ + x₂ + x₃ = 10
@@ -214,7 +236,7 @@ If **n+1** objects are placed into **n** boxes, then at least one box contains *
 
 ### Generalized Form
 
-If **N** objects are placed into **n** boxes, then at least one box contains at least \\(\\lceil N/n \\rceil\\) objects.
+If **N** objects are placed into **n** boxes, then at least one box contains at least $\lceil N/n \rceil$ objects.
 
 ### Why "Pigeonhole"?
 
@@ -239,15 +261,21 @@ Imagine n pigeonholes and n+1 pigeons. Each pigeon must go in a hole. With more 
 
 ### Two Sets
 
-\\[ |A \\cup B| = |A| + |B| - |A \\cap B| \\]
+$$
+ |A \cup B| = |A| + |B| - |A \cap B| 
+$$
 
 ### Three Sets
 
-\\[ |A \\cup B \\cup C| = |A| + |B| + |C| - |A \\cap B| - |A \\cap C| - |B \\cap C| + |A \\cap B \\cap C| \\]
+$$
+ |A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C| 
+$$
 
 ### General Form
 
-\\[ \\left| \\bigcup_{i=1}^n A_i \\right| = \\sum |A_i| - \\sum |A_i \\cap A_j| + \\sum |A_i \\cap A_j \\cap A_k| - \\cdots + (-1)^{n+1} |A_1 \\cap \\cdots \\cap A_n| \\]
+$$
+ \left| \bigcup_{i=1}^n A_i \right| = \sum |A_i| - \sum |A_i \cap A_j| + \sum |A_i \cap A_j \cap A_k| - \cdots + (-1)^{n+1} |A_1 \cap \cdots \cap A_n| 
+$$
 
 ### Example: Numbers ≤ 100 Divisible by 2, 3, or 5
 

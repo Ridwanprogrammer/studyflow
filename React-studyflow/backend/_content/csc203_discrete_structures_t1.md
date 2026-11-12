@@ -141,22 +141,30 @@ This is the **Product Rule** in action: for each of the 3 choices from A, you ha
 ### Set
 A **set** A is a well-defined collection of distinct objects. We write `x ∈ A` if x is an element of A.
 
-\\[ A = \\{ x \\mid P(x) \\} \\quad \\text{(set-builder notation: the set of all x such that P(x) holds)} \\]
+$$
+ A = \{ x \mid P(x) \} \quad \text{(set-builder notation: the set of all x such that P(x) holds)} 
+$$
 
 ### Subset
 A is a **subset** of B (A ⊆ B) iff every element of A is also an element of B.
 
-\\[ A \\subseteq B \\iff \\forall x (x \\in A \\implies x \\in B) \\]
+$$
+ A \subseteq B \iff \forall x (x \in A \implies x \in B) 
+$$
 
 ### Cardinality
 The **cardinality** of a finite set A, denoted |A|, is the number of distinct elements in A.
 
-\\[ |A| = n \\iff \\text{there exists a bijection between A and } \\{1, 2, \\dots, n\\} \\]
+$$
+ |A| = n \iff \text{there exists a bijection between A and } \{1, 2, \dots, n\} 
+$$
 
 ### Cartesian Product
 The **Cartesian product** of sets A and B is:
 
-\\[ A \\times B = \\{ (a, b) \\mid a \\in A \\land b \\in B \\} \\]
+$$
+ A \times B = \{ (a, b) \mid a \in A \land b \in B \} 
+$$
 
 For finite sets: |A × B| = |A| · |B|.
 
@@ -207,13 +215,17 @@ This is a **permutation**: P(6, 3) = 6! / (6-3)! = 6 × 5 × 4 = 120.
 
 A **permutation** of k items from n distinct items is an ordered arrangement.
 
-\\[ P(n, k) = \\frac{n!}{(n-k)!} = n(n-1)\\cdots(n-k+1) \\]
+$$
+ P(n, k) = \frac{n!}{(n-k)!} = n(n-1)\cdots(n-k+1) 
+$$
 
 ### Combinations
 
 A **combination** of k items from n distinct items is an unordered selection.
 
-\\[ C(n, k) = \\binom{n}{k} = \\frac{n!}{k!(n-k)!} \\]
+$$
+ C(n, k) = \binom{n}{k} = \frac{n!}{k!(n-k)!} 
+$$
 
 **Key distinction:** Permutation = order matters; Combination = order doesn't matter.
 
@@ -311,23 +323,35 @@ Check each pair:
 
 Start with the right-hand side:
 
-\\[ (r+1) \\cdot C(n, r+1) = (r+1) \\cdot \\frac{n!}{(r+1)!(n-r-1)!} \\]
+$$
+ (r+1) \cdot C(n, r+1) = (r+1) \cdot \frac{n!}{(r+1)!(n-r-1)!} 
+$$
 
 Since (r+1)! = (r+1) · r!:
 
-\\[ = (r+1) \\cdot \\frac{n!}{(r+1) \\cdot r! \\cdot (n-r-1)!} \\]
+$$
+ = (r+1) \cdot \frac{n!}{(r+1) \cdot r! \cdot (n-r-1)!} 
+$$
 
-\\[ = \\frac{n!}{r! \\cdot (n-r-1)!} \\]
+$$
+ = \frac{n!}{r! \cdot (n-r-1)!} 
+$$
 
 Now multiply numerator and denominator by (n-r):
 
-\\[ = \\frac{n! \\cdot (n-r)}{r! \\cdot (n-r-1)! \\cdot (n-r)} \\]
+$$
+ = \frac{n! \cdot (n-r)}{r! \cdot (n-r-1)! \cdot (n-r)} 
+$$
 
 Since (n-r)! = (n-r) · (n-r-1)!:
 
-\\[ = (n-r) \\cdot \\frac{n!}{r! \\cdot (n-r)!} \\]
+$$
+ = (n-r) \cdot \frac{n!}{r! \cdot (n-r)!} 
+$$
 
-\\[ = (n-r) \\cdot C(n, r) \\]
+$$
+ = (n-r) \cdot C(n, r) 
+$$
 
 **QED.**
 

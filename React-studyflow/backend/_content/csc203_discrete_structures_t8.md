@@ -130,7 +130,9 @@ Undirected:         Directed:
 ### 1. Adjacency Matrix
 
 n×n matrix A where:
-\\[ A_{ij} = \\begin{cases} 1 & \\text{if } \\{i,j\\} \\in E \\\\ 0 & \\text{otherwise} \\end{cases} \\]
+$$
+ A_{ij} = \begin{cases} 1 & \text{if } \{i,j\} \in E \\ 0 & \text{otherwise} \end{cases} 
+$$
 
 **Undirected:** Symmetric matrix.
 **Directed:** Not necessarily symmetric.
@@ -296,7 +298,9 @@ A graph is **planar** if it can be drawn in the plane with no edge crossings (ex
 ### Euler's Formula
 
 For connected planar graph with n vertices, m edges, f faces:
-\\[ n - m + f = 2 \\]
+$$
+ n - m + f = 2 
+$$
 
 ### Consequences
 

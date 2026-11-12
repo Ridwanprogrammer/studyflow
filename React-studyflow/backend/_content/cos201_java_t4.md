@@ -1,330 +1,69 @@
-# COS 201 Track B: Java OOP — Topic 4
-# Aggregation vs Composition in Code
+# Aggregation and Composition in Code
 
-## The Central Idea
+## “Has a” can mean different kinds of ownership
 
-**Aggregation** and **Composition** are both "has-a" relationships, but differ in **ownership** and **lifetime dependency**. This topic shows the exact code patterns for each, matching the exam requirement to distinguish them with diagrammatic examples.
+A university has students, and a student's record may include enrollments. But if a department is reorganized, students do not cease to exist. By contrast, a line item may exist only as part of one particular order in a simple order model.
 
----
+Both are **has-a** relationships, but their lifecycle meanings differ:
 
-## Why It Matters — Past Exam Coverage
+- **Aggregation** is a weak whole-part relationship: the part can exist independently of the whole.
+- **Composition** is strong ownership: the part's lifecycle is controlled by its whole.
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "With aid of diagrammatic example, distinguish between aggregation and composition." | Code + UML for both |
+These are domain-model decisions, not merely syntax choices.
 
----
+## Aggregation in Java
 
-## Section 1 — Core Difference
-
-| Aspect | Aggregation | Composition |
-|--------|-------------|-------------|
-| **Relationship** | Weak "has-a" | Strong "has-a" |
-| **Ownership** | Shared | Exclusive |
-| **Lifetime** | Independent | Dependent |
-| **UML** | Hollow diamond (◇) | Filled diamond (◆) |
-| **Code** | Part passed in / created elsewhere | Part created in constructor |
-
----
-
-## Section 2 — Aggregation Code Pattern
-
-### Characteristics
-- Part exists **independently** of whole
-- Part can belong to **multiple wholes**
-- Whole **does not create** part
-- Part passed via **constructor/setter**
-
-### Code Example: Department & Professor
+Java does not have a special aggregation keyword. A class holds a reference to another object, and the ownership policy is expressed through how objects are created and managed.
 
 ```java
-// Part: Exists independently
-public class Professor {
-    private String id;
-    private String name;
-    private String email;
-    
-    public Professor(String id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-    
-    public String getName() { return name; }
-    // ... getters/setters
-}
+class Team {
+    private final List<Player> players;
 
-// Whole: Aggregates professors
-public class Department {
-    private String name;
-    private List<Professor> professors;  // Aggregation
-    
-    public Department(String name) {
-        this.name = name;
-        this.professors = new ArrayList<>();
+    Team(List<Player> players) {
+        this.players = new ArrayList<>(players);
     }
-    
-    // Professor created OUTSIDE, passed in
-    public void addProfessor(Professor prof) {
-        professors.add(prof);
+}
+```
+
+Players can exist and move between teams independently. Copying the list protects the collection structure, though the `Player` objects are still shared references.
+
+## Composition in Java
+
+```java
+class Order {
+    private final List<LineItem> items = new ArrayList<>();
+
+    public void addItem(String name, int quantity) {
+        items.add(new LineItem(name, quantity));
     }
-    
-    public void removeProfessor(Professor prof) {
-        professors.remove(prof);
-    }
-    
-    public void listProfessors() {
-        System.out.println("Department: " + name);
-        for (Professor p : professors) {
-            System.out.println("  - " + p.getName());
+
+    private static class LineItem {
+        private final String name;
+        private final int quantity;
+
+        private LineItem(String name, int quantity) {
+            this.name = name;
+            this.quantity = quantity;
         }
     }
 }
-
-// Usage: Professor exists independently
-Professor prof1 = new Professor("P001", "Dr. Smith", "smith@uni.edu");
-Professor prof2 = new Professor("P002", "Dr. Jones", "jones@uni.edu");
-
-Department cs = new Department("Computer Science");
-Department math = new Department("Mathematics");
-
-// Same professor can belong to MULTIPLE departments
-cs.addProfessor(prof1);
-math.addProfessor(prof1);  // Shared!
-
-cs.addProfessor(prof2);
-
-// Deleting department does NOT delete professors
-// prof1 and prof2 still exist
 ```
 
-### UML for Aggregation
-```
-┌──────────────┐       ◇──────────►┌─────────────┐
-│  Department  │                   │  Professor  │
-└──────────────┘  has a (weak)     └─────────────┘
-```
+Here, the order controls creation and access to its line items. The model communicates that a line item belongs to that order. Java's garbage collector manages memory; composition is about domain ownership and lifecycle, not manually freeing memory.
 
----
+## Choose the relationship from the rules
 
-## Section 3 — Composition Code Pattern
+Ask:
 
-### Characteristics
-- Part **cannot exist** without whole
-- Part belongs to **exactly one whole**
-- Whole **creates** part in constructor
-- Part **destroyed** when whole is destroyed
+1. Can the part be created or used without this whole?
+2. Can it be shared among several wholes?
+3. If the whole is removed, should the part remain meaningful?
+4. Who is responsible for constructing and changing the part?
 
-### Code Example: House & Room
+A `Car` and `Engine` may be modeled as composition when the engine is treated as part of that car in the system. A `Library` and `Book` are often an association or aggregation because books can exist independently and move between libraries.
 
-```java
-// Part: Cannot exist without House
-public class Room {
-    private String name;
-    private double area;  // sq meters
-    private House house;  // Back-reference (optional)
-    
-    // Room created BY House, not externally
-    Room(String name, double area, House house) {
-        this.name = name;
-        this.area = area;
-        this.house = house;
-    }
-    
-    public String getName() { return name; }
-    public double getArea() { return area; }
-}
+## Avoid confusing composition with inheritance
 
-// Whole: Composes rooms
-public class House {
-    private String address;
-    private List<Room> rooms;  // Composition
-    
-    public House(String address) {
-        this.address = address;
-        this.rooms = new ArrayList<>();
-        // House CREATES its rooms
-        rooms.add(new Room("Living Room", 25.0, this));
-        rooms.add(new Room("Kitchen", 15.0, this));
-        rooms.add(new Room("Bedroom 1", 20.0, this));
-        rooms.add(new Room("Bedroom 2", 18.0, this));
-        rooms.add(new Room("Bathroom", 8.0, this));
-    }
-    
-    // No public addRoom — rooms created internally
-    // (or private method for extensibility)
-    
-    public double totalArea() {
-        double total = 0;
-        for (Room r : rooms) {
-            total += r.getArea();
-        }
-        return total;
-    }
-    
-    public void listRooms() {
-        System.out.println("House at " + address);
-        for (Room r : rooms) {
-            System.out.println("  - " + r.getName() + ": " + r.getArea() + " sqm");
-        }
-    }
-}
+Inheritance means “is a”; composition means “has a.” A `SavingsAccount` is an `Account`. A `Car` has an `Engine`. Choosing inheritance only to reuse code can create a false model and make future changes difficult.
 
-// Usage
-House myHouse = new House("123 University Ave");
-myHouse.listRooms();
-System.out.println("Total area: " + myHouse.totalArea() + " sqm");
-
-// When myHouse is garbage collected, all Rooms are too
-// Rooms cannot exist without a House
-// Rooms cannot be shared between houses
-```
-
-### UML for Composition
-```
-┌─────────┐       ◆──────────►┌─────────┐
-│  House  │                   │  Room   │
-└─────────┘  has a (strong)   └─────────┘
-```
-
----
-
-## Section 4 — Quick Comparison Code
-
-### Aggregation (Shared, Independent)
-```java
-// Part
-public class Engine {
-    private String serialNumber;
-    public Engine(String sn) { this.serialNumber = sn; }
-    public void start() { System.out.println("Engine " + serialNumber + " started"); }
-}
-
-// Whole
-public class Car {
-    private Engine engine;  // Aggregation
-    
-    public Car(Engine engine) {  // Engine passed in
-        this.engine = engine;
-    }
-    
-    public void start() { engine.start(); }
-}
-
-// Usage
-Engine v8 = new Engine("V8-001");
-Car car1 = new Car(v8);
-Car car2 = new Car(v8);  // Same engine in two cars!
-v8.start();  // Works independently
-```
-
-### Composition (Exclusive, Dependent)
-```java
-// Part
-public class Heart {
-    private int beatsPerMinute;
-    Heart() { this.beatsPerMinute = 70; }
-    public void beat() { System.out.println("Heart beating: " + beatsPerMinute + " bpm"); }
-}
-
-// Whole
-public class Human {
-    private Heart heart;  // Composition
-    
-    public Human() {
-        this.heart = new Heart();  // Human CREATES heart
-    }
-    
-    public void live() { heart.beat(); }
-}
-
-// Usage
-Human person = new Human();
-person.live();  // Heart beats
-// Heart cannot exist without Human
-// Heart cannot be transplanted to another Human in this model
-```
-
----
-
-## Section 5 — Decision Guide
-
-| Question | Aggregation | Composition |
-|----------|-------------|-------------|
-| Can part exist without whole? | Yes | No |
-| Can part belong to multiple wholes? | Yes | No |
-| Who creates the part? | External code | Whole's constructor |
-| Should deleting whole delete part? | No | Yes |
-| Is part shared? | Often | Never |
-
----
-
-## Section 5 — UML Diagram Examples
-
-### Aggregation Example: University
-```
-┌─────────────┐      ◇──────────►┌──────────────┐
-│  University │                  │  Professor   │
-└─────────────┘                  └──────────────┘
-       │
-       │ 1..*
-       ▼
-┌─────────────┐      ◇──────────►┌──────────────┐
-│ Department  │                  │  Professor   │
-└─────────────┘                  └──────────────┘
-```
-
-### Composition Example: Order System
-```
-┌─────────┐      ◆──────────►┌──────────────┐
-│  Order  │                  │  OrderItem   │
-└─────────┘                  └──────────────┘
-       │
-       │ 1..*
-       ▼
-┌─────────┐      ◆──────────►┌──────────────┐
-│  Cart   │                  │  CartItem    │
-└─────────┘                  └──────────────┘
-```
-
----
-
-## Section 6 — Past Exam Answer Format
-
-> **With aid of diagrammatic example, distinguish between aggregation and composition.**
-
-**Answer Structure:**
-
-1. **Definitions** (2-3 sentences each)
-2. **UML Symbols** (◇ vs ◆)
-3. **Key Differences Table** (ownership, lifetime, creation)
-4. **Code Example** (Aggregation: Department-Professor; Composition: House-Room)
-5. **UML Diagrams** for both
-
----
-
-## Section 7 — Self-Check Questions
-
-1. In aggregation, who creates the part?
-2. In composition, can a Room exist without a House?
-3. What UML symbol for aggregation? For composition?
-4. Can a Professor belong to two Departments in aggregation?
-5. Can a Room belong to two Houses in composition?
-6. In code, how do you distinguish them?
-
----
-
-## Solutions
-
-1. External code (passed in)
-2. No — dependent lifetime
-3. Aggregation: ◇ (hollow diamond); Composition: ◆ (filled diamond)
-4. Yes — shared ownership
-5. No — exclusive ownership
-6. Aggregation: part passed to constructor/setter. Composition: part created with `new` in whole's constructor.
-
----
-
-## Glossary Terms
-
-[[aggregation]], [[composition]], [[has-a]], [[weak-has-a]], [[strong-has-a]], [[hollow-diamond]], [[filled-diamond]], [[ownership]], [[shared-ownership]], [[exclusive-ownership]], [[lifetime-dependency]], [[independent-lifetime]], [[dependent-lifetime]], [[part-of]], [[whole-part]], [[code-pattern]], [[uml-diagram]], [[back-reference]], [[constructor-injection]], [[setter-injection]], [[factory-method]], [[dependency-injection]], [[aggregation-vs-composition]]
+**Practice:** In a university system, should `Department` compose `Student`? Usually not: a student can transfer or remain in the system if a department changes. A department may associate with students, but it does not own their existence.

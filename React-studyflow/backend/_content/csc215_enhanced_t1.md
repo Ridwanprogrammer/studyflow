@@ -1,373 +1,99 @@
-# CSC 215 Topic 1: Number Systems and Codes — Enhanced
+# Number Systems and Codes
 
-## The Central Idea
+## Different symbols can describe the same quantity
 
-Digital circuits process **binary** (0/1), but humans work in **decimal**. We need systematic ways to convert between number systems and to encode special types of data (negative numbers, decimal digits, characters).
+People usually write numbers in decimal, using ten symbols: $0$ through $9$. A digital circuit is built from two stable states, commonly represented as 0 and 1, so binary is a natural way to represent information inside it. Decimal and binary are not different kinds of quantity; they are different ways to write a value.
 
-This topic covers conversions, codes, and the **exact problem types from past exams**.
+The key is **place value**. In decimal, each position is a power of 10. In binary, each position is a power of 2. Once the place values are clear, conversions are bookkeeping rather than guesswork.
 
----
+## Read a number using its base
 
-## Why It Matters — Past Exam Coverage
+The **base** (or radix) tells you how many digit symbols are used and what each position is worth. For a base-$b$ number,
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| Convert 73₁₀ to binary | Decimal → Binary conversion |
-| Convert 0.125₁₀ to binary | Fractional decimal → Binary |
-| Convert 2B6₁₆ to decimal | Hex → Decimal |
-| Convert 47₁₀ to octal | Decimal → Octal |
-| Convert 1010100101₂ to octal | Binary → Octal (group by 3) |
-| Find 2's complement of 11010₂ | 2's complement method |
-| BCD encoding | BCD vs binary distinction |
+$$(d_nd_{n-1}\ldots d_0)_b=\sum_{i=0}^{n}d_i b^i.$$
 
----
+The subscript $b$ names the base. For example,
 
-## Section 1 — Conversions (Integer)
+$$1011_2=1(2^3)+0(2^2)+1(2^1)+1(2^0)=8+0+2+1=11_{10}.$$
 
-### Decimal → Binary (Repeated Division)
+The same value in decimal is $11$. A binary digit is called a **bit**. The rightmost bit is the $2^0$ place; moving left multiplies the place value by 2 each time.
 
-**Algorithm:** Divide by 2, collect remainders bottom-to-top.
+Hexadecimal uses base 16. Since ten symbols are not enough, it uses $A$ through $F$ for values 10 through 15. One hexadecimal digit represents exactly four bits:
 
-**Example: 73₁₀ → Binary**
-```
-73 ÷ 2 = 36 rem 1
-36 ÷ 2 = 18 rem 0
-18 ÷ 2 = 9  rem 0
-9  ÷ 2 = 4  rem 1
-4  ÷ 2 = 2  rem 0
-2  ÷ 2 = 1  rem 0
-1  ÷ 2 = 0  rem 1  ← stop
-```
-Read remainders **bottom-to-top: 1001001₂**
+| Hex digit | Binary | Hex digit | Binary |
+|---|---|---|---|
+| 0–3 | 0000–0011 | 8–B | 1000–1011 |
+| 4–7 | 0100–0111 | C–F | 1100–1111 |
 
-**Check:** 64 + 8 + 1 = 73 ✓
+For instance, $2B6_{16}=2(16^2)+11(16)+6=694_{10}$. Converting each hex digit to four bits gives $0010\ 1011\ 0110_2$; leading zeros may be dropped when they do not represent a fixed-width word.
 
-**Example: 47₁₀ → Octal**
-```
-47 ÷ 8 = 5 rem 7
-5  ÷ 8 = 0 rem 5
-```
-**57₈** (Check: 5×8 + 7 = 47 ✓)
+## Convert between decimal and binary
 
----
+### Whole-number conversion: divide and collect remainders
 
-### Decimal → Binary (Fractional Part)
+To convert a positive decimal integer to base 2, divide by 2 repeatedly. Each remainder is the next binary digit, starting from the rightmost place. Read the remainders from bottom to top.
 
-**Algorithm:** Multiply fraction by 2, collect integer parts top-to-bottom.
-
-**Example: 0.125₁₀ → Binary**
-```
-0.125 × 2 = 0.25  → 0
-0.25  × 2 = 0.5   → 0
-0.5   × 2 = 1.0   → 1  ← stop when fraction becomes 0
-```
-Read **top-to-bottom: 0.001₂**
-
-**Check:** 0×½ + 0×¼ + 1×⅛ = 0.125 ✓
-
----
-
-### Binary Fraction → Decimal
-
-Digits to the right of the binary point use negative powers of 2.
-
-**Example: 110.10₂**
+For $73_{10}$:
 
 ```text
-1×2² + 1×2¹ + 0×2⁰ + 1×2⁻¹ + 0×2⁻²
-= 4 + 2 + 0 + 0.5 + 0
-= 6.5₁₀
+73 ÷ 2 = 36 remainder 1
+36 ÷ 2 = 18 remainder 0
+18 ÷ 2 =  9 remainder 0
+ 9 ÷ 2 =  4 remainder 1
+ 4 ÷ 2 =  2 remainder 0
+ 2 ÷ 2 =  1 remainder 0
+ 1 ÷ 2 =  0 remainder 1
 ```
 
----
+Reading upward gives $1001001_2$. Check by place value: $64+8+1=73$. This check is useful because reversing the remainders is an easy mistake.
 
-### Binary → Decimal (Positional Weights)
+The same method works in another base: divide by that base and read remainders upward. For example, $47_{10}$ in base 8 gives remainders 7 and 5, so $47_{10}=57_8$.
 
-**Example: 1010100101₂ → Decimal**
-```
-Position: 9 8 7 6 5 4 3 2 1 0
-Bits:     1 0 1 0 1 0 0 1 0 1
-Weights:  512 256 128 64 32 16 8 4 2 1
-Sum: 512 + 128 + 32 + 4 + 1 = 677
-```
+### Fraction conversion: multiply and collect whole parts
 
-**Example: 1010100101₂ → Octal** (Group by 3 from right)
-```
-1 010 100 101  (pad left with zeros: 001 010 100 101)
-   1   2   4   5
-```
-**1245₈**
+For a decimal fraction between 0 and 1, multiply by 2 repeatedly. At each step, the whole-number part is the next bit after the binary point; continue with the remaining fractional part.
 
----
+For $0.125_{10}$:
 
-### Hex ↔ Binary (Group by 4)
-
-| Hex | Binary |
-|-----|--------|
-| 0 | 0000 |
-| 1 | 0001 |
-| ... | ... |
-| 9 | 1001 |
-| A | 1010 |
-| B | 1011 |
-| C | 1100 |
-| D | 1101 |
-| E | 1110 |
-| F | 1111 |
-
-**Example: 2B6₁₆ → Binary**
-```
-2 = 0010
-B = 1011
-6 = 0110
-→ 0010 1011 0110 = 1010110110₂
-```
-
-**Example: 2B6₁₆ → Decimal**
-```
-2×16² + 11×16¹ + 6×16⁰ = 2×256 + 11×16 + 6 = 512 + 176 + 6 = 694
-```
-
----
-
-### Binary → Hex (Group by 4 from right)
-
-**Example: 101100110₂ → Hex**
-```
-Pad: 0001 0110 0110
-     1    6    6
-→ 166₁₆
-```
-
----
-
-## Section 2 — Signed Integer Representations (Critical for Exams)
-
-### 1. Sign-Magnitude
-- MSB = sign (0=+, 1=-)
-- Remaining bits = magnitude
-- **Problem:** Two zeros (+0, -0), addition complicated
-
-### 2. One's Complement
-- Positive: same as binary
-- Negative: invert all bits
-- **Problem:** Still two zeros, end-around carry in addition
-
-### 3. Two's Complement (STANDARD — Used in All Computers)
-
-**To get -X in n bits:**
-1. Write +X in n bits
-2. Invert all bits (one's complement)
-3. Add 1
-
-**Example: 2's Complement of 11010₂ (5-bit)**
-
-**Method 1: Invert + Add 1**
-```
-Original:  1 1 0 1 0
-Invert:    0 0 1 0 1
-Add 1:     0 0 1 1 0
-Result:    00110
-```
-
-**Method 2: Copy from right until first 1, then invert rest**
-```
-11010
-  ↑  First 1 from right (position 1)
-Copy:  0  (the 1 itself)
-Invert rest: 0011
-Result: 00110
-```
-
-Interpreting the same bits depends on the representation: unsigned `11010₂` is 26, but as a 5-bit two's-complement number it is `−6`. Taking its two's complement negates that signed value, giving `00110₂` (`+6`). A 5-bit signed number cannot represent `−26`; in 6 bits, `+26 = 011010₂`, so `−26 = 100110₂`.
-
----
-
-### Past Exam: 2's Complement Problems
-
-| Binary pattern | Width | Two's complement (negate) | Signed value before negation |
-|---------------|-------|---------------------------|------------------------------|
-| 11010 | 5 bits | 00110 | −6 |
-| 1001010 | 7 bits | 0110110 | −54 |
-| 1010010 | 7 bits | 0101110 | −46 |
-
----
-
-## Section 3 — BCD (Binary Coded Decimal)
-
-### Definition
-Each decimal digit encoded separately in 4-bit binary.
-
-**Example: 59 in BCD**
-```
-5 = 0101
-9 = 1001
-BCD: 0101 1001
-```
-**NOT the same as binary 59 = 111011!**
-
-### BCD Addition
-Add as binary. If any 4-bit group > 9 (i.e., 1010-1111), add 6 (0110) to that group.
-
-**Example: 45 + 38 in BCD**
-```
-  0100 0101  (45)
-+ 0011 1000  (38)
-= 0111 1101
-       ↑ This group = 13 > 9, add 6:
-  0111 1101
-+      0110
-= 1000 0011  → 83 ✓
-```
-
----
-
-## Section 4 — Past Exam Worked Problems
-
-### Problem 1: Convert 73₁₀ to Binary
-**Solution:** As shown above: **1001001₂**
-
-### Problem 2: Convert 0.125₁₀ to Binary
-**Solution:** 0.001₂
-
-### Problem 3: Convert 2B6₁₆ to Decimal
-**Solution:** 2×256 + 11×16 + 6 = 512 + 176 + 6 = **694**
-
-### Problem 4: Convert A4B1₁₆ to Decimal
-**Solution:** 10×4096 + 4×256 + 11×16 + 1 = 40960 + 1024 + 176 + 1 = **42161**
-
-### Problem 5: Convert 2C5₁₆ to Decimal
-**Solution:** 2×256 + 12×16 + 5 = 512 + 192 + 5 = **709**
-
-### Problem 6: 2's Complement of 11010₂
-**Solution:** Invert → 00101, Add 1 → **00110**
-
-### Problem 7: 2's Complement of 1001010₂
-**Solution:** Invert → 0110101, Add 1 → **0110110**
-
-### Problem 8: 2's Complement of 1010010₂
-**Solution:** Invert → 0101101, Add 1 → **0101110**
-
-### Problem 9: Convert 47₁₀ to Octal
-**Solution:** 47 ÷ 8 = 5 rem 7, 5 ÷ 8 = 0 rem 5 → **57₈**
-
-### Problem 10: Convert 151₁₀ to Octal
-**Solution:** 151 ÷ 8 = 18 rem 7, 18 ÷ 8 = 2 rem 2, 2 ÷ 8 = 0 rem 2 → **227₈**
-
-### Problem 11: Convert 302₁₀ to Octal
-**Solution:** 302 ÷ 8 = 37 rem 6, 37 ÷ 8 = 4 rem 5, 4 ÷ 8 = 0 rem 4 → **456₈**
-
-### Problem 12: Convert 1010100101₂ to Octal
-**Solution:** Group by 3: 001 010 100 101 → **1245₈**
-
-### Problem 13: Convert 101100110₂ to Octal
-**Solution:** Group by 3: 101 100 110 → **546₈**
-
----
-
-## Section 5 — Arithmetic Operations (Past Exam)
-
-### Binary Addition
-
-**Example: 101.1011₂ + 1100.001₂**
-```
-  101.1011
-+1100.0010
-----------
- 10001.1101
-```
-Align binary points. Add column by column with carry.
-
-### Binary Subtraction
-
-**Example: 1011.011₂ - 1001.110₂**
-```
-  1011.011
-- 1001.110
-----------
-    1.101
-```
-Borrow as needed. Or use 2's complement: A - B = A + (-B).
-
-### Binary Addition (Multi-bit)
-
-**Example: 1100001₂ + 10011101₂**
-```
-  01100001  (pad to 8 bits)
-+ 10011101
-----------
-  11111110
-```
-As unsigned values, `1100001₂ = 97` and `10011101₂ = 157`, so the sum is `254₁₀ = 11111110₂`. The result fits in 8 bits; there is no carry out.
-
-### Binary Multiplication and Division
-
-Binary multiplication follows long multiplication, with partial products of either the multiplicand or zero.
-
-**Example: 111₂ × 101₂**
 ```text
-      111
-    × 101
-    -----
-      111
-     000
-    11100
-    -----
-   100011₂
+0.125 × 2 = 0.25  → bit 0
+0.25  × 2 = 0.5   → bit 0
+0.5   × 2 = 1.0   → bit 1; stop
 ```
-Check: `7 × 5 = 35`, and `100011₂ = 35₁₀`.
 
-Binary division uses long division, subtracting shifted copies of the divisor where they fit. For `101010₂ ÷ 110₂`, the quotient is `111₂` with remainder 0; check that `111₂ × 110₂ = 101010₂`.
+Reading downward gives $0.001_2$. Check: $0(2^{-1})+0(2^{-2})+1(2^{-3})=1/8=0.125$. Some fractions do not terminate in binary, just as $1/3$ does not terminate in decimal; in those cases, stop at the required precision and state that the result is an approximation.
 
----
+## Use grouping to convert binary quickly
 
-### Verify De Morgan's Theorems (Past Exam)
+Because $8=2^3$, group binary digits in threes from the binary point to convert to octal. Because $16=2^4$, group in fours to convert to hexadecimal. Add leading or trailing zeros to complete a group; they do not change the value.
 
-**De Morgan's First:** (A + B)' = A' · B'
-**De Morgan's Second:** (A · B)' = A' + B'
+For $1010100101_2$, grouping by threes gives $001\ 010\ 100\ 101$, which converts to $1245_8$. Grouping by fours gives $0010\ 1010\ 0101$, or $2A5_{16}$.
 
-**Truth Table Verification (3 variables):**
+**Pause and try:** Convert $1101_2$ to decimal and hexadecimal. Its place values give $8+4+1=13_{10}$. Padding to four bits gives $1101_2=D_{16}$.
 
-| A | B | C | A+B | (A+B)' | A' | B' | A'·B' |
-|---|---|---|-----|--------|----|----|-------|
-| 0 | 0 | 0 | 0   | 1      | 1  | 1  | 1     |
-| 0 | 0 | 1 | 0   | 1      | 1  | 1  | 1     |
-| ... | ... | ... | ... | ...    | ...| ...| ...   |
+## Bits alone do not tell you whether a number is negative
 
-(Complete all 8 rows — both sides match for all combinations)
+A bit pattern has meaning only after a representation and a word width are specified. The 5-bit pattern `11010` is 26 if interpreted as unsigned binary. In **two's-complement** signed representation, the same pattern means $-6$.
 
----
+For an $n$-bit two's-complement number, the leftmost bit has weight $-2^{n-1}$ and the remaining bits have positive powers of 2. A 5-bit signed value therefore ranges from $-16$ to $15$. To negate a value, invert every bit and add 1, keeping the same width.
 
-## Section 6 — Quick Reference: Conversion Algorithms
+For example, $+6$ in 5 bits is `00110`. Invert to `11001`, then add 1 to get `11010`, which represents $-6$. Negating `11010` repeats the process and returns `00110`.
 
-| Conversion | Algorithm |
-|------------|-----------|
-| Dec → Bin (int) | Repeated ÷2, remainders bottom-up |
-| Dec → Bin (frac) | Repeated ×2, integers top-down |
-| Bin → Dec | Sum of 2ᵏ for each 1-bit |
-| Bin → Oct | Group 3 bits from right |
-| Bin → Hex | Group 4 bits from right |
-| Oct → Bin | Each digit → 3 bits |
-| Hex → Bin | Each digit → 4 bits |
-| Dec → Oct | Repeated ÷8 |
-| Dec → Hex | Repeated ÷16 |
-| 2's Comp | Invert all bits, add 1 (or: copy to first 1, invert rest) |
-| BCD | Each decimal digit → 4-bit binary |
+The width matters. Five-bit signed representation cannot hold $+26$. In six bits, $+26$ is `011010`, and $-26$ is `100110`. Always pad to the chosen width before taking a two's complement.
 
----
+## Binary-coded decimal stores decimal digits separately
 
-## Section 7 — Self-Check Problems
+Binary-coded decimal (**BCD**) represents each decimal digit using its own four-bit group. Thus decimal 59 is `0101 1001` in BCD: `0101` represents digit 5 and `1001` represents digit 9. This is different from the ordinary binary representation of 59, which is `111011`.
 
-1. Convert 23₁₀ to binary, octal, hex
-2. Convert 0.625₁₀ to binary
-3. 2's complement of 01101 (5-bit)
-4. 101101₂ + 11011₂ (binary addition)
-4. BCD of 387
-5. Verify (A+B)' = A'·B' with truth table
-6. Convert 3B6₁₆ to binary, octal, decimal
+BCD is useful when a system must display or process decimal digits directly. Its trade-off is that some four-bit patterns, such as `1010`, are not valid BCD digits. When adding BCD numbers, a digit group above 9 must be corrected by adding 6 (binary `0110`) so the result returns to a valid decimal digit and passes any carry to the next group.
 
----
+## A safe conversion routine
 
-## Glossary Terms
+1. Write down the source base and target base.
+2. For positional evaluation, multiply each digit by its place value and add.
+3. For whole-number conversion by repeated division, read remainders from last to first.
+4. For fractional conversion by repeated multiplication, read whole parts from first to last.
+5. For binary/octal/hex conversion, group bits from the point in threes or fours.
+6. For signed values or BCD, state the representation and bit width before interpreting the pattern.
 
-[[number-system]], [[base]], [[radix]], [[positional-notation]], [[binary]], [[octal]], [[hexadecimal]], [[bcd]], [[sign-magnitude]], [[ones-complement]], [[twos-complement]], [[signed-integer]], [[unsigned-integer]], [[overflow]], [[de-morgans-theorems]], [[truth-table]], [[complement]], [[bit]], [[nibble]], [[byte]], [[word]], [[msb]], [[lsb]]
+These checks prevent the most common errors: reading remainders in the wrong direction, grouping from the wrong side, and treating a bit pattern as though its meaning were self-evident.

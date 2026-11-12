@@ -1,271 +1,47 @@
-# COS 201 Track A: Software Engineering Theory — Topic 5
-# Design Principles: SOLID, Coupling, Cohesion, GRASP
+# Design Principles: SOLID, Coupling, Cohesion, and GRASP
 
-## The Central Idea
+## Good design makes change safer
 
-**Good design** isn't about aesthetics — it's about **managing change**. Principles like SOLID, low coupling, high cohesion, and GRASP patterns guide you to create systems that are easy to understand, modify, and extend.
+Software changes because users' needs, rules, and environments change. A design is valuable when a small, expected change can be made without breaking unrelated parts of the system.
 
----
+Two useful questions are: **How many other parts must know about this component?** That is coupling. **Does this component's work belong together?** That is cohesion. Lower coupling and stronger cohesion generally make systems easier to understand and change.
 
-## Why It Matters — Past Exam Coverage
+### Coupling and cohesion
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "Design Principles: SOLID, GRASP, coupling/cohesion" | Core SE design theory |
-| Often asked as "explain SOLID" or "difference between coupling and cohesion" | |
+**Coupling** describes how dependent modules are on one another. If changing a database detail forces edits across every page, the design is tightly coupled. Interfaces and clear boundaries reduce knowledge that must be shared.
 
----
+**Cohesion** describes how closely a module's responsibilities fit together. A class that validates an order, formats reports, sends email, and reads files has unrelated reasons to change and low cohesion. Separating responsibilities can make each part clearer.
 
-## Section 1 — Coupling & Cohesion (Fundamental)
+## SOLID: five guidelines for object-oriented design
 
-### Coupling
-**Degree of interdependence between modules.**
+### Single Responsibility Principle
 
-| Level | Type | Example | Good/Bad |
-|-------|------|---------|----------|
-| **Low (Good)** | **Data coupling** | Pass simple data (int, String) | ✓ |
-| | **Stamp coupling** | Pass data structure, use only part | △ |
-| | **Control coupling** | Pass flag to control logic | ✗ |
-| **High (Bad)** | **Common coupling** | Shared global data | ✗✗ |
-| | **Content coupling** | Directly modify another's internals | ✗✗✗ |
+A class should have one coherent responsibility, or one main reason to change. This does not mean every method needs its own class; it means unrelated policies should not be bundled together.
 
-**Goal:** **Low coupling** — modules independent, change in one doesn't ripple.
+### Open-Closed Principle
 
-### Cohesion
-**How closely related are responsibilities within a module.**
+Software components should be open to extension but closed to repeated modification of stable code. For example, a payment workflow that uses a `PaymentMethod` interface can support a new method by adding an implementation, rather than rewriting the workflow's conditional logic each time.
 
-| Level | Type | Example | Good/Bad |
-|-------|------|---------|----------|
-| **High (Good)** | **Functional** | Single well-defined task | ✓✓✓ |
-| | **Sequential** | Output of one = input to next | ✓✓ |
-| | **Communicational** | Operate on same data | ✓ |
-| **Low (Bad)** | **Procedural** | Steps in sequence, unrelated | △ |
-| | **Temporal** | Done at same time (init) | △ |
-| | **Logical** | Similar operations (all I/O) | ✗ |
-| | **Coincidental** | Random grouping | ✗✗✗ |
+### Liskov Substitution Principle
 
-**Goal:** **High cohesion** — each module does ONE thing well.
+A subtype should be usable wherever its parent type is expected without breaking promised behaviour. If a `SavingsAccount` overrides withdrawal so that ordinary withdrawals fail unexpectedly, code expecting an `Account` may break. Inheritance must preserve the contract, not just reuse fields.
 
----
+### Interface Segregation Principle
 
-## Section 2 — SOLID Principles
+Clients should not depend on methods they do not use. Several small, focused interfaces are often better than one large interface forcing every implementation to provide irrelevant operations.
 
-### S — Single Responsibility Principle (SRP)
+### Dependency Inversion Principle
 
-> **A class should have only one reason to change.**
+High-level policy should depend on abstractions rather than concrete low-level details. A report service can depend on a `Repository` interface instead of constructing a specific database connection. Dependency injection supplies the implementation.
 
-**Violation:**
-```java
-class UserManager {
-    void saveUser(User u) { /* DB logic */ }
-    void sendEmail(User u) { /* Email logic */ }
-    void generateReport(User u) { /* Report logic */ }
-}
-```
-Three reasons to change: DB schema, email format, report format.
+## GRASP: assign responsibilities deliberately
 
-**Fix:** Separate classes:
-```java
-class UserRepository { void save(User u) { /* DB */ } }
-class EmailService { void send(User u) { /* Email */ } }
-class ReportGenerator { void generate(User u) { /* Report */ } }
-```
+GRASP (General Responsibility Assignment Software Patterns) offers principles for deciding which class should do what. **Information Expert** assigns a responsibility to the object with the necessary information. **Controller** gives a system operation to a suitable coordinator. **Low Coupling** and **High Cohesion** guide boundaries. **Polymorphism** lets behaviour vary by type without a growing chain of conditionals.
 
----
+For example, a `Course` object knows its own enrolled students, so it can answer a question about its enrollment count. A central application service may coordinate registration across course and student objects without owning every detail.
 
-### O — Open/Closed Principle (OCP)
+## Apply principles without turning them into slogans
 
-> **Open for extension, closed for modification.**
+Each principle is a tool, not a command to create maximum abstraction. For a small stable feature, an extra interface may add more complexity than it removes. Ask which likely change or testing problem the design is addressing.
 
-**Violation:**
-```java
-class PaymentProcessor {
-    void process(Payment p) {
-        if (p.type == "CREDIT") { /* credit logic */ }
-        else if (p.type == "PAYPAL") { /* paypal logic */ }
-        // Adding new payment = modify this class
-    }
-}
-```
-
-**Fix:** Polymorphism
-```java
-interface PaymentStrategy { void process(Payment p); }
-class CreditCardStrategy implements PaymentStrategy { ... }
-class PayPalStrategy implements PaymentStrategy { ... }
-
-class PaymentProcessor {
-    void process(Payment p, PaymentStrategy strategy) {
-        strategy.process(p);
-    }
-}
-```
-
----
-
-### L — Liskov Substitution Principle (LSP)
-
-> **Subtypes must be substitutable for their base types.**
-
-**Violation:** Square extends Rectangle (classic)
-```java
-class Rectangle {
-    void setWidth(int w) { width = w; }
-    void setHeight(int h) { height = h; }
-}
-class Square extends Rectangle {
-    void setWidth(int w) { width = height = w; } // Breaks Rectangle contract
-    void setHeight(int h) { width = height = h; }
-}
-```
-`Rectangle r = new Square(); r.setWidth(5); r.setHeight(10);` — width becomes 10! Not a rectangle.
-
-**Fix:** Don't model Square as Rectangle. Use composition or separate.
-
----
-
-### I — Interface Segregation Principle (ISP)
-
-> **Clients should not depend on interfaces they don't use.**
-
-**Violation:**
-```java
-interface Worker {
-    void work();
-    void eat();
-    void sleep();
-}
-class Robot implements Worker {
-    void work() { ... }
-    void eat() { throw new UnsupportedOperationException(); } // Robot doesn't eat!
-    void sleep() { throw new UnsupportedOperationException(); }
-}
-```
-
-**Fix:** Split interfaces
-```java
-interface Workable { void work(); }
-interface Eatable { void eat(); }
-interface Sleepable { void sleep(); }
-
-class Human implements Workable, Eatable, Sleepable { ... }
-class Robot implements Workable { ... }
-```
-
----
-
-### D — Dependency Inversion Principle (DIP)
-
-> **Depend on abstractions, not concretions.**
-> - High-level modules should not depend on low-level modules. Both should depend on abstractions.
-> - Abstractions should not depend on details. Details should depend on abstractions.
-
-**Violation:**
-```java
-class UserService {
-    private MySQLDatabase db = new MySQLDatabase(); // Depends on concrete
-    void save(User u) { db.save(u); }
-}
-```
-
-**Fix:**
-```java
-interface Database { void save(User u); }
-class MySQLDatabase implements Database { ... }
-class PostgreSQLDatabase implements Database { ... }
-
-class UserService {
-    private Database db; // Depends on abstraction
-    UserService(Database db) { this.db = db; } // Injected
-    void save(User u) { db.save(u); }
-}
-```
-
----
-
-## Section 3 — GRASP Patterns (General Responsibility Assignment)
-
-| Pattern | Principle | Example |
-|---------|-----------|---------|
-| **Information Expert** | Assign responsibility to class with needed info | `Order` calculates total (has items) |
-| **Creator** | Class B creates A if B contains/aggregates A | `Order` creates `OrderItem` |
-| **Controller** | Delegate system events to non-UI class | `OrderController` handles `placeOrder()` |
-| **Low Coupling** | Minimize dependencies | Use interfaces, DI |
-| **High Cohesion** | Keep related responsibilities together | `PaymentService` only does payments |
-| **Polymorphism** | Vary behavior by type | `PaymentStrategy` |
-| **Pure Fabrication** | Create convenience class for low coupling | `PaymentProcessor` (not domain concept) |
-| **Indirection** | Use intermediary to decouple | `Mediator` between UI and domain |
-| **Protected Variations** | Wrap unstable parts with stable interface | `PaymentGateway` interface |
-
----
-
-## Section 4 — Design Patterns (GoF — Brief)
-
-### Creational
-- **Singleton** — One instance globally
-- **Factory Method** — Delegate instantiation to subclass
-- **Abstract Factory** — Families of related objects
-- **Builder** — Complex object construction
-- **Prototype** — Clone existing object
-
-### Structural
-- **Adapter** — Convert interface
-- **Decorator** — Add behavior dynamically
-- **Facade** — Simplify complex subsystem
-- **Composite** — Tree structures
-- **Proxy** — Placeholder for another object
-
-### Behavioral
-- **Strategy** — Interchangeable algorithms
-- **Observer** — Publish/subscribe
-- **Command** — Encapsulate request as object
-- **Template Method** — Skeleton algorithm
-- **State** — Change behavior with state
-
----
-
-## Section 5 — Conceptual Model
-
-**Design Principles = Guardrails for Change**
-
-| Principle | Prevents |
-|-----------|----------|
-| **SRP** | God classes, tangled changes |
-| **OCP** | Fragile base class, modification cascades |
-| **LSP** | Broken inheritance hierarchies |
-| **ISP** | Fat interfaces, dummy implementations |
-| **DIP** | Rigid dependencies, hard to test |
-| **Low Coupling** | Ripple effects |
-| **High Cohesion** | Scattered logic, hard to find |
-
----
-
-## Section 6 — Self-Check Questions
-
-1. What does "high cohesion, low coupling" mean?
-2. SRP: "A class should have one reason to..." what?
-3. OCP: "Open for extension, closed for..." what?
-4. LSP: Subtypes must be... what?
-5. ISP: Clients should not depend on... what?
-6. DIP: High-level modules should not depend on... what?
-7. What GRASP pattern says "assign to class with the info"?
-8. Difference between coupling and cohesion?
-
----
-
-## Solutions
-
-1. High cohesion = module does one thing well. Low coupling = modules independent.
-2. Change
-3. Modification
-4. Substitutable for base types
-5. Interfaces they don't use
-6. Low-level modules (both depend on abstractions)
-7. Information Expert
-8. Coupling = between modules; Cohesion = within module
-
----
-
-## Glossary Terms
-
-[[coupling]], [[cohesion]], [[data-coupling]], [[stamp-coupling]], [[control-coupling]], [[common-coupling]], [[content-coupling]], [[functional-cohesion]], [[sequential-cohesion]], [[communicational-cohesion]], [[procedural-cohesion]], [[temporal-cohesion]], [[logical-cohesion]], [[coincidental-cohesion]], [[solid]], [[srp]], [[single-responsibility]], [[ocp]], [[open-closed]], [[lsp]], [[liskov-substitution]], [[isp]], [[interface-segregation]], [[dip]], [[dependency-inversion]], [[grasp]], [[information-expert]], [[creator]], [[controller]], [[low-coupling]], [[high-cohesion]], [[polymorphism]], [[pure-fabrication]], [[indirection]], [[protected-variations]], [[design-patterns]], [[gof]], [[singleton]], [[factory-method]], [[abstract-factory]], [[builder]], [[adapter]], [[decorator]], [[facade]], [[composite]], [[proxy]], [[strategy]], [[observer]], [[command]], [[template-method]], [[state]]
+**Practice:** If a class sends email, writes audit logs, and calculates a student's grade, identify a cohesion problem and propose a separation. A reasonable design gives grade calculation, notification, and auditing clear owners, while a coordinator connects the steps.

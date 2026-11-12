@@ -1,393 +1,68 @@
-# CSC 215 Topic 4: Combinational Logic Circuits — Enhanced
+# Combinational Logic Circuits
 
-## The Central Idea
+## The output depends on what is happening now
 
-**Combinational circuits** have no memory — outputs depend **only on current inputs**. They are the building blocks of all digital computation: arithmetic, data routing, code conversion, comparison.
+A light controlled by a switch illustrates a simple digital system: the output is determined by the current switch position. A **combinational circuit** has this property—its outputs depend only on the current input values. It has no stored history.
 
-This topic covers the standard combinational blocks with **complete worked examples** matching past exam expectations.
+This differs from a sequential circuit, whose output may also depend on a stored state from earlier input changes. Deciding whether a problem needs memory is the first design choice.
 
----
+## Translate a specification into logic
 
-## Why It Matters — Past Exam Coverage
+To design a combinational circuit:
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| Draw logic gate for F = A·B + A·C + B·C | Combinational design from expression |
-| Draw logic gate for Z = A'·B·C·(A+D) | Expression → circuit |
-| Half adder / Full adder design | Adder circuits |
-| Multiplexer / Decoder / Encoder | Standard MSI blocks |
-| Output expression from logic diagram | Circuit → expression analysis |
+1. List and name the inputs and outputs.
+2. Write a truth table covering every input combination.
+3. Derive a Boolean expression for each output.
+4. Simplify the expressions.
+5. Draw the gates and verify that the circuit matches the table.
 
----
+For $n$ binary inputs there are $2^n$ rows. A truth table is therefore a complete, checkable description of the circuit.
 
-## Section 1 — Design Flow
+## Adders combine binary digits
 
-1. **Specification** → Truth table
-2. **Truth table** → Boolean expressions (SOP/POS)
-3. **Simplify** (K-map/algebra)
-4. **Implement** with gates (AND/OR/NOT, NAND-only, NOR-only)
-5. **Verify** (timing, fan-out, power)
+### Half adder
 
----
+A half adder adds two one-bit inputs $A$ and $B$. The sum is 1 when they differ, so $S=A\oplus B$. The carry is 1 only when both are 1, so $C=AB$.
 
-## Section 2 — Arithmetic Circuits
+| $A$ | $B$ | $S$ | $C$ |
+|---:|---:|---:|---:|
+| 0 | 0 | 0 | 0 |
+| 0 | 1 | 1 | 0 |
+| 1 | 0 | 1 | 0 |
+| 1 | 1 | 0 | 1 |
 
-### Half Adder (HA)
+It cannot accept a carry from a previous bit position, which is why it is called “half.”
 
-Adds two 1-bit numbers: A + B
+### Full adder
 
-| A | B | Sum | Carry |
-|---|---|-----|-------|
-| 0 | 0 | 0   | 0     |
-| 0 | 1 | 1   | 0     |
-| 1 | 0 | 1   | 0     |
-| 1 | 1 | 0   | 1     |
+A full adder adds $A$, $B$, and an incoming carry $C_{in}$. The sum is odd when an odd number of inputs are 1:
 
-**Expressions:**
-- Sum = A ⊕ B = A'B + AB'
-- Carry = A·B
+$$S=A\oplus B\oplus C_{in}.$$
 
-**Gate Diagram:**
-```
-A ──┬──[XOR]── Sum
-    │
-B ──┴──[AND]── Carry
-```
+The outgoing carry is 1 when at least two inputs are 1:
 
----
+$$C_{out}=AB+AC_{in}+BC_{in}.$$
 
-### Full Adder (FA)
+Full adders can be chained to add multi-bit numbers. The carry from each position becomes the input carry for the next position.
 
-Adds three 1-bit numbers: A + B + C_in
+## Select or decode information
 
-| A | B | C_in | Sum | C_out |
-|---|---|------|-----|-------|
-| 0 | 0 | 0    | 0   | 0     |
-| 0 | 0 | 1    | 1   | 0     |
-| 0 | 1 | 0    | 1   | 0     |
-| 0 | 1 | 1    | 0   | 1     |
-| 1 | 0 | 0    | 1   | 0     |
-| 1 | 0 | 1    | 0   | 1     |
-| 1 | 1 | 0    | 0   | 1     |
-| 1 | 1 | 1    | 1   | 1     |
+A **multiplexer** (MUX) selects one of several data inputs and routes it to one output. A 2-to-1 MUX with select $S$ gives
 
-**Expressions:**
-- Sum = A ⊕ B ⊕ C_in
-- C_out = A·B + B·C_in + A·C_in = (A⊕B)·C_in + A·B
+$$Y=S'D_0+SD_1.$$
 
-**Gate Diagram (using two half adders):**
-```
-A ──┬──[HA1]── Sum1 ──┬──[HA2]── Sum
-    │                 │
-B ──┴──[HA1]── C1 ────┤
-                      │
-C_in ─────────────────┴──[HA2]── C2
-                                    │
-C_out = C1 + C2 ────────────────────┘
-```
+When $S=0$, the output is $D_0$; when $S=1$, it is $D_1$. With $n$ select bits, a MUX can choose among $2^n$ inputs.
 
-**Alternative (direct):**
-```
-Sum = A ⊕ B ⊕ C_in  (two XORs)
-C_out = AB + BC_in + AC_in  (three ANDs + one OR)
-```
+A **decoder** does the reverse style of job: an $n$-bit input code activates one of up to $2^n$ output lines. A 2-to-4 decoder, for example, maps each two-bit input to one active output. Decoders are used for address selection and instruction decoding.
 
----
+A **demultiplexer** routes one input to one of several outputs, selected by control bits. An **encoder** converts one active input among several into a binary code. State the active-high or active-low convention before interpreting outputs.
 
-### 4-Bit Ripple Carry Adder
+## Build and check a small selector
 
-Chain 4 full adders: C_out of stage i → C_in of stage i+1.
+Suppose a device can display either sensor $D_0$ or sensor $D_1$. A switch $S$ selects the desired reading. The MUX expression $Y=S'D_0+SD_1$ directly encodes the requirement. Check the two cases: at $S=0$, $Y=D_0$; at $S=1$, $Y=D_1$.
 
-**Delay:** C_out propagates through all stages. Total delay ≈ 4 × t_FA.
+**Practice:** A one-bit comparator outputs 1 when inputs differ. Its truth table matches XOR: $A\oplus B$. A one-bit equality detector is XNOR: $(A\oplus B)'$.
 
-### Carry Lookahead Adder (CLA) — Faster
+## Read a circuit by following signals
 
-Compute carries in parallel:
-- Generate: G_i = A_i·B_i
-- Propagate: P_i = A_i ⊕ B_i
-- C_{i+1} = G_i + P_i·C_i
-
-Expands to:
-- C_1 = G_0 + P_0·C_0
-- C_2 = G_1 + P_1·G_0 + P_1·P_0·C_0
-- C_3 = G_2 + P_2·G_1 + P_2·P_1·G_0 + P_2·P_1·P_0·C_0
-- C_4 = ...
-
-All carries computed in ~2-3 gate delays regardless of width.
-
----
-
-### Subtractor
-
-A - B = A + (-B) = A + (2's complement of B) = A + B' + 1
-
-**Full Subtractor (FS):**
-| A | B | B_in | Diff | B_out |
-|---|---|------|------|-------|
-| 0 | 0 | 0    | 0    | 0     |
-| 0 | 0 | 1    | 1    | 1     |
-| 0 | 1 | 0    | 1    | 1     |
-| 0 | 1 | 1    | 0    | 1     |
-| 1 | 0 | 0    | 1    | 0     |
-| 1 | 0 | 1    | 0    | 0     |
-| 1 | 1 | 0    | 0    | 0     |
-| 1 | 1 | 1    | 1    | 1     |
-
-Diff = A ⊕ B ⊕ B_in
-B_out = A'B + A'B_in + B·B_in
-
-**4-Bit Subtractor:** Use adder with B inverted and C_in = 1.
-
----
-
-## Section 3 — Data Routing Circuits
-
-### Multiplexer (MUX) — "Data Selector"
-
-Selects one of 2ⁿ inputs based on n select lines.
-
-**2-to-1 MUX:**
-| S | Output |
-|---|--------|
-| 0 | D₀     |
-| 1 | D₁     |
-
-Y = S'·D₀ + S·D₁
-
-**4-to-1 MUX:**
-| S₁ | S₀ | Output |
-|----|----|--------|
-| 0  | 0  | D₀     |
-| 0  | 1  | D₁     |
-| 1  | 0  | D₂     |
-| 1  | 1  | D₃     |
-
-Y = S₁'S₀'D₀ + S₁'S₀D₁ + S₁S₀'D₂ + S₁S₀D₃
-
-**8-to-1 MUX:** 3 select lines, 8 inputs.
-
-**Implementing Boolean Functions with MUX:**
-- Use select lines for some variables
-- Connect data inputs to 0, 1, variable, or variable'
-- Example: F(A,B,C) with 4-to-1 MUX (S₁=A, S₀=B):
-  - D₀ = F(0,0,C) = C
-  - D₁ = F(0,1,C) = C'
-  - D₂ = F(1,0,C) = 1
-  - D₃ = F(1,1,C) = 0
-
----
-
-### Demultiplexer (DEMUX) — "Data Distributor"
-
-Opposite of MUX: 1 input → 2ⁿ outputs based on select.
-
-**1-to-4 DEMUX:**
-| S₁ | S₀ | Outputs (Y₀,Y₁,Y₂,Y₃) |
-|----|----|----------------------|
-| 0  | 0  | D, 0, 0, 0          |
-| 0  | 1  | 0, D, 0, 0          |
-| 1  | 0  | 0, 0, D, 0          |
-| 1  | 1  | 0, 0, 0, D          |
-
----
-
-### Decoder
-
-n inputs → 2ⁿ outputs. Exactly one output active (HIGH) for each input code.
-
-**2-to-4 Decoder:**
-| A | B | Y₀ | Y₁ | Y₂ | Y₃ |
-|---|---|----|----|----|----|
-| 0 | 0 | 1  | 0  | 0  | 0  |
-| 0 | 1 | 0  | 1  | 0  | 0  |
-| 1 | 0 | 0  | 0  | 1  | 0  |
-| 1 | 1 | 0  | 0  | 0  | 1  |
-
-**Expressions:**
-- Y₀ = A'B'
-- Y₁ = A'B
-- Y₂ = AB'
-- Y₃ = AB
-
-**Decoder with Enable (E):**
-All outputs 0 when E=0. Normal operation when E=1.
-
-**Build larger decoders:** 3-to-8 from two 2-to-4 + enable.
-
----
-
-### Encoder
-
-2ⁿ inputs → n outputs. Output = binary code of active input.
-
-**4-to-2 Encoder:**
-| Y₀ | Y₁ | Y₂ | Y₃ | A | B |
-|----|----|----|----|---|---|
-| 1  | 0  | 0  | 0  | 0 | 0 |
-| 0  | 1  | 0  | 0  | 0 | 1 |
-| 0  | 0  | 1  | 0  | 1 | 0 |
-| 0  | 0  | 0  | 1  | 1 | 1 |
-
-**Priority Encoder:** If multiple inputs active, highest priority wins.
-
----
-
-## Section 4 — Code Converters
-
-### Binary to Gray Code
-
-Gray code: adjacent values differ by 1 bit.
-
-**Conversion:** G_i = B_i ⊕ B_{i+1} (with B_n = 0)
-| Binary | Gray |
-|--------|------|
-| 0000   | 0000 |
-| 0001   | 0001 |
-| 0010   | 0011 |
-| 0011   | 0010 |
-| 0100   | 0110 |
-
-**Circuit:** XOR chain.
-
-### Gray to Binary
-
-B_i = G_i ⊕ B_{i+1} (with B_n = 0)
-
----
-
-### BCD to Excess-3
-
-Excess-3 = BCD + 3.
-
-**Example:** 5 (0101) + 3 = 8 (1000) → Excess-3 = 1000
-
----
-
-## Section 5 — Comparators
-
-### 1-Bit Magnitude Comparator
-
-| A | B | A>B | A=B | A<B |
-|---|---|-----|-----|-----|
-| 0 | 0 | 0   | 1   | 0   |
-| 0 | 1 | 0   | 0   | 1   |
-| 1 | 0 | 1   | 0   | 0   |
-| 1 | 1 | 0   | 1   | 0   |
-
-A>B = A·B'
-A=B = A⊙B = (A⊕B)'
-A<B = A'·B
-
----
-
-### 4-Bit Comparator (74LS85)
-
-Cascade: compare MSB first, if equal go to next bit.
-
-**Logic:**
-- (A>B)_out = A₃>B₃ + (A₃=B₃)·(A>B)_in
-- (A=B)_out = (A₃=B₃)·(A=B)_in
-- (A<B)_out = A₃<B₃ + (A₃=B₃)·(A<B)_in
-
----
-
-## Section 6 — Parity Generators/Checkers
-
-### Even Parity Generator
-
-Output = 1 if odd number of 1s in input (makes total even).
-
-**3-bit:** P = A ⊕ B ⊕ C
-
-### Even Parity Checker
-
-Input + parity bit. Output = 1 if error (odd total 1s).
-
-**4-bit (3 data + 1 parity):** Error = A ⊕ B ⊕ C ⊕ P
-
----
-
-## Section 7 — Past Exam Circuit Analysis
-
-### Problem: Find Output Expression from Logic Diagram
-
-**Given:** Diagram with inputs A,B,C,D and gate network.
-
-**Method:**
-1. Label each gate output with expression
-2. Work from inputs to output
-3. Simplify if needed
-
-**Example:** 
-```
-A ──[NOT]──┐
-           ├──[AND]──┐
-B ─────────┤         ├──[OR]── F
-           │         │
-C ─────────┤         │
-           └──[AND]──┘
-D ─────────┘
-```
-
-Outputs:
-- Gate 1 (NOT A): A'
-- Gate 2 (AND): A'·B
-- Gate 3 (AND): C·D
-- Gate 4 (OR): F = A'·B + C·D
-
----
-
-### Problem: Circuit with Feedback (Not Combinational!)
-
-**If output feeds back to input:** Sequential circuit!
-**Exam trick:** "What is the output expression?" → If feedback, answer: "Not combinational — has memory/state."
-
----
-
-## Section 7 — Hazard Analysis
-
-### Static-1 Hazard
-
-Output should stay 1 but momentarily goes 0 during input transition.
-
-**Cause:** Two paths with different delays converge.
-**Fix:** Add redundant term (consensus).
-
-**Example:** F = A'B + AC
-Transition A=1,B=1,C=1 → A=0.
-- Path 1: A'B = 1 (A' goes 0→1, B=1)
-- Path 2: AC = 1→0 (A goes 1→0)
-If path 2 faster, momentary 0.
-
-**Fix:** Add consensus term BC.
-F = A'B + AC + BC (hazard-free)
-
----
-
-## Section 8 — Self-Check Problems
-
-1. Design a 4-bit adder-subtractor with mode control (M=0: add, M=1: subtract)
-2. Implement F(A,B,C) = Σm(1,2,4,7) using 8-to-1 MUX
-3. Implement same function using 4-to-1 MUX (S₁=A, S₀=B)
-4. Design 2-to-4 decoder with enable using NAND gates only
-5. Draw circuit for 4-to-2 priority encoder
-6. Find output of: A,B → XOR → AND with C → OR with D
-7. Binary-to-Gray converter for 3 bits
-
----
-
-## Solutions
-
-1. **Adder-Subtractor:** XOR each B bit with mode M. C_in = M. (B⊕0=B, B⊕1=B'. Add 1 when M=1 via C_in).
-2. **8-to-1 MUX:** S₂=A, S₁=B, S₀=C. D₁=D₂=D₄=D₇=1, others 0.
-3. **4-to-1 MUX:** S₁=A, S₀=B. D₀=F(0,0,C)=C, D₁=F(0,1,C)=C', D₂=F(1,0,C)=C', D₃=F(1,1,C)=C. (Check: m1=001→C, m2=010→C', m4=100→C', m7=111→C)
-4. **2-to-4 Decoder (NAND):** Y_i = (A'... )' = NAND of complemented inputs. With enable: NAND(E, inputs).
-5. **Priority Encoder:** Y₁ = D₃+D₂, Y₀ = D₃+D₁·D₂'. Valid = D₃+D₂+D₁+D₀.
-6. **F = (A⊕B)·C + D = (A'B+AB')C + D = A'BC + ABC' + D**
-7. **3-bit Gray:** G₂=B₂, G₁=B₂⊕B₁, G₀=B₁⊕B₀
-
----
-
-## Glossary Terms
-
-[[combinational-circuit]], [[half-adder]], [[full-adder]], [[ripple-carry-adder]], [[carry-lookahead-adder]], [[subtractor]], [[multiplexer]], [[mux]], [[demultiplexer]], [[demux]], [[decoder]], [[encoder]], [[priority-encoder]], [[comparator]], [[magnitude-comparator]], [[parity-generator]], [[parity-checker]], [[gray-code]], [[excess-3]], [[bcd]], [[code-converter]], [[hazard]], [[static-hazard]], [[dynamic-hazard]], [[consensus-term]], [[glitch]], [[fan-out]], [[propagation-delay]], [[critical-path]], [[msi]], [[lsi]], [[vlsi]]
+When analyzing a diagram, label each gate output with an intermediate expression, then substitute those expressions into the final output. Compare the resulting truth table with the specification. This catches common mistakes such as swapping MUX data inputs, forgetting an inversion bubble, or using a half adder where a carry-in is required.

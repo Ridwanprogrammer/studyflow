@@ -1,273 +1,62 @@
-# COS 201 Track B: Java OOP — Topic 5
 # Exception Handling
 
-## The Central Idea
+## An exceptional situation needs a visible path
 
-**Exceptions** are objects representing errors or exceptional conditions. Java's exception handling mechanism (`try-catch-finally`, `throw`, `throws`) lets you separate error-handling code from normal logic, making programs more robust and maintainable.
+A file may be missing, a network may be unavailable, or a user may enter text where a number is required. If a method cannot complete its normal task, it needs a way to report the problem to the code that can respond.
 
----
+An **exception** is an object describing an abnormal condition or failure. Throwing an exception interrupts the normal path and searches outward for a matching handler.
 
-## Why It Matters — Past Exam Coverage
+## The exception hierarchy
 
-| Past Exam Question | This Topic Covers |
-|--------------------|-------------------|
-| "Exception Handling: try/catch/finally, throws, custom exceptions" | Core Java exception handling |
+At the top is `Throwable`, with two main branches:
 
----
+- `Error` represents serious conditions applications usually should not try to recover from.
+- `Exception` represents conditions an application may handle.
 
-## Section 1 — Exception Hierarchy
+`RuntimeException` and its subclasses are unchecked exceptions. Other exceptions are checked: a method must catch them or declare them with `throws`, allowing the compiler to require that callers consider the condition.
 
-```
-java.lang.Throwable
-├── java.lang.Error (Unchecked) — Serious, usually unrecoverable
-│   ├── OutOfMemoryError
-│   ├── StackOverflowError
-│   └── ...
-└── java.lang.Exception
-    ├── java.lang.RuntimeException (Unchecked) — Programming errors
-    │   ├── NullPointerException
-    │   ├── ArrayIndexOutOfBoundsException
-    │   ├── IllegalArgumentException
-    │   ├── ArithmeticException
-    │   └── ...
-    └── Checked Exceptions — Must be caught or declared
-        ├── IOException
-        ├── FileNotFoundException
-        ├── SQLException
-        ├── ClassNotFoundException
-        └── ...
-```
-
-**Key Distinction:**
-- **Checked** — Compiler enforces handling (catch or throws). Extends `Exception` but not `RuntimeException`.
-- **Unchecked** — Compiler doesn't enforce. Extends `RuntimeException` or `Error`.
-
----
-
-## Section 2 — try-catch-finally
-
-### Syntax
-```java
-try {
-    // Risky code
-} catch (ExceptionType1 e) {
-    // Handle ExceptionType1
-} catch (ExceptionType2 e) {
-    // Handle ExceptionType2
-} finally {
-    // Always executes (cleanup)
-}
-```
-
-### Rules
-- **At least one** `catch` or `finally` required
-- `catch` blocks ordered **specific → general**
-- `finally` runs **always** (even with `return` in try/catch)
-- `finally` **does not run** if `System.exit()` called
-
-### Example
-```java
-public double divide(double a, double b) {
-    try {
-        if (b == 0) {
-            throw new ArithmeticException("Division by zero");
-        }
-        return a / b;
-    } catch (ArithmeticException e) {
-        System.err.println("Error: " + e.getMessage());
-        return Double.NaN;
-    } finally {
-        System.out.println("Division operation completed");
-    }
-}
-```
-
----
-
-## Section 3 — throws Clause
-
-### Purpose
-Declare that a method **may throw** checked exceptions. Caller must handle.
-
-```java
-public void readFile(String path) throws IOException, FileNotFoundException {
-    FileReader reader = new FileReader(path);
-    // ... read
-    reader.close();
-}
-```
-
-### Rules
-- **Checked exceptions** must be caught or declared
-- **Unchecked** (`RuntimeException`, `Error`) optional
-- Overriding method: can throw **same or narrower** checked exceptions
-
----
-
-## Section 4 — throw Statement
-
-### Explicitly Throw Exception
-```java
-public void setAge(int age) {
-    if (age < 0 || age > 150) {
-        throw new IllegalArgumentException("Invalid age: " + age);
-    }
-    this.age = age;
-}
-```
-
-### Re-throwing
-```java
-try {
-    // ...
-} catch (IOException e) {
-    // Log, then re-throw
-    throw new RuntimeException("File error", e);  // Wrap
-    // OR: throw e;  // Re-throw same
-}
-```
-
----
-
-## Section 5 — try-with-resources (Java 7+)
-
-### Auto-close Resources
-```java
-// Before: manual close in finally
-FileReader reader = null;
-try {
-    reader = new FileReader("file.txt");
-    // read
-} finally {
-    if (reader != null) reader.close();
-}
-
-// After: try-with-resources (AutoCloseable)
-try (FileReader reader = new FileReader("file.txt");
-     BufferedReader br = new BufferedReader(reader)) {
-    String line = br.readLine();
-    // ...
-} // Auto-closed!
-```
-
-### Multiple Resources
-```java
-try (Connection conn = DriverManager.getConnection(url);
-     Statement stmt = conn.createStatement();
-     ResultSet rs = stmt.executeQuery(sql)) {
-    // use resources
-} // Closed in reverse order
-```
-
----
-
-## Section 6 — Custom Exceptions
-
-### Checked Custom Exception
-```java
-public class InsufficientFundsException extends Exception {
-    private double balance;
-    private double requested;
-    
-    public InsufficientFundsException(String message, double balance, double requested) {
-        super(message);
-        this.balance = balance;
-        this.requested = requested;
-    }
-    
-    public double getBalance() { return balance; }
-    public double getRequested() { return requested; }
-}
-```
-
-### Unchecked Custom Exception
-```java
-public class InvalidTransactionException extends RuntimeException {
-    public InvalidTransactionException(String message) {
-        super(message);
-    }
-    
-    public InvalidTransactionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
-```
-
-### Usage
-```java
-public void withdraw(double amount) throws InsufficientFundsException {
-    if (amount > balance) {
-        throw new InsufficientFundsException(
-            "Cannot withdraw " + amount, balance, amount);
-    }
-    balance -= amount;
-}
-```
-
----
-
-## Section 7 — Multi-catch (Java 7+)
+## Handle an exception with try and catch
 
 ```java
 try {
-    // ...
-} catch (IOException | SQLException e) {
-    // Handle both
-    e.printStackTrace();
+    int value = Integer.parseInt(input);
+    System.out.println(value);
+} catch (NumberFormatException exception) {
+    System.out.println("Enter a whole number.");
 }
 ```
 
----
+The `try` contains code that may fail; `catch` handles a matching exception. Catch the most specific expected condition, and provide useful recovery or a clear message. Catching `Exception` broadly and doing nothing hides failures.
 
-## Section 8 — Best Practices
+## Use finally and try-with-resources appropriately
 
-| Practice | Reason |
-|----------|--------|
-| **Catch specific** | Avoid catching `Exception` broadly |
-| **Don't swallow** | Log or re-throw; empty catch hides bugs |
-| **Use finally/try-with-resources** | Prevent resource leaks |
-| **Custom exceptions** | Domain-specific, carry context |
-| **Fail fast** | Validate early, throw descriptive exceptions |
-| **Document** | Javadoc `@throws` for checked exceptions |
+A `finally` block runs whether the `try` succeeds or throws, and is traditionally used for cleanup. For resources implementing `AutoCloseable`, **try-with-resources** closes them automatically:
 
----
+```java
+try (BufferedReader reader = Files.newBufferedReader(path)) {
+    return reader.readLine();
+}
+```
 
-## Section 9 — Past Exam Answer
+This is safer than manually closing in multiple paths. If cleanup itself can fail, Java's try-with-resources defines how those exceptions are reported.
 
-> **Explain try/catch/finally, throws, custom exceptions.**
+## Throw or declare an exception
 
-**Answer Structure:**
-1. **try-catch-finally** — syntax, rules, finally always runs
-2. **throws** — declare checked exceptions, caller responsibility
-3. **throw** — explicitly throw exception objects
-4. **try-with-resources** — auto-close `AutoCloseable`
-5. **Custom exceptions** — extend `Exception` (checked) or `RuntimeException` (unchecked), add context fields
-6. **Code example** showing all
+Use `throw` to signal a failure at the point it is detected. Use `throws` in a method declaration to state that a checked exception may be passed to its caller.
 
----
+```java
+static int divide(int numerator, int denominator) {
+    if (denominator == 0) {
+        throw new IllegalArgumentException("Denominator must not be zero");
+    }
+    return numerator / denominator;
+}
+```
 
-## Section 10 — Self-Check Questions
+Validate a method's own preconditions with an appropriate exception. Do not use exceptions as routine control flow when an ordinary condition is expected.
 
-1. Difference between checked and unchecked?
-2. Can finally run after return?
-3. What happens if you don't catch a checked exception?
-4. How to auto-close a resource?
-5. When to create checked vs unchecked custom exception?
-6. Order of catch blocks?
+## Choose a recovery boundary
 
----
+The code closest to a failure may know that a file is missing, but a user-facing layer may know how to offer a retry. Handle an exception where there is enough context to recover meaningfully; otherwise propagate it with relevant information.
 
-## Solutions
-
-1. Checked = compiler enforces; Unchecked = RuntimeException/Error
-2. Yes, finally runs even after return
-3. Compile error
-4. `try (Resource r = ...) { }`
-5. Checked for recoverable conditions caller should handle; Unchecked for programming errors
-6. Most specific first, general last
-
----
-
-## Glossary Terms
-
-[[exception]], [[throwable]], [[error]], [[runtime-exception]], [[checked-exception]], [[unchecked-exception]], [[try-catch]], [[finally]], [[throws]], [[throw]], [[try-with-resources]], [[autocloseable]], [[custom-exception]], [[exception-hierarchy]], [[null-pointer-exception]], [[array-index-out-of-bounds]], [[illegal-argument-exception]], [[io-exception]], [[file-not-found]], [[sql-exception]], [[multi-catch]], [[exception-chaining]], [[fail-fast]], [[resource-leak]], [[stack-trace]], [[print-stack-trace]]
+**Practice:** If parsing user input fails, should the application pretend the number was zero? No. That success-shaped fallback can corrupt later results. Report the invalid input or ask the user to correct it.

@@ -4,9 +4,8 @@
 
 For a landscape $z=f(x,y)$, changing $x$ while holding $y$ fixed traces a cross-section through the surface. The slope of that cross-section is a partial [[derivative|derivative]] with respect to $x$.
 
-At $(a,b)$,
-$$f_x(a,b)=\lim_{h\to0}\frac{f(a+h,b)-f(a,b)}{h},\qquad
-f_y(a,b)=\lim_{h\to0}\frac{f(a,b+h)-f(a,b)}{h},$$
+At $(a,b)$, the partial derivatives are
+$$f_x(a,b)=\lim_{h\to0}\frac{f(a+h,b)-f(a,b)}{h},\qquad f_y(a,b)=\lim_{h\to0}\frac{f(a,b+h)-f(a,b)}{h},$$
 when the limits exist. In the first limit, $y$ is frozen; in the second, $x$ is frozen.
 
 For $f(x,y)=x^2y+3y^2$, differentiate with respect to $x$ as though $y$ were a constant:
@@ -28,8 +27,7 @@ For $F=x^2+y^2+z^2$, $\nabla F=(2x,2y,2z)$, which points in the direction of ste
 Differentiate a partial derivative again to get second partials such as $f_{xx}$ and mixed partials such as $f_{xy}$. For a sufficiently smooth function, Clairaut’s theorem says $f_{xy}=f_{yx}$.
 
 For $f=7x^2-x^3y^4+5x^4y^3$:
-$$f_x=14x-3x^2y^4+20x^3y^3,\qquad
-f_y=-4x^3y^3+15x^4y^2,$$
+$$f_x=14x-3x^2y^4+20x^3y^3,\qquad f_y=-4x^3y^3+15x^4y^2,$$
 and
 $$f_{xy}=f_{yx}=-12x^2y^3+60x^3y^2.$$
 

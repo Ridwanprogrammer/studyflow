@@ -1,43 +1,61 @@
 # Real-valued Functions of Two or More Variables
 
-## From a curve to a landscape
+## A landscape takes a location and returns a measurement
 
-A real-valued [[function|function]] of several variables takes a point as input and returns one real number. For example, a room’s temperature can depend on position: two coordinates locate a point on a floor, and the function gives the temperature there.
+Imagine a weather map. At each location, it assigns a temperature. The location needs two coordinates on a map, but the result is one number. This is a real-valued function of two variables.
 
-For two independent variables,
-$$f:D\subseteq\mathbb{R}^2\to\mathbb{R},\qquad (x,y)\mapsto f(x,y).$$
-For **three independent variables**,
-$$F:D\subseteq\mathbb{R}^3\to\mathbb{R},\qquad (x,y,z)\mapsto F(x,y,z).$$
-Here “independent” means each coordinate can be chosen as an input, subject to the domain. The output is still one real number. A function of three inputs is not the same as a vector-valued function that returns three outputs.
+$$f:D\subseteq\mathbb R^2\to\mathbb R,\qquad (x,y)\mapsto f(x,y).$$
 
-## Domain is now a region
+The ordered pair $(x,y)$ is the input point; $f(x,y)$ is one real output. For three independent coordinates,
 
-The same [[domain|domain]] restrictions apply, but the allowed inputs form a region in a plane or in three-dimensional space.
+$$F:D\subseteq\mathbb R^3\to\mathbb R,\qquad (x,y,z)\mapsto F(x,y,z).$$
 
-For $f(x,y)=\sqrt{9-x^2-y^2}$, the radicand condition gives
-$$x^2+y^2\le9.$$
-The domain is the closed disk of radius $3$. Its graph is the upper hemisphere $z=\sqrt{9-x^2-y^2}$.
+“Independent variables” means each coordinate may vary as an input, subject to the domain. Do not confuse a scalar-valued function of three inputs with a vector-valued function, which returns a vector of several outputs.
 
-For $G(x,y,z)=\ln(16-x^2-y^2-z^2)$, the logarithm requires
-$$x^2+y^2+z^2<16,$$
-so the domain is the open ball of radius $4$.
+## The domain becomes a region
 
-## How to picture an output you cannot graph directly
+The domain is the set of input points that make the rule meaningful and real-valued. For
 
-The graph of $F(x,y,z)$ would require four coordinates: $(x,y,z,F)$. Instead, use **level surfaces**:
+$$f(x,y)=\sqrt{9-x^2-y^2},$$
+
+the expression under the square root must be nonnegative, so $x^2+y^2\le9$. The domain is a closed disk of radius 3. The graph $z=f(x,y)$ is the upper half of a sphere of radius 3.
+
+For
+
+$$G(x,y,z)=\ln(16-x^2-y^2-z^2),$$
+
+the logarithm's input must be strictly positive. Thus $x^2+y^2+z^2<16$, an open ball of radius 4. The boundary is excluded because $\ln(0)$ is undefined.
+
+**Pause and check:** What is the domain of $h(x,y)=\sqrt{y-x^2}$? It is the region $y\ge x^2$, the points on or above a parabola.
+
+## Visualize outputs as height and contour
+
+For two inputs, the graph $z=f(x,y)$ fits in three-dimensional space: its height at $(x,y)$ is the output. A horizontal slice at a fixed height $k$ gives the level curve
+
+$$f(x,y)=k.$$
+
+A contour map is a collection of these level curves, like lines of equal elevation on a map. For three inputs, the graph would require four coordinates, so we commonly visualize **level surfaces** instead:
+
 $$F(x,y,z)=k.$$
-Each fixed $k$ identifies the input points that produce that output. For $F=x^2+y^2+z^2$, the level surface $F=k$ is a sphere of radius $\sqrt{k}$ when $k>0$.
 
-For two-input functions, the graph $w=f(x,y)$ fits in ordinary three-dimensional space. Horizontal slices $f(x,y)=k$ are level curves; a collection of them is a contour map. A vertical slice fixes one input, such as $y=b$, and shows how the output changes as $x$ varies.
+For $F(x,y,z)=x^2+y^2+z^2$, each positive level $k$ is a sphere of radius $\sqrt{k}$ centred at the origin; level zero is just the origin, and negative levels have no points.
 
-## Read a model before calculating
+## Read a model by interpreting its inputs and output
 
-Consider $T(x,y,z)=20+2x-y+0.5z$, a simple temperature model. The coordinates represent location and $T$ is the measured temperature. At $(1,2,4)$, $T=22$. The coefficient of $x$ describes how the model changes with that coordinate while the others are held fixed; this idea leads to partial derivatives in the next topic.
+Suppose a simplified temperature model is
+
+$$T(x,y,z)=20+2x-y+\frac12z,$$
+
+where $(x,y,z)$ locates a point and $T$ is its temperature. At $(1,2,4)$,
+
+$$T(1,2,4)=20+2-2+2=22.$$
+
+The coefficient 2 says that increasing $x$ by one unit while fixing the other coordinates raises the model's output by 2 units. This idea—vary one input while holding the others fixed—leads to partial derivatives in the next topic.
 
 ## Practice
 
 1. Find the domain of $f(x,y)=\ln(4-x^2-y^2)$.
 2. Describe the level surfaces of $F(x,y,z)=x^2+y^2+z^2$.
-3. How many independent inputs and outputs does $F:\mathbb{R}^3\to\mathbb{R}$ have?
+3. How many inputs and outputs does $F:\mathbb R^3\to\mathbb R$ have?
 
-**Answers:** 1. $x^2+y^2<4$, the open disk of radius $2$. 2. Spheres centered at the origin for positive levels; the origin at level $0$; no points for negative levels. 3. Three inputs and one real output.
+**Check:** 1. $x^2+y^2<4$, the open disk of radius 2. 2. Spheres for positive $k$, the origin for $k=0$, and no points for $k<0$. 3. Three real inputs and one real output.

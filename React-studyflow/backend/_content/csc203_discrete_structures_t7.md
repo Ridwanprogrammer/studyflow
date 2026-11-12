@@ -4,7 +4,9 @@
 
 A **recurrence relation** defines a sequence by expressing each term as a function of previous terms. Instead of a direct formula for the nth term, you get a **rule** like:
 
-\\[ a_n = a_{n-1} + a_{n-2} \\quad \\text{(Fibonacci)} \\]
+$$
+ a_n = a_{n-1} + a_{n-2} \quad \text{(Fibonacci)} 
+$$
 
 Solving a recurrence means finding a **closed-form** (explicit) formula for aₙ.
 
@@ -77,7 +79,7 @@ A recurrence needs **initial conditions** (base cases) to uniquely determine the
 | [[master-theorem]] | Solves T(n) = aT(n/b) + f(n) |
 | [[generating-function]] | Formal power series G(x) = ∑ aₙxⁿ |
 | [[convolution]] | (a * b)ₙ = ∑ aₖbₙ₋ₖ |
-| [[catalan-numbers]] | Cₙ = (1/(n+1))\\(\\binom{2n}{n}\\) — many combinatorial recurrences |
+| [[catalan-numbers]] | Cₙ = (1/(n+1))$\binom{2n}{n}$ — many combinatorial recurrences |
 
 ---
 
@@ -85,18 +87,24 @@ A recurrence needs **initial conditions** (base cases) to uniquely determine the
 
 ### General Form
 
-\\[ a_n = c a_{n-1} + f(n), \\quad a_0 = A \\]
+$$
+ a_n = c a_{n-1} + f(n), \quad a_0 = A 
+$$
 
 ### Homogeneous Case (f(n) = 0)
 
-\\[ a_n = c a_{n-1} \\]
-Solution: \\(a_n = A c^n\\)
+$$
+ a_n = c a_{n-1} 
+$$
+Solution: $a_n = A c^n$
 
 **Example:** aₙ = 3aₙ₋₁, a₀ = 5 → aₙ = 5 · 3ⁿ
 
 ### Non-Homogeneous: Constant Forcing (f(n) = K)
 
-\\[ a_n = c a_{n-1} + K \\]
+$$
+ a_n = c a_{n-1} + K 
+$$
 
 **Method:** Find particular solution p (constant). Try p = K/(1-c) if c ≠ 1.
 General: aₙ = A cⁿ + K/(1-c)
@@ -127,20 +135,26 @@ Solution: **aₙ = 2ⁿ⁺¹ - n - 2**
 
 ### General Form
 
-\\[ a_n = c_1 a_{n-1} + c_2 a_{n-2} \\]
+$$
+ a_n = c_1 a_{n-1} + c_2 a_{n-2} 
+$$
 
 ### Characteristic Equation
 
 Assume solution of form aₙ = rⁿ. Substitute:
-\\[ r^n = c_1 r^{n-1} + c_2 r^{n-2} \\]
+$$
+ r^n = c_1 r^{n-1} + c_2 r^{n-2} 
+$$
 Divide by rⁿ⁻²:
-\\[ r^2 - c_1 r - c_2 = 0 \\]
+$$
+ r^2 - c_1 r - c_2 = 0 
+$$
 
 This is the **characteristic equation**.
 
 ### Case 1: Distinct Real Roots r₁, r₂
 
-General solution: \\(a_n = \\alpha r_1^n + \\beta r_2^n\\)
+General solution: $a_n = \alpha r_1^n + \beta r_2^n$
 
 **Example:** aₙ = 5aₙ₋₁ - 6aₙ₋₂, a₀ = 1, a₁ = 4
 Characteristic: r² - 5r + 6 = 0 → (r-2)(r-3) = 0 → r = 2, 3
@@ -154,7 +168,7 @@ Solve: α = -1, β = 2
 
 ### Case 2: Repeated Root r (Multiplicity 2)
 
-General solution: \\(a_n = (\\alpha + \\beta n) r^n\\)
+General solution: $a_n = (\alpha + \beta n) r^n$
 
 **Example:** aₙ = 4aₙ₋₁ - 4aₙ₋₂, a₀ = 1, a₁ = 4
 Characteristic: r² - 4r + 4 = 0 → (r-2)² = 0 → r = 2 (double)
@@ -168,7 +182,7 @@ a₁ = (1+β)2 = 4 ⇒ 1+β = 2 ⇒ β = 1
 ### Case 3: Complex Roots
 
 If roots are complex conjugates: r = ρe^{±iθ}
-Solution: \\(a_n = \\rho^n (A \\cos n\\theta + B \\sin n\\theta)\\)
+Solution: $a_n = \rho^n (A \cos n\theta + B \sin n\theta)$
 Often written using trigonometric form or kept as complex exponentials.
 
 ---
@@ -176,10 +190,14 @@ Often written using trigonometric form or kept as complex exponentials.
 ## Section 5 — Characteristic Equation Method (General)
 
 For order k:
-\\[ a_n = c_1 a_{n-1} + c_2 a_{n-2} + \\cdots + c_k a_{n-k} \\]
+$$
+ a_n = c_1 a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k} 
+$$
 
 **Characteristic equation:**
-\\[ r^k - c_1 r^{k-1} - c_2 r^{k-2} - \\cdots - c_k = 0 \\]
+$$
+ r^k - c_1 r^{k-1} - c_2 r^{k-2} - \cdots - c_k = 0 
+$$
 
 If roots are r₁, r₂, ..., rₖ with multiplicities m₁, m₂, ..., mₖ:
 General solution = sum over roots of (polynomial of degree mᵢ-1 in n) × rᵢⁿ.
@@ -193,7 +211,9 @@ aₙ = (α + βn)2ⁿ + γ(-1)ⁿ
 
 ### General Form
 
-\\[ a_n = c_1 a_{n-1} + \\cdots + c_k a_{n-k} + f(n) \\]
+$$
+ a_n = c_1 a_{n-1} + \cdots + c_k a_{n-k} + f(n) 
+$$
 
 **General solution = Homogeneous solution + Particular solution**
 
@@ -223,7 +243,9 @@ General: aₙ = α·3ⁿ - 2ⁿ⁺¹
 
 ### Form
 
-\\[ T(n) = a T(n/b) + f(n) \\quad (a \\ge 1, b > 1) \\]
+$$
+ T(n) = a T(n/b) + f(n) \quad (a \ge 1, b > 1) 
+$$
 
 ### Master Theorem
 
@@ -256,7 +278,9 @@ Let T(n) = a T(n/b) + f(n). Compare f(n) with n^{log_b a}.
 
 The **ordinary generating function** for sequence {aₙ} is:
 
-\\[ G(x) = \\sum_{n=0}^\\infty a_n x^n = a_0 + a_1 x + a_2 x^2 + \\cdots \\]
+$$
+ G(x) = \sum_{n=0}^\infty a_n x^n = a_0 + a_1 x + a_2 x^2 + \cdots 
+$$
 
 ### Key Properties
 

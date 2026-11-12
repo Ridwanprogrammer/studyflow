@@ -1,43 +1,61 @@
 # Mean Value Theorem and Its Applications
 
-## When does an average slope happen instantaneously?
+## An average rate must occur somewhere
 
-Travel 100 km in 2 hours and your average speed is 50 km/h. If your motion is continuous and has no abrupt velocity breaks, then at some moment your instantaneous speed must have been 50 km/h. The Mean Value Theorem makes this intuition precise: at some interior point, the instantaneous [[derivative|derivative]] matches the interval’s average rate.
+Suppose a bus travels 100 km in 2 hours. Its average speed is 50 km/h. If its motion changes smoothly, it must have travelled at exactly 50 km/h at least once. The bus may have gone faster or slower at other times, but it cannot move continuously from one side of the average to the other without passing through it.
 
-If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then there exists at least one $c\in(a,b)$ such that
+The Mean Value Theorem (MVT) makes this idea precise for a function. Between two points, the average rate of change is
+
+$$\frac{f(b)-f(a)}{b-a}.$$
+
+If $f$ is continuous on the whole closed interval $[a,b]$ and differentiable at every interior point $(a,b)$, then at least one $c\in(a,b)$ satisfies
+
 $$f'(c)=\frac{f(b)-f(a)}{b-a}.$$
-The right side is the slope of the secant joining the endpoints; $f'(c)$ is the slope of a tangent parallel to that secant.
 
-Continuity on the closed interval prevents a break in the overall journey. Differentiability inside the interval rules out a sharp corner where the needed tangent may not exist. Both hypotheses matter.
+The right side is the slope of the straight secant joining $(a,f(a))$ and $(b,f(b))$. The derivative $f'(c)$ is the slope of the tangent at an interior point. The theorem says some tangent is parallel to that secant.
 
-## Find the point promised by the theorem
+**Why both conditions?** Continuity prevents a gap or jump on the journey from one endpoint to the other. Differentiability prevents a sharp corner inside where the tangent slope may not exist. Without the conditions, the guaranteed point may not exist.
 
-For $f(x)=x^2$ on $[1,4]$:
+## Find the point the theorem guarantees
+
+Let $f(x)=x^2$ on $[1,4]$. The average slope is
+
 $$\frac{f(4)-f(1)}{4-1}=\frac{16-1}{3}=5.$$
-Since $f'(x)=2x$, solve $2c=5$, giving $c=5/2$. This lies inside $(1,4)$, as required.
 
-The theorem guarantees **at least one** such point, not necessarily a unique one.
+The instantaneous slope is $f'(x)=2x$. Equating it to 5 gives $2c=5$, so $c=5/2$. This lies inside $(1,4)$, as the theorem promises.
 
-### Rolle’s theorem is the zero-slope case
+There may be more than one such point for a different function; the theorem promises at least one, not a unique point.
 
-If $f(a)=f(b)$, the secant slope is zero. Under the same continuity and differentiability conditions, some interior point satisfies $f'(c)=0$. This is Rolle’s theorem, a special case of the Mean Value Theorem.
+## Rolle's theorem is the level-endpoint case
 
-## What the theorem lets us prove
+If $f(a)=f(b)$, the average slope is zero. Under the same continuity and differentiability conditions, some interior point has $f'(c)=0$. This special case is **Rolle's theorem**.
 
-- **A bound on change:** if $|f'(x)|\le M$ throughout an interval, then $|f(b)-f(a)|\le M|b-a|$.
-- **Monotonicity:** if $f'(x)>0$ throughout an interval, then the function is strictly increasing there.
-- **Uniqueness:** if $f'(x)$ never vanishes, a differentiable function cannot take the same value at two distinct points.
+For example, $f(x)=x^2-1$ on $[-1,1]$ has equal endpoint values, both 0. Its derivative is $2x$, which is zero at $c=0$.
 
-For example, to show $\ln(1+x)<x$ for $x>0$, apply the theorem to $f(t)=\ln(1+t)$ on $[0,x]$. For some $c\in(0,x)$,
-$$\ln(1+x)=f'(c)x=\frac{x}{1+c}<x.$$
+## Use the theorem to reason about change
 
-## A hypothesis can fail
+The MVT is useful even when we do not need to find the point $c$ itself.
 
-For $f(x)=|x|$ on $[-1,1]$, the endpoint values agree, so the secant slope is zero. But $f$ has a corner at $0$ and is not differentiable there; elsewhere its derivative is $1$ or $-1$. There is no point with derivative zero. The failure of the differentiability condition explains why the theorem cannot be applied.
+- If $|f'(x)|\le M$ throughout $[a,b]$, the theorem implies $|f(b)-f(a)|\le M|b-a|$. A bounded slope limits how far the output can move.
+- If $f'(x)>0$ throughout an interval, the function is strictly increasing there; if $f'(x)<0$, it is strictly decreasing.
+- If $f'(x)$ never vanishes and the theorem applies, $f$ cannot take the same value at two distinct points. Otherwise the MVT on those points would force a zero derivative.
+
+### Worked inequality: $\ln(1+x)<x$
+
+For $x>0$, set $g(t)=\ln(1+t)$ on $[0,x]$. It is continuous on this interval and differentiable inside, so for some $c\in(0,x)$,
+
+$$\ln(1+x)-\ln(1)=g'(c)x=\frac{x}{1+c}.$$
+
+Since $c>0$, the denominator is greater than 1, so $x/(1+c)<x$. Therefore $\ln(1+x)<x$. The theorem turns a statement about total change into a statement about a derivative at some intermediate point.
+
+## A failed hypothesis blocks the conclusion
+
+Consider $f(x)=|x|$ on $[-1,1]$. The endpoint values agree, so the secant slope is 0. But there is a corner at 0: the derivative is $-1$ to the left and $1$ to the right, and does not exist at 0. No point has derivative 0. This does not contradict Rolle's theorem because its differentiability condition fails.
 
 ## Try it
 
-1. Apply the theorem to $f(x)=x^3$ on $[0,2]$ and find all possible $c$.
-2. Can the theorem be used for $f(x)=1/x$ on $[-1,1]$? Identify the failed condition.
+1. For $f(x)=x^3$ on $[0,2]$, find every $c$ that satisfies the theorem.
+2. Can the theorem be applied to $f(x)=1/x$ on $[-1,1]$? Name the failed condition.
+3. If $f'(x)\ge 3$ throughout $[a,b]$, what lower bound does the MVT give for $f(b)-f(a)$ when $a<b$?
 
-**Answers:** 1. The average slope is $4$, so $3c^2=4$ and $c=2/\sqrt3\in(0,2)$. 2. No; $f$ is not continuous on the closed interval because it is undefined at $0$.
+**Check:** 1. The average slope is 4; $3c^2=4$, so $c=2/\sqrt3$. 2. No; $f$ is not continuous on the interval and is undefined at 0. 3. $f(b)-f(a)\ge3(b-a)$.

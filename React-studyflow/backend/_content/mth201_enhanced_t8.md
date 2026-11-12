@@ -1,47 +1,67 @@
 # Differentials and Linear Approximations
 
-## A small input change has two related descriptions
+## Use a tangent to estimate a small change
 
-For $y=f(x)$, changing the input from $a$ to $a+\Delta x$ produces the **actual increment**; the tangent’s slope comes from the [[derivative|derivative]] at the base point:
+If a curved road is viewed over a very short stretch, it looks nearly straight. A tangent line uses that local straightness to estimate what happens after a small input change. The estimate is not generally exact, because the curve bends away from the tangent.
+
+For $y=f(x)$, starting at $x=a$ and changing the input by $\Delta x$ gives the exact output increment
+
 $$\Delta y=f(a+\Delta x)-f(a).$$
-The differential describes the change predicted by the tangent line:
+
+The tangent's slope at $a$ is $f'(a)$. The **differential** records the tangent's predicted change:
+
 $$dx=\Delta x,\qquad dy=f'(a)\,dx.$$
-The increment is the exact finite change; the differential is its linear estimate. For small $\Delta x$, they are close, but not generally equal.
 
-For $f(x)=x^2$ at $a=3$, let $\Delta x=0.1$. Then
-$$\Delta y=3.1^2-3^2=0.61,\qquad dy=f'(3)(0.1)=6(0.1)=0.6.$$
-The tangent prediction misses by $0.01$ because the curve bends away from its tangent.
+The increment $\Delta y$ is the actual finite change; $dy$ is its linear estimate.
 
-## Extend the idea to several inputs
+For $f(x)=x^2$ at $a=3$, let $\Delta x=0.1$. The exact change is
 
-For $z=f(x,y)$, small input increments $\Delta x,\Delta y$ produce
+$$\Delta y=3.1^2-3^2=0.61,$$
+
+while the tangent predicts
+
+$$dy=f'(3)(0.1)=6(0.1)=0.6.$$
+
+The difference, 0.01, is small because the input change is small, but the two quantities are not identical.
+
+## Extend the estimate to several inputs
+
+For a surface $z=f(x,y)$, small changes in both coordinates give the exact increment
+
 $$\Delta z=f(x+\Delta x,y+\Delta y)-f(x,y).$$
-The total differential is the first-order prediction:
-$$dz=f_x\,dx+f_y\,dy,\qquad dx=\Delta x,\quad dy=\Delta y.$$
-For $n$ inputs, $dF=\sum_{i=1}^{n}F_{x_i}\,dx_i$. This applies in particular to a function of three independent variables.
 
-The corresponding linear approximation near $(a,b)$ is
-$$f(x,y)\approx f(a,b)+f_x(a,b)(x-a)+f_y(a,b)(y-b).$$
-It is the tangent plane’s output, and $dz$ estimates the change from the base value.
+Near a point $(a,b)$, the tangent plane predicts the change by
 
-### Estimate a product near a known point
+$$dz=f_x(a,b)\,dx+f_y(a,b)\,dy,\qquad dx=\Delta x,\quad dy=\Delta y.$$
 
-Take $f(x,y)=xy$ near $(2,3)$. Here $f=6$, $f_x=3$, and $f_y=2$. For $dx=0.1$ and $dy=-0.05$:
+Each partial derivative measures how the output changes in one coordinate direction while the other input is held fixed. The total differential adds the two predicted contributions.
+
+### Worked estimate for a product
+
+Let $f(x,y)=xy$ near $(2,3)$. The base output is 6, and the partial derivatives there are $f_x=3$ and $f_y=2$. For $dx=0.1$ and $dy=-0.05$,
+
 $$dz=3(0.1)+2(-0.05)=0.2.$$
-So $f(2.1,2.95)\approx6.2$. The exact value is $6.195$; the difference is the higher-order effect omitted by the linear model.
 
-## Turn a tangent into a numerical estimate
+So the tangent-plane estimate is $f(2.1,2.95)\approx6.2$. The exact product is 6.195. The difference is caused by the nonlinear term $dx\,dy$, which a first-order linear model omits.
 
-For $f(x)=\sqrt{x}$ near $a=100$, $f(100)=10$ and $f'(100)=1/20$. Therefore
+For $n$ inputs, the same idea is
+
+$$dF=\sum_{i=1}^{n}F_{x_i}\,dx_i.$$
+
+## Estimate a value and understand measurement error
+
+For $f(x)=\sqrt{x}$ near $a=100$, the known value is 10 and the derivative is $f'(100)=1/20$. Thus
+
 $$\sqrt{100.1}\approx10+\frac{0.1}{20}=10.005.$$
-Choose a nearby input whose function value and derivative are easy to calculate.
 
-The differential also estimates propagated measurement error: if input errors are small, $|dy|\approx|f'(a)|\,|dx|$. For several inputs, $|dz|$ is estimated from the contributions $f_xdx$ and $f_ydy$; signs matter when estimating the signed change.
+This works because the function is nearly linear over such a small interval.
+
+The same calculation estimates how uncertainty in a measurement affects an output. If the input uncertainty is small, then $|dy|\approx|f'(a)|\,|dx|$. For multiple inputs, each partial derivative measures sensitivity to one input. When estimating signed change, keep the signs: effects may reinforce or cancel each other.
 
 ## Check the distinction
 
-1. For $f(x)=x^2$ at $a=2$, compute $\Delta y$ and $dy$ when $\Delta x=0.05$.
-2. For $f(x,y)=x^2+y^2$ near $(1,2)$, estimate $f(1.1,1.9)$ using the total differential.
+1. For $f(x)=x^2$ at $a=2$, calculate the exact increment and differential when $\Delta x=0.05$.
+2. Use a linear approximation to estimate $f(1.1,1.9)$ for $f(x,y)=x^2+y^2$ near $(1,2)$.
 3. In one sentence, distinguish an increment from a differential.
 
-**Answers:** 1. $\Delta y=0.2025$, $dy=0.2$. 2. Base value $5$, with $dz=2(0.1)+4(-0.1)=-0.2$, so estimate $4.8$. 3. The increment is the exact finite change; the differential is its first-order linear estimate.
+**Check:** 1. $\Delta y=0.2025$ and $dy=0.2$. 2. The base value is 5 and $dz=2(0.1)+4(-0.1)=-0.2$, so the estimate is 4.8. 3. The increment is the exact finite output change; the differential is the first-order tangent estimate.

@@ -50,9 +50,11 @@ Imagine a clock with n hours (labeled 0 to n-1). When you reach n, you wrap to 0
 
 Two integers a and b are **congruent modulo n** if they leave the same remainder when divided by n.
 
-Notation: \\(a \\equiv b \\pmod n\\)
+Notation: $a \equiv b \pmod n$
 
-\\[ a \\equiv b \\pmod n \\iff n \\mid (a - b) \\iff a \\bmod n = b \\bmod n \\]
+$$
+ a \equiv b \pmod n \iff n \mid (a - b) \iff a \bmod n = b \bmod n 
+$$
 
 **Examples:**
 - 17 ≡ 5 (mod 12) — both leave remainder 5
@@ -114,15 +116,15 @@ If a ≡ b (mod n) and c ≡ d (mod n), then:
 
 ### Addition & Subtraction
 
-\\( (a + b) \\bmod n = ((a \\bmod n) + (b \\bmod n)) \\bmod n \\)
+$ (a + b) \bmod n = ((a \bmod n) + (b \bmod n)) \bmod n $
 
-\\( (a - b) \\bmod n = ((a \\bmod n) - (b \\bmod n)) \\bmod n \\)
+$ (a - b) \bmod n = ((a \bmod n) - (b \bmod n)) \bmod n $
 
 **Example:** (123 + 456) mod 7 = (4 + 1) mod 7 = 5
 
 ### Multiplication
 
-\\( (a \\cdot b) \\bmod n = ((a \\bmod n) \\cdot (b \\bmod n)) \\bmod n \\)
+$ (a \cdot b) \bmod n = ((a \bmod n) \cdot (b \bmod n)) \bmod n $
 
 **Example:** (123 × 456) mod 7 = (4 × 1) mod 7 = 4
 
@@ -160,7 +162,7 @@ def mod_pow(a, e, n):
 
 "Division" by b means multiplying by **b⁻¹** (modular inverse of b).
 
-\\( a / b \\equiv a \\cdot b^{-1} \\pmod n \\)
+$ a / b \equiv a \cdot b^{-1} \pmod n $
 
 ### When Does Inverse Exist?
 
@@ -190,7 +192,9 @@ If gcd(a,n) > 1, a has **no inverse**. Such a is a **zero divisor**: ∃b≠0 wi
 
 ### General Form
 
-\\[ ax \\equiv b \\pmod n \\]
+$$
+ ax \equiv b \pmod n 
+$$
 
 ### Solution Method
 
@@ -221,12 +225,12 @@ Solutions mod 15: 4, 4+5=9, 9+5=14.
 
 Let n₁, n₂, ..., nₖ be **pairwise coprime**. The system:
 
-\\begin{align}
-x &\equiv a_1 \\pmod{n_1} \\\\
-x &\equiv a_2 \\pmod{n_2} \\\\
-&\vdots \\\\
-x &\equiv a_k \\pmod{n_k}
-\\end{align}
+\begin{align}
+x &\equiv a_1 \pmod{n_1} \\
+x &\equiv a_2 \pmod{n_2} \\
+&\vdots \\
+x &\equiv a_k \pmod{n_k}
+\end{align}
 
 has a **unique solution modulo N = n₁n₂⋯nₖ**.
 
@@ -235,7 +239,7 @@ has a **unique solution modulo N = n₁n₂⋯nₖ**.
 For each i:
 - Nᵢ = N / nᵢ
 - Find yᵢ = Nᵢ⁻¹ mod nᵢ (exists since gcd(Nᵢ, nᵢ) = 1)
-- Solution: \\(x = \\sum_{i=1}^k a_i N_i y_i \\pmod N\\)
+- Solution: $x = \sum_{i=1}^k a_i N_i y_i \pmod N$
 
 ### Example
 
@@ -260,14 +264,18 @@ Check: 23 mod 3 = 2 ✓, 23 mod 5 = 3 ✓, 23 mod 7 = 2 ✓
 ### Fermat's Little Theorem
 
 If p is prime and p ∤ a:
-\\[ a^{p-1} \\equiv 1 \\pmod p \\]
+$$
+ a^{p-1} \equiv 1 \pmod p 
+$$
 
-**Corollary:** For any a, \\(a^p \\equiv a \\pmod p\\)
+**Corollary:** For any a, $a^p \equiv a \pmod p$
 
 ### Euler's Theorem (Generalization)
 
 If gcd(a, n) = 1:
-\\[ a^{\\varphi(n)} \\equiv 1 \\pmod n \\]
+$$
+ a^{\varphi(n)} \equiv 1 \pmod n 
+$$
 
 where φ(n) = number of integers 1 ≤ k ≤ n with gcd(k, n) = 1.
 

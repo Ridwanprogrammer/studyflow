@@ -1,67 +1,59 @@
 # Taylor Series
 
-## Build a local polynomial from a function
+## Approximate a complicated curve with a familiar one
 
-Near a point $a$, a smooth curve can often be approximated by a polynomial that matches the curve’s value, slope, curvature, and further [[derivative|derivatives]] at $a$. The more derivative information we match, the more accurately the polynomial can follow the function nearby.
+Near a point, a smooth curve can look almost like a straight line. If we want a better local picture, we can use a curved polynomial. The idea is to build a polynomial that agrees with the function's value, slope, curvature, and further changes at a chosen centre.
 
-The degree-$n$ Taylor polynomial centered at $a$ is
+The centre is called $a$. The polynomial through degree $n$ is
 
-$$
-P_n(x)=\sum_{k=0}^{n}\frac{f^{(k)}(a)}{k!}(x-a)^k
-$$
+$$P_n(x)=\sum_{k=0}^{n}\frac{f^{(k)}(a)}{k!}(x-a)^k.$$
 
-At $a=0$, it is called a Maclaurin polynomial. The Taylor series extends this pattern indefinitely, but a formal infinite series represents $f$ only where it converges to $f$.
+Here $f^{(k)}(a)$ is the $k$th derivative at the centre, $k!$ is factorial, and $(x-a)^k$ measures how far the input is from the centre. The zeroth derivative is the function itself. At $a=0$, this is called a **Maclaurin polynomial**.
 
-## Constructing an approximation
+Why these coefficients? The constant term makes the polynomial match the value at $a$; the linear term makes its slope match; the quadratic term matches curvature; each higher term matches another derivative. The result is a local model, not automatically a globally correct replacement.
 
-To estimate $\ln(1.03)$, write $f(x)=\ln(1+x)$ and expand about $0$. Its derivatives at zero give
+## Build and use an approximation
 
-$$
-\ln(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\cdots,\qquad -1<x\le1
-$$
+To estimate $\ln(1.03)$, let $f(x)=\ln(1+x)$ and expand about $a=0$. Its derivatives at zero give
 
-Using the fourth-degree polynomial at $x=0.03$:
+$$\ln(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\cdots,\qquad -1<x\le1.$$
 
-$$
-P_4(0.03)=0.03-\frac{0.03^2}{2}+\frac{0.03^3}{3}-\frac{0.03^4}{4}\approx0.029559
-$$
+Using the first four terms,
 
-This is close to $\ln(1.03)\approx0.0295588$.
+$$P_4(0.03)=0.03-\frac{0.03^2}{2}+\frac{0.03^3}{3}-\frac{0.03^4}{4}\approx0.029559.$$
 
-The center is a strategic choice: choose $a$ near the input you want to approximate, where the derivatives are manageable.
+The actual value is approximately $0.0295588$. The input is close to the centre, so the approximation is accurate. In general, choose a centre near the input you care about and where the function and its derivatives are manageable.
 
-## Approximation comes with an error
+**Pause and predict:** Why not expand $\ln x$ at $x=0$ to estimate $\ln(1.03)$? The logarithm is not defined at 0. Rewriting it as $\ln(1+x)$ puts the centre at a valid, convenient point.
 
-Taylor’s theorem writes
+## A polynomial has an error, and we can bound it
 
-$$
-f(x)=P_n(x)+R_n(x),\qquad R_n(x)=\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}
-$$
+Taylor's theorem describes the difference between the function and its degree-$n$ polynomial:
 
-for some $c$ between $a$ and $x$. To turn this into a bound, find $M$ such that $|f^{(n+1)}(t)|\le M$ between those points. Then
+$$f(x)=P_n(x)+R_n(x),\qquad R_n(x)=\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1},$$
 
-$$
-|R_n(x)|\le \frac{M|x-a|^{n+1}}{(n+1)!}
-$$
+for some $c$ between $a$ and $x$. The remainder $R_n$ is the error. If $|f^{(n+1)}(t)|\le M$ between the centre and the target, then
 
-The factor $|x-a|^{n+1}$ explains why a nearby center and a higher degree usually improve a local approximation.
+$$|R_n(x)|\le\frac{M|x-a|^{n+1}}{(n+1)!}.$$
 
-## Familiar series, used with care
+This explains two practical facts: moving the target closer to the centre reduces the error, and adding terms often improves the approximation. “Often” matters—the bound and convergence conditions should be checked when accuracy is important.
+
+## Familiar series and where they work
+
+Several useful Maclaurin series are
 
 $$
-\begin{aligned}
-e^x &= \sum_{k=0}^\infty\frac{x^k}{k!} \\
-\sin x &= x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots \\
-\cos x &= 1-\frac{x^2}{2!}+\frac{x^4}{4!}-\cdots
-\end{aligned}
+e^x=\sum_{k=0}^{\infty}\frac{x^k}{k!},\qquad
+\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots,\qquad
+\cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\cdots.
 $$
 
-For $\ln(1+x)$, the expansion does not converge for every real $x$; its interval of convergence is $(-1,1]$. Always distinguish the polynomial approximation from the infinite series and check where the series is valid.
+The function and its infinite series agree only where the series converges to that function. For $\ln(1+x)$, the series converges for $-1<x\le1$; it does not represent $\ln(1+x)$ for every real input. A finite Taylor polynomial can still be evaluated outside the interval where the infinite series converges, but it may be a poor approximation there.
 
 ## Check your understanding
 
 1. Write the degree-3 Maclaurin polynomial for $e^x$.
-2. Why is expanding $\ln x$ near $a=1$ more useful than using a Maclaurin series for inputs near $1$?
-3. What information is needed to turn the Lagrange remainder into a numerical error bound?
+2. What information is needed to turn Taylor's remainder formula into an error bound?
+3. If an input is near 5, why might a Taylor polynomial centred at 5 be more useful than one centred at 0?
 
-**Answers:** 1. $1+x+x^2/2+x^3/6$. 2. The center should be near the input; $\ln x$ is also undefined at the Maclaurin center $0$. 3. A bound on the magnitude of the next derivative throughout the interval between the center and the target.
+**Check:** 1. $1+x+x^2/2+x^3/6$. 2. A bound on the next derivative throughout the interval between centre and target. 3. The powers of $x-5$ are small near the target, typically producing a more accurate local approximation.
