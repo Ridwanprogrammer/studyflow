@@ -80,8 +80,8 @@ F = ΠM(list of indices where F=0)
 Use K-map or Boolean algebra to reduce.
 
 **Example:** F = Σm(1,3,5,6) = ΠM(0,2,4,7)
-- Minimal SOP: A'C + AB'C + ABC' (or AB + C from POS)
-- Minimal POS: (A+C)(B+C) = AB + C
+- Minimal SOP: A'C + B'C + ABC'
+- Minimal POS: (A+C)(B+C)(A'+B'+C')
 
 ### Truth Table ↔ Canonical
 - Rows with 1 → minterms (SOP)
@@ -104,9 +104,7 @@ Just simplify using Boolean algebra or K-map.
 
 **Example:** F = Σm(1,3,5,6)
 = A'B'C + A'BC + AB'C + ABC'
-= A'C(B'+B) + AC'(B+B')  (group 1,3 and 5,6? No, 5,6 not adjacent)
-Actually: m1+m3 = A'C, m5+m6 don't share.
-Better: Use K-map.
+= A'C + B'C + ABC'
 
 ---
 
@@ -116,9 +114,8 @@ Better: Use K-map.
 Any SOP → NAND-NAND (double complement)
 1. Draw SOP with AND-OR
 2. Add bubbles on AND outputs and OR inputs
-3. Replace bubbled OR with NAND
-3. Replace bubbled AND with NAND
-4. Add inverter for single literals
+3. Replace each product AND with a NAND for its complemented product.
+4. Combine those outputs with a NAND, adding input inverters for complemented literals as needed.
 
 ### NOR-NOR Implementation
 Any POS → NOR-NOR
@@ -148,9 +145,8 @@ Denoted: d(indices) or X on K-map.
 - Different choices → different minimal forms
 
 **Example:** F(A,B,C) = Σm(1,3) + d(0,2,5)
-- d's at 0,2,5 can help group m1,m3
-- With d's: group all 4 (0,1,2,3) → A' (if 0,1,2,3 are 1)
-- Or group (1,3,5,7) → C? Need to check.
+- Grouping minterms 0, 1, 2, and 3 (using don't-cares 0 and 2) gives the simpler valid form A'.
+- If the don't-cares are not used, m1 and m3 give A'C. Both forms cover all required 1s; the output at a don't-care input is unspecified.
 
 ---
 
@@ -177,9 +173,8 @@ F = ABC + ABC' + AB'C + A'B'C
 = Σm(7,6,5,1) = Σm(1,5,6,7)
 
 **Canonical POS:**
-F = (A+B)(B'+C) ... use K-map or complement method.
-F' = Σm(0,2,3,4) = ΠM(1,5,6,7)
-F = ΠM(0,2,3,4)
+F is 0 at rows 0, 2, 3, and 4, so
+F = ΠM(0,2,3,4).
 
 ---
 
@@ -217,8 +212,9 @@ F = C
 **Canonical SOP:** F = Σm(0,2,3,5,6)
 **Canonical POS:** F = ΠM(1,4,7)
 
-**Minimal SOP:** K-map → A'B'C' + A'BC' + A'BC + AB'C + ABC'
-= A'C'(B'+B) + A'B(C'+C) + A(B'C+BC')? Let's K-map.
+**Minimal SOP:** Group minterms (0,2), (2,3), and (2,6); minterm 5 is isolated.
+
+F = A'C' + A'B + BC' + AB'C.
 
 ---
 
@@ -237,14 +233,13 @@ F = C
 
 1. **F = A + B'C**
    = A(B+B')(C+C') + B'C(A+A')
-   = ABC + ABC' + AB'C + AB'C' + AB'C + A'B'C
-   = Σm(4,5,6,7,3,1) = Σm(1,3,4,5,6,7)
+   = ABC + ABC' + AB'C + A'B'C
+   = Σm(1,5,6,7)
 
 2. **F = (A+B)(A'+C)**
    POS: Already sum terms. Expand each to maxterms.
    (A+B) = (A+B+C)(A+B+C')
    (A'+C) = (A'+B+C)(A'+B'+C)
-   F = ΠM(0,1,2,3)? Wait.
    (A+B) = 0 when A=0,B=0 → C=0,1 → M₀,M₁
    (A'+C) = 0 when A=1,C=0 → B=0,1 → M₄,M₆
    F = ΠM(0,1,4,6) = Σm(2,3,5,7)
@@ -260,7 +255,7 @@ F = C
    Groups: (0,1)→A'B', (1,3)→A'C, (3,7)→BC
    SOP: A'B' + A'C + BC
    POS (group 0s): 0s at 2,4,5,6
-   (2,6)→B, (4,5)→A+C'? 
+   (2,6)→(B'+C), (4,5)→(A'+B)
    Minimal POS: (A'+B)(B'+C) = A'B' + A'C + BC ✓
 
 4. **F = ΠM(0,2,4,6)** = Σm(1,3,5,7) = C

@@ -179,25 +179,17 @@ Invert rest: 0011
 Result: 00110
 ```
 
-**Check:** If original was +26 (11010 = 16+8+2), then -26 in 5-bit 2's comp:
-Range: -16 to +15. -26 needs 6 bits! 
-Actually 11010 as unsigned = 26. As signed 5-bit, MSB=1 so negative.
-Value = -16 + 8 + 2 = -6. 
--6 in 5-bit 2's comp: 16-6=10 = 01010? No...
-
-Let's recheck: 11010₂ = 26₁₀. But 5-bit signed range is -16 to +15. So 11010 as signed IS negative.
-Magnitude: invert (00101) + 1 = 00110 = 6. So value = -6.
-2's complement of -6 (i.e., +6) = 00110. ✓
+Interpreting the same bits depends on the representation: unsigned `11010₂` is 26, but as a 5-bit two's-complement number it is `−6`. Taking its two's complement negates that signed value, giving `00110₂` (`+6`). A 5-bit signed number cannot represent `−26`; in 6 bits, `+26 = 011010₂`, so `−26 = 100110₂`.
 
 ---
 
 ### Past Exam: 2's Complement Problems
 
-| Binary | 2's Complement (negate) | Value (if 5-bit signed) |
-|--------|------------------------|-------------------------|
-| 11010 | 00110 | -6 |
-| 1001010 (7-bit) | 0110110 | -54? Wait, 1001010 = 74. MSB=1 → negative. Invert: 0110101 + 1 = 0110110 = 54. So -54. |
-| 1010010 | 0101110 | -42? 1010010 = 82. Invert: 0101101 + 1 = 0101110 = 46. So -46. |
+| Binary pattern | Width | Two's complement (negate) | Signed value before negation |
+|---------------|-------|---------------------------|------------------------------|
+| 11010 | 5 bits | 00110 | −6 |
+| 1001010 | 7 bits | 0110110 | −54 |
+| 1010010 | 7 bits | 0101110 | −46 |
 
 ---
 
@@ -304,24 +296,28 @@ Borrow as needed. Or use 2's complement: A - B = A + (-B).
   01100001  (pad to 8 bits)
 + 10011101
 ----------
- 100011110  (9 bits = overflow in 8-bit)
+  11111110
 ```
-Unsigned: 97 + 157 = 254 = 11111110? Wait: 97+157=254. 254 = 11111110₂.
-Let me recheck: 1100001 = 97, 10011101 = 157. 97+157=254.
-254 in binary: 128+64+32+16+8+4+2 = 254 = 11111110₂.
-But our addition gave 100011110 = 286? Something wrong.
+As unsigned values, `1100001₂ = 97` and `10011101₂ = 157`, so the sum is `254₁₀ = 11111110₂`. The result fits in 8 bits; there is no carry out.
 
-Let's redo:
+### Binary Multiplication and Division
+
+Binary multiplication follows long multiplication, with partial products of either the multiplicand or zero.
+
+**Example: 111₂ × 101₂**
+```text
+      111
+    × 101
+    -----
+      111
+     000
+    11100
+    -----
+   100011₂
 ```
-  01100001  (97)
-+ 10011101  (157)
-----------
- 100011110  (286) — that's 9 bits
-```
-Ah! 10011101 with leading 1 is negative in signed 8-bit! -99.
-97 + (-99) = -2 = 11111110 in 8-bit 2's comp.
-But as unsigned: 97 + 157 = 254 = 11111110.
-The problem likely expects unsigned addition giving 9-bit result.
+Check: `7 × 5 = 35`, and `100011₂ = 35₁₀`.
+
+Binary division uses long division, subtracting shifted copies of the divisor where they fit. For `101010₂ ÷ 110₂`, the quotient is `111₂` with remainder 0; check that `111₂ × 110₂ = 101010₂`.
 
 ---
 

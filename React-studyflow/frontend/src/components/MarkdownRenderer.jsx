@@ -77,6 +77,23 @@ function getCodeText(node) {
   return getCodeText(node?.props?.children)
 }
 
+function getHeadingProps(children, node) {
+  const text = getCodeText(children)
+  const kind = /example|worked solution|solution/i.test(text)
+    ? 'example'
+    : /self.?check|practice|exercise|understanding/i.test(text)
+      ? 'check'
+      : undefined
+  const line = node?.position?.start?.line
+
+  return {
+    id: Number.isInteger(line)
+      ? `topic-section-${line - 1}`
+      : text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+    'data-kind': kind,
+  }
+}
+
 function GlossaryTermPopover({ term, children, glossaryContext }) {
   const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState(null)
@@ -257,9 +274,9 @@ function createMarkdownComponents(glossaryTerms, glossaryContext) {
   code: ({ children, className }) => (
     <code className={`sf-inline-code ${className || ''}`.trim()}>{children}</code>
   ),
-  h1: ({ children }) => <h1 className="sf-md-h1">{children}</h1>,
-  h2: ({ children }) => <h2 className="sf-md-h2">{children}</h2>,
-  h3: ({ children }) => <h3 className="sf-md-h3">{children}</h3>,
+  h1: ({ children, node }) => <h1 {...getHeadingProps(children, node)} className="sf-md-h1">{children}</h1>,
+  h2: ({ children, node }) => <h2 {...getHeadingProps(children, node)} className="sf-md-h2">{children}</h2>,
+  h3: ({ children, node }) => <h3 {...getHeadingProps(children, node)} className="sf-md-h3">{children}</h3>,
   p: ({ children }) => <p className="sf-md-p">{children}</p>,
   ul: ({ children }) => <ul className="sf-md-ul">{children}</ul>,
   ol: ({ children }) => <ol className="sf-md-ol">{children}</ol>,

@@ -64,7 +64,7 @@ export function CourseDetail() {
   const discColor = disciplineColors[course.discipline?.name] || '#06b6d4'
 
   return (
-    <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+    <div className="sf-course-detail-page max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Course Header Hero Card */}
       <header className="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-2xl space-y-6">
         <div

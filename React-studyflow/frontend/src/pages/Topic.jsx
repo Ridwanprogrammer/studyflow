@@ -13,7 +13,7 @@ export function Topic() {
   const { courseId, topicId } = useParams()
   const navigate = useNavigate()
   const [fontSize, setFontSize] = useState(16)
-  const [showOutline, setShowOutline] = useState(false)
+  const [showOutline, setShowOutline] = useState(() => window.matchMedia('(min-width: 1024px)').matches)
   const [readingProgress, setReadingProgress] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [assistantInput, setAssistantInput] = useState('')
@@ -167,98 +167,109 @@ export function Topic() {
   // Extract outline headings (#, ##, ###)
   const headings = (topic.notes || '')
     .split('\n')
-    .filter((line) => line.startsWith('#'))
-    .map((line) => {
-      const match = line.match(/^(#{1,3})\s+(.+)$/)
-      if (!match) return null
-      return {
+    .flatMap((line, lineIndex) => {
+      const match = line.match(/^(#{2,3})\s+(.+)$/)
+      if (!match) return []
+      const text = match[2]
+        .replace(/\[\[.*?\|(.+?)\]\]/g, '$1')
+        .replace(/\[\[(.+?)\]\]/g, '$1')
+        .trim()
+      return [{
         level: match[1].length,
-        text: match[2].trim(),
-        anchor: match[2].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-      }
+        text,
+        anchor: `topic-section-${lineIndex}`,
+      }]
     })
-    .filter(Boolean)
 
   return (
     <>
-      {/* Top Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 z-500 bg-slate-900/60">
+      <div className="sf-reading-progress" aria-hidden="true">
         <div
-          className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-lime-400 transition-all duration-150"
+          className="sf-reading-progress__fill"
           style={{ width: `${readingProgress}%` }}
         />
       </div>
 
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-        {/* Topic Action Bar */}
-        <div className="glass-panel p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
+      <div className={`sf-study-workspace ${showOutline ? 'outline-open' : 'outline-closed'}`}>
+        <div className="sf-study-toolbar">
           <NavLink
             to={`/courses/${courseId}`}
-            className="flex items-center gap-2 text-slate-300 hover:text-white font-medium text-sm transition-colors"
+            className="sf-study-back"
           >
             <ChevronLeft size={18} />
             <span>Back to {course?.code || 'Course'}</span>
           </NavLink>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="flex items-center gap-1.5 text-xs text-slate-400 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/10">
+          <div className="sf-study-toolbar__actions">
+            {headings.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowOutline((open) => !open)}
+                className="sf-study-tool sf-study-outline-toggle"
+                aria-expanded={showOutline}
+                aria-controls="topic-outline"
+              >
+                <BookOpen size={15} />
+                <span>Outline</span>
+              </button>
+            )}
+            <span className="sf-study-read-time">
               <Clock size={14} />
               <span>{topic.estimated_read_time || 5} min read</span>
             </span>
 
-            {/* Font Size Scaling */}
-            <div className="flex items-center bg-white/5 border border-white/10 rounded-lg p-0.5">
+            <div className="sf-study-font-controls" aria-label="Note text size">
               <button
                 type="button"
                 onClick={() => setFontSize((prev) => Math.max(13, prev - 2))}
-                className="px-2 py-1 text-xs font-bold text-slate-300 hover:text-white transition-colors"
+                className="sf-study-tool"
                 title="Decrease font size"
+                aria-label="Decrease note text size"
               >
                 A-
               </button>
-              <div className="w-[1px] h-3 bg-white/10" />
               <button
                 type="button"
                 onClick={() => setFontSize((prev) => Math.min(24, prev + 2))}
-                className="px-2 py-1 text-xs font-bold text-slate-300 hover:text-white transition-colors"
+                className="sf-study-tool"
                 title="Increase font size"
+                aria-label="Increase note text size"
               >
                 A+
               </button>
             </div>
 
-            {/* Quick Search */}
             <button
+              type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
-              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-lg transition-colors"
+              className="sf-study-tool"
               title="Quick Search (Ctrl + K)"
             >
               <Search size={14} />
               <span className="hidden sm:inline">Search</span>
             </button>
 
-            {/* Ask Assistant Drawer Toggle */}
             <button
+              type="button"
               onClick={() => setSidebarOpen(true)}
-              className="flex items-center gap-1.5 text-xs font-semibold text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/25 transition-all shadow-sm shadow-cyan-500/20"
+              className="sf-study-tool sf-study-tool--primary"
             >
               <Bot size={15} />
               <span>Ask AI Tutor</span>
             </button>
 
-            {/* Glossary Link with Origin tracking */}
             <NavLink
               to={`/glossary?originTopic=${encodeURIComponent(topic.title)}&originCourse=${encodeURIComponent(courseId)}&originTopicId=${encodeURIComponent(topicId)}`}
-              className="flex items-center gap-1.5 text-xs text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-1.5 rounded-lg hover:bg-purple-500/25 transition-colors"
+              className="sf-study-tool"
             >
               <Sparkles size={14} />
               <span className="hidden sm:inline">Glossary</span>
             </NavLink>
 
-            {/* Export PDF */}
             <button
+              type="button"
               onClick={handleExportPdf}
-              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-lg transition-colors"
+              className="sf-study-tool"
               title="Print or save as PDF"
             >
               <Download size={14} />
@@ -267,131 +278,114 @@ export function Topic() {
           </div>
         </div>
 
-        {/* Section Outline Chips (if outline enabled or headings exist) */}
-        {headings.length > 0 && (
-          <div className="glass-panel p-4 rounded-2xl border border-white/10 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-400 font-semibold uppercase tracking-wider">
-              <span>Topic Outline</span>
-              <button
-                onClick={() => setShowOutline(!showOutline)}
-                className="text-cyan-400 hover:underline"
-              >
-                {showOutline ? 'Hide Outline' : 'Show Outline'}
-              </button>
-            </div>
-            {showOutline && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {headings.map((h) => (
-                  <a
-                    key={h.anchor}
-                    href={`#${h.anchor}`}
-                    className="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-cyan-500/20 hover:text-cyan-300 border border-white/10 text-slate-300 transition-colors"
-                  >
-                    {h.text}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Main Notes Card */}
-        <article className="glass-panel p-6 sm:p-10 rounded-2xl border border-white/10 space-y-6 print:bg-white print:text-black">
-          <header className="border-b border-white/10 pb-6 space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-              {course?.code} · {course?.title}
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              {topic.title}
-            </h1>
-          </header>
-
-          {/* Learning Guide Box (Mental models, why it matters) */}
-          {topic.learning_guide && typeof topic.learning_guide === 'object' && Object.keys(topic.learning_guide).length > 0 && (
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/40 to-blue-950/40 border border-cyan-500/30 space-y-3">
-              <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
-                <Sparkle size={16} />
-                <span>Study Guide & Mental Model</span>
-              </div>
-              {topic.learning_guide.why && (
-                <div className="text-xs sm:text-sm text-slate-200">
-                  <strong className="text-cyan-300">Why this matters: </strong>
-                  {topic.learning_guide.why}
-                </div>
-              )}
-              {topic.learning_guide.mentalModel && (
-                <div className="text-xs sm:text-sm text-slate-200">
-                  <strong className="text-cyan-300">Mental Model: </strong>
-                  {topic.learning_guide.mentalModel}
-                </div>
-              )}
-              {topic.learning_guide.plainExplanation && (
-                <div className="text-xs sm:text-sm text-slate-200">
-                  <strong className="text-cyan-300">In plain English: </strong>
-                  {topic.learning_guide.plainExplanation}
-                </div>
-              )}
-              {topic.learning_guide.check && (
-                <div className="text-xs sm:text-sm text-lime-300 bg-lime-500/10 p-3 rounded-xl border border-lime-500/20">
-                  <strong>Self Check: </strong>
-                  {topic.learning_guide.check}
-                </div>
-              )}
-            </div>
+        <div className="sf-study-layout">
+          {showOutline && (
+            <button
+              type="button"
+              className="sf-topic-outline-backdrop"
+              aria-label="Close topic outline"
+              onClick={() => setShowOutline(false)}
+            />
           )}
 
-          {/* Notes Content with Fluid KaTeX Math & Typography */}
-          <div
-            ref={contentRef}
-            className="prose prose-invert max-w-none text-slate-200 leading-relaxed space-y-4"
-            style={{ fontSize: `${fontSize}px` }}
-          >
-            <MarkdownRenderer
-              content={topic.notes}
-              glossaryTerms={glossaryTerms}
-              glossaryContext={{
-                originTopic: topic.title,
-                originCourse: courseId,
-                originTopicId: topicId,
-              }}
-            />
-          </div>
-        </article>
+          {headings.length > 0 && (
+            <aside id="topic-outline" className="sf-topic-outline" aria-label="Topic outline">
+              <div className="sf-topic-outline__header">
+                <span>In this lesson</span>
+                <button
+                  type="button"
+                  className="sf-topic-outline__close"
+                  onClick={() => setShowOutline(false)}
+                  aria-label="Hide topic outline"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <nav className="sf-topic-outline__nav" aria-label="Lesson sections">
+                {headings.map((heading, index) => (
+                  <a
+                    key={`${heading.anchor}-${index}`}
+                    href={`#${heading.anchor}`}
+                    className={`sf-topic-outline__link level-${heading.level}`}
+                    onClick={() => setShowOutline(false)}
+                  >
+                    {heading.text}
+                  </a>
+                ))}
+              </nav>
+              <div className="sf-topic-outline__footer">
+                <span>{headings.length} sections</span>
+                <span>Read at your pace</span>
+              </div>
+            </aside>
+          )}
 
-        {/* Footer Navigation */}
-        <div className="flex items-center justify-between pt-4">
-          <NavLink
-            to={`/courses/${courseId}`}
-            className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
-          >
-            <ChevronLeft size={16} />
-            <span>Return to Course Topics</span>
-          </NavLink>
+          <article className="sf-topic-reader">
+            <header className="sf-topic-reader__header">
+              <div className="sf-topic-reader__meta">
+                <span>{course?.code}</span>
+                <span>{course?.title}</span>
+              </div>
+              <h1>{topic.title}</h1>
+              <p>{topic.estimated_read_time || 5} minute read</p>
+            </header>
 
-          <button
-            onClick={() => handleSendAssistant(`Give me 3 practice test questions on ${topic.title}`)}
-            className="flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:underline"
-          >
-            <Bot size={16} />
-            <span>Practice with AI Tutor →</span>
-          </button>
+            {topic.learning_guide && typeof topic.learning_guide === 'object' && Object.keys(topic.learning_guide).length > 0 && (
+              <section className="sf-study-guide" aria-label="Study guide">
+                <div className="sf-study-guide__title">
+                  <Sparkle size={16} />
+                  <span>A way into this topic</span>
+                </div>
+                {topic.learning_guide.why && <p><strong>Why it matters</strong>{topic.learning_guide.why}</p>}
+                {topic.learning_guide.mentalModel && <p><strong>Think of it this way</strong>{topic.learning_guide.mentalModel}</p>}
+                {topic.learning_guide.plainExplanation && <p><strong>In plain language</strong>{topic.learning_guide.plainExplanation}</p>}
+                {topic.learning_guide.check && (
+                  <p className="sf-study-guide__check">
+                    <strong>Quick check</strong>{topic.learning_guide.check}
+                  </p>
+                )}
+              </section>
+            )}
+
+            <div
+              ref={contentRef}
+              className="sf-topic-markdown"
+              style={{ fontSize: `${fontSize}px` }}
+            >
+              <MarkdownRenderer
+                content={topic.notes}
+                glossaryTerms={glossaryTerms}
+                glossaryContext={{
+                  originTopic: topic.title,
+                  originCourse: courseId,
+                  originTopicId: topicId,
+                }}
+              />
+            </div>
+
+            <footer className="sf-topic-reader__footer">
+              <NavLink to={`/courses/${courseId}`}>
+                <ChevronLeft size={16} />
+                <span>Back to course topics</span>
+              </NavLink>
+              <button
+                type="button"
+                onClick={() => handleSendAssistant(`Give me 3 practice test questions on ${topic.title}`)}
+              >
+                <Bot size={16} />
+                <span>Practice this topic</span>
+              </button>
+            </footer>
+          </article>
         </div>
       </div>
 
-      {/* Floating Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-300 print:hidden">
-        {headings.length > 0 && (
-          <button
-            onClick={() => setShowOutline(!showOutline)}
-            className="w-12 h-12 rounded-full glass-panel border border-white/20 text-slate-300 hover:text-white flex items-center justify-center shadow-lg hover:shadow-cyan-500/20 transition-all"
-            title="Toggle Outline"
-          >
-            <BookOpen size={20} />
-          </button>
-        )}
+      <div className="sf-study-floating-actions print:hidden">
         <button
+          type="button"
           onClick={() => setSidebarOpen(true)}
-          className="flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold text-sm shadow-xl shadow-cyan-500/25 hover:shadow-2xl hover:scale-105 transition-all"
+          className="sf-study-floating-ai"
+          aria-label="Ask the AI tutor"
         >
           <Bot size={20} />
           <span className="hidden sm:inline">Ask AI</span>

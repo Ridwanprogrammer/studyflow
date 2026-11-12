@@ -28,7 +28,7 @@ export function CourseCard({ course, index = 0 }) {
   return (
     <div
       onClick={handleCardClick}
-      className="relative p-5 sm:p-6 rounded-2xl bg-slate-900/75 border border-white/10 hover:border-cyan-500/40 backdrop-blur-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10 flex flex-col justify-between group cursor-pointer overflow-hidden"
+      className="sf-course-card relative p-5 sm:p-6 rounded-2xl bg-slate-900/75 border border-white/10 hover:border-cyan-500/40 backdrop-blur-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10 flex flex-col justify-between group cursor-pointer overflow-hidden"
       role="article"
       aria-label={`${course.code}: ${course.title}`}
     >

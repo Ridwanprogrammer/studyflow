@@ -132,6 +132,14 @@ This topic covers memory technologies, organization, and the trade-offs that def
 
 **Example:** 16-bit address, 8-bit data → 64KB memory
 
+### Words, Capacity, and Basic Memory Operations
+
+A memory labelled `16K × 8` has 16K addressable words, each 8 bits wide. In conventional binary memory-size notation, that is 16,384 words or 16 KiB. Keep bits (`b`) distinct from bytes (`B`): one byte is 8 bits, and one KiB is 1,024 bytes.
+
+An address decoder selects a word using the address bus. A write stores the data on the data bus at the selected address, replacing its previous value. A read selects an address and puts the stored word on the data bus; the logical contents remain unchanged.
+
+With a 3-bit address bus, for example, address `101₂` selects location 5. A write stores the input word there, and a later read from `101₂` returns it. DRAM cells require internal restoration after sensing, but that device-level action does not change the usual read operation seen at the memory interface.
+
 ### Chip Organization
 
 **Memory chip:** 
