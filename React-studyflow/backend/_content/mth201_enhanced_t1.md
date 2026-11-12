@@ -4,7 +4,9 @@
 
 Think of a function as a machine. You choose an allowed input, the machine follows one fixed rule, and it returns exactly one output. For example, the rule “square the input, then add 3” sends 2 to 7:
 
-$$2\longrightarrow 2^2+3=7.$$
+$$
+2\longrightarrow 2^2+3=7.
+$$
 
 The same input and same rule always give the same output. That is the central idea; the notation gives names to the machine, its allowed inputs, and its outputs.
 
@@ -14,7 +16,9 @@ A **real number** is a number that can be placed on the continuous number line: 
 
 Now let $f(x)=x^2+3$. Here $f$ names the rule, $x$ is the input, and the expression $x^2+3$ tells the machine what to do. Substituting 2 gives
 
-$$f(2)=2^2+3=7.$$
+$$
+f(2)=2^2+3=7.
+$$
 
 Read $f(2)$ as “the output of $f$ when the input is 2,” not as $f$ multiplied by 2.
 
@@ -22,11 +26,15 @@ Read $f(2)$ as “the output of $f$ when the input is 2,” not as $f$ multiplie
 
 A **function** is a rule that assigns exactly one output to every allowed input. If the allowed inputs form a set $D$ of real numbers and every output is real, we write
 
-$$f:D\to\mathbb R,\qquad x\mapsto f(x).$$
+$$
+f:D\to\mathbb R,\qquad x\mapsto f(x).
+$$
 
 The notation says that $f$ takes each $x$ in $D$ and assigns it the value $f(x)$. The set $D$ is the **domain**: the inputs the machine is allowed to receive. The set named after the arrow is the **codomain**: the set in which outputs are required to lie. The **range** is the set of outputs the rule actually produces:
 
-$$f(D)=\{f(x):x\in D\}\subseteq\mathbb R.$$
+$$
+f(D)=\{f(x):x\in D\}\subseteq\mathbb R.
+$$
 
 The range can be smaller than the codomain. For $f(x)=x^2$ with domain and codomain both $\mathbb R$, negative numbers are allowed inputs, but no output is negative. Its range is $[0,\infty)$, not all of $\mathbb R$.
 
@@ -36,7 +44,9 @@ The range can be smaller than the codomain. For $f(x)=x^2$ with domain and codom
 
 The formula alone may not reveal the whole domain. For a real-valued function, inputs must make the rule produce a real output. For example, an even root cannot have a negative radicand. With
 
-$$g(x)=\sqrt{4-x^2},$$
+$$
+g(x)=\sqrt{4-x^2},
+$$
 
 we need $4-x^2\ge0$, so $-2\le x\le2$. Thus the natural real domain is $[-2,2]$. On this interval, the square root is at least 0 and at most 2, so the range is also $[0,2]$.
 
@@ -58,11 +68,15 @@ For $f(x)=x^2$, the points $(2,4)$ and $(-2,4)$ are both on the graph. That is a
 
 If $f(x)=2x+1$ and $g(x)=x^2$, then applying $g$ first and feeding its output into $f$ gives
 
-$$ (f\circ g)(x)=f(g(x))=2x^2+1.$$
+$$
+(f\circ g)(x)=f(g(x))=2x^2+1.
+$$
 
 Reversing the order gives
 
-$$ (g\circ f)(x)=g(f(x))=(2x+1)^2.$$
+$$
+(g\circ f)(x)=g(f(x))=(2x+1)^2.
+$$
 
 These are different because composition means “do the inside rule first.” When combining rules, keep track of which inputs each rule accepts; a composition only works where the output of the first rule is an allowed input for the next one.
 

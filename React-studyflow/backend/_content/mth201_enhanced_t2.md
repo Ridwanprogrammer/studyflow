@@ -1,88 +1,268 @@
 # Revision of Differentiation and Integration
 
-## Two questions: how fast, and how much?
+## Two questions about change
 
-Imagine tracking a car. Its position tells you where it is. A speedometer tells you how quickly its position is changing at this instant. A trip meter tells you how far it travelled over a period. Calculus gives mathematical tools for both questions:
+Imagine watching a car. Its position tells you where it is. Its speedometer tells you how quickly its position is changing now. Its trip meter tells you how much distance has accumulated over a period.
 
-- **Differentiation** measures an instantaneous rate of change.
-- **Integration** accumulates many small contributions over an interval.
+Calculus gives names to these two kinds of questions:
 
-These are connected ideas, but they are not the same operation. The derivative looks locally at change; an integral combines contributions across a whole range.
+- **Differentiation** asks for an instantaneous rate of change.
+- **Integration** adds up many small contributions over an interval.
 
-## A derivative is the slope at one point
+The connection between them is powerful, but first understand each operation on its own.
 
-For a straight line, slope is rise divided by run. A curve does not have one constant slope, so we zoom in around a point and compare two nearby points. As the second point approaches the first, the secant slope approaches the tangent slope.
+## Derivatives: build an instantaneous slope from nearby averages
 
-For $y=f(x)$, the derivative at $x=a$ is defined by
+For a straight line, slope is change in height divided by change across. On a curve, that ratio between two distinct points is an **average** slope. To find the slope at one particular point, move the second point closer and closer until the average slope approaches the tangent slope.
 
-$$f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h},$$
+Let the starting input be $a$ and move it by a small amount $h$. The output changes from $f(a)$ to $f(a+h)$. The average rate of change over this small step is
 
-when this limit exists. Here, $h$ is a small input change; the numerator is the corresponding output change. Their ratio is an average rate over a short step, and the limit gives the instantaneous rate.
+$$
+\frac{f(a+h)-f(a)}{h}.
+$$
 
-For example, if position is $s(t)=t^2$, then
+Letting $h$ approach zero produces the **derivative**:
 
-$$s'(t)=2t.$$
+$$
+f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}.
+$$
 
-At $t=3$ seconds, the instantaneous velocity is $s'(3)=6$ units per second. The units confirm the interpretation: position divided by time.
+The numerator is output change; the denominator is input change; their ratio is change per unit input. The limit asks what that ratio approaches as the input step becomes arbitrarily small. If the limit exists, it is the instantaneous rate at $a$.
 
-### Choose the derivative rule from the shape of the expression
+### Derive a derivative from the definition
 
-The rules are shortcuts built from the limit definition. Identify the structure before differentiating:
+Take $f(x)=x^2$. At input $a$, increase the input by $h$. Then
 
-| Expression structure | Rule | Example |
-|---|---|---|
-| A sum | Differentiate each term | $(x^3+\sin x)'=3x^2+\cos x$ |
-| A product | $(uv)'=u'v+uv'$ | $(x^2e^x)'=2xe^x+x^2e^x$ |
-| A quotient | $(u/v)'=(u'v-uv')/v^2$ | Keep the denominator squared |
-| A function inside another | Chain rule: $(F(g(x)))'=F'(g(x))g'(x)$ | $(\sin 3x)'=3\cos 3x$ |
+$$
+\frac{f(a+h)-f(a)}{h}
+=\frac{(a+h)^2-a^2}{h}
+=\frac{a^2+2ah+h^2-a^2}{h}
+=2a+h.
+$$
 
-For $y=\frac{\sin(3x)}{x+1}$, the numerator is a composite function and the whole expression is a quotient. Apply both rules:
+As $h$ approaches zero, $2a+h$ approaches $2a$. Therefore
 
-$$y'=\frac{3(x+1)\cos(3x)-\sin(3x)}{(x+1)^2},\qquad x\ne-1.$$
+$$
+f'(a)=2a,\qquad\text{so}\qquad \frac{d}{dx}(x^2)=2x.
+$$
 
-The condition $x\ne-1$ remains because the original function is undefined there.
+The derivative is another function: it tells us the slope at every input. At $x=3$, the slope is 6. If $s(t)=t^2$ describes position in metres after $t$ seconds, then $s'(3)=6$ metres per second. Units help interpret the answer: output-units divided by input-units.
 
-**Pause and try:** For $y=(x^2+1)^3$, identify the outer and inner functions before differentiating. The outer rule cubes its input; the inner rule is $x^2+1$. Therefore
+## Why the main differentiation rules work
 
-$$y'=3(x^2+1)^2(2x)=6x(x^2+1)^2.$$
+The familiar rules are shortcuts that follow from the limit definition.
 
-## An integral is accumulated change
+### Constant and sum rules
 
-Suppose a car’s velocity is known at every moment. Over a tiny time interval $\Delta t$, its change in position is approximately velocity times time, $v(t)\Delta t$. Add these small changes over a whole trip and make the time steps arbitrarily small: the result is a definite integral.
+A constant does not change when $x$ changes, so its slope is zero:
 
-$$\int_a^b v(t)\,dt$$
+$$
+\frac{d}{dx}(c)=0.
+$$
 
-is the **signed** change in position from time $a$ to time $b$. Forward motion contributes positively and backward motion negatively. Total distance instead adds the magnitude of velocity, so it is $\int_a^b|v(t)|\,dt$ when the velocity is integrable.
+For a sum, the total output change is the sum of the changes of its parts. Limits preserve that sum, giving
 
-Integration can also reverse differentiation. If $F'(x)=f(x)$, then $F$ is an **antiderivative** of $f$. The Fundamental Theorem of Calculus states
+$$
+(f+g)'=f'+g'.
+$$
 
-$$\int_a^b f(x)\,dx=F(b)-F(a).$$
+### Power rule
 
-For example, with $f(x)=3x^2+2x$, an antiderivative is $F(x)=x^3+x^2$. Thus
+For a positive integer $n$, start with the definition for $x^n$:
 
-$$\int_0^1(3x^2+2x)\,dx=F(1)-F(0)=2.$$
+$$
+\frac{(x+h)^n-x^n}{h}.
+$$
 
-The same theorem explains why differentiation and integration fit together: the net accumulation of a rate is the total change in the quantity.
+Expanding $(x+h)^n$ gives $x^n+n x^{n-1}h+\text{terms containing }h^2\text{ or higher powers}$. After subtracting $x^n$ and dividing by $h$, the first term is $n x^{n-1}$; all remaining terms still contain a factor of $h$ and vanish as $h\to0$. Thus
 
-## Choose an integration strategy
+$$
+\frac{d}{dx}(x^n)=n x^{n-1}.
+$$
 
-Integration reverses differentiation, but the reverse pattern may be hidden.
+For example,
 
-- Use **substitution** when the derivative of an inner expression appears as a factor. With $u=\cos x$, so $du=-\sin x\,dx$:
-  $$\int\frac{\sin x}{\cos^3x}\,dx=-\int u^{-3}\,du=\frac{1}{2\cos^2x}+C.$$
-- Use **integration by parts** when a product becomes easier after differentiating one factor:
-  $$\int u\,dv=uv-\int v\,du.$$
-  For instance, choosing $u=x$ and $dv=e^x\,dx$ gives $\int xe^x\,dx=e^x(x-1)+C$.
-- Use algebraic simplification, trigonometric identities, or partial fractions when the expression’s structure calls for them.
+$$
+\frac{d}{dx}(3x^4-2x+7)=12x^3-2.
+$$
 
-For an indefinite integral, include the constant $C$: derivatives of constants are zero, so an antiderivative is never unique. For a definite integral, evaluate the antiderivative at the upper bound and subtract its value at the lower bound.
+The constant term disappears, and each power is differentiated separately.
 
-## Check an antiderivative by differentiating
+### Product rule
 
-After finding an antiderivative, differentiate it to test the result. For the substitution example,
+The product of two changing quantities has two sources of change: the first factor can change, or the second can change. Over a small input step, write
 
-$$\frac{d}{dx}\left(\frac12\sec^2x\right)=\sec^2x\tan x=\frac{\sin x}{\cos^3x}.$$
+$$
+f(x+h)g(x+h)-f(x)g(x)
+=\big(f(x+h)-f(x)\big)g(x+h)
++f(x)\big(g(x+h)-g(x)\big).
+$$
 
-This reverse check catches a missing chain-rule factor or a sign error. It is often quicker and more reliable than repeating the integration from scratch.
+Divide by $h$ and let $h\to0$. The two average rates approach $f'$ and $g'$, giving
 
-**Your turn:** Find $\int x\cos x\,dx$. Choose $u=x$ and $dv=\cos x\,dx$, so $du=dx$ and $v=\sin x$. By parts, the result is $x\sin x+\cos x+C$; differentiating verifies it.
+$$
+(fg)'=f'g+fg'.
+$$
+
+For $y=x^2e^x$, take $f=x^2$ and $g=e^x$:
+
+$$
+y'=2xe^x+x^2e^x=e^x(x^2+2x).
+$$
+
+Do not differentiate both factors and multiply their derivatives; that would ignore the two separate sources of change.
+
+### Chain rule: account for an inside input changing first
+
+Suppose $y=F(u)$ and $u=g(x)$. A small change in $x$ first changes $u$, which then changes $y$. Multiplying these two rates gives
+
+$$
+\frac{dy}{dx}=\frac{dy}{du}\frac{du}{dx}=F'(g(x))g'(x).
+$$
+
+For $y=\sin(3x)$, the outside rule is sine and the inside rule is $3x$:
+
+$$
+y'=\cos(3x)\cdot3=3\cos(3x).
+$$
+
+The factor 3 is the rate at which the inside angle changes. Leaving it out gives the wrong rate.
+
+### Quotient rule
+
+For $y=f/g$, the quotient rule is
+
+$$
+\left(\frac{f}{g}\right)'=\frac{f'g-fg'}{g^2},\qquad g\ne0.
+$$
+
+The denominator is squared, and the numerator order is “derivative of top times bottom minus top times derivative of bottom.” For
+
+$$
+y=\frac{\sin(3x)}{x+1},
+$$
+
+combine chain and quotient rules:
+
+$$
+y'=\frac{3(x+1)\cos(3x)-\sin(3x)}{(x+1)^2},\qquad x\ne-1.
+$$
+
+The restriction $x\ne-1$ is inherited from the original function.
+
+## Integrals: build a total from many tiny contributions
+
+Suppose a car moves at velocity $v(t)$. Over a short time step $\Delta t$, its change in position is approximately $v(t)\Delta t$. Add these changes over many intervals:
+
+$$
+\text{total change}\approx
+v(t_1)\Delta t+v(t_2)\Delta t+\cdots+v(t_n)\Delta t.
+$$
+
+As the intervals become thinner, this sum approaches the **definite integral**:
+
+$$
+\int_a^b v(t)\,dt.
+$$
+
+The integral adds signed changes. Forward motion is positive; backward motion is negative. Therefore it gives net displacement. Total distance instead adds the magnitude of velocity:
+
+$$
+\text{distance}=\int_a^b |v(t)|\,dt.
+$$
+
+For a graph of $f(x)$ above the horizontal axis, $\int_a^b f(x)\,dx$ is the area under the curve. If the graph dips below the axis, those parts count negatively. The integral is a signed accumulation, not automatically a geometric area.
+
+### Begin with a constant rate
+
+If a tap pours water at a constant rate $r$ litres per minute for $T$ minutes, then it contributes approximately $r\Delta t$ in each short time interval. There are about $T/\Delta t$ intervals, so the total is
+
+$$
+\frac{T}{\Delta t}(r\Delta t)=rT.
+$$
+
+This is the rectangle area “height times width.” In integral notation,
+
+$$
+\int_0^T r\,dt=rT.
+$$
+
+When the rate varies, the thin rectangles have different heights; the integral adds them all.
+
+## Why integration and differentiation undo one another
+
+If $F'(x)=f(x)$, then $f$ is the rate of change of $F$. Adding that rate from $a$ to $b$ recovers the total change in $F$. This is the Fundamental Theorem of Calculus:
+
+$$
+\int_a^b f(x)\,dx=F(b)-F(a).
+$$
+
+An **antiderivative** $F$ is any function whose derivative is $f$. For example, since
+
+$$
+\frac{d}{dx}\left(\frac{x^3}{3}\right)=x^2,
+$$
+
+one antiderivative of $x^2$ is $x^3/3$. Every function $x^3/3+C$ is also an antiderivative because the derivative of a constant is zero. Hence
+
+$$
+\int x^2\,dx=\frac{x^3}{3}+C.
+$$
+
+The symbol $C$ is needed for an indefinite integral, which describes all antiderivatives. A definite integral has bounds and gives one accumulated value:
+
+$$
+\int_0^2 x^2\,dx
+=\left[\frac{x^3}{3}\right]_0^2
+=\frac83.
+$$
+
+The brackets mean “evaluate at the upper bound, then subtract the lower-bound value.”
+
+## Choose an integration method by recognizing a reverse derivative
+
+### Substitution reverses the chain rule
+
+If part of an integrand is an inside function and another factor is its derivative, set $u$ equal to the inside expression. For example:
+
+$$
+\int 2x\cos(x^2)\,dx.
+$$
+
+Choose $u=x^2$, so $du=2x\,dx$. The integral becomes
+
+$$
+\int\cos u\,du=\sin u+C=\sin(x^2)+C.
+$$
+
+Check by differentiation: the derivative of $\sin(x^2)$ is $2x\cos(x^2)$, exactly the integrand.
+
+### Integration by parts reverses the product rule
+
+The product rule says $(uv)'=u'v+uv'$. Rearranging and integrating gives
+
+$$
+\int u\,dv=uv-\int v\,du.
+$$
+
+For $\int xe^x\,dx$, choose $u=x$ (it simplifies when differentiated) and $dv=e^x\,dx$:
+
+$$
+du=dx,\qquad v=e^x.
+$$
+
+Then
+
+$$
+\int xe^x\,dx=xe^x-\int e^x\,dx=e^x(x-1)+C.
+$$
+
+Differentiate the answer to check it.
+
+## Practice the reasoning
+
+1. Differentiate $y=(x^2+1)^3$. Identify the inside function and explain where the factor $2x$ comes from.
+2. A particle has velocity $v(t)=3t^2$ metres per second for $0\le t\le2$. Find its displacement.
+3. Evaluate $\int_0^1(3x^2+2x)\,dx$ using an antiderivative.
+
+**Check:** 1. $y'=3(x^2+1)^2(2x)$; the inner function $x^2+1$ changes at rate $2x$. 2. $\int_0^2 3t^2\,dt=[t^3]_0^2=8$ metres. 3. An antiderivative is $x^3+x^2$, so the value is 2.

@@ -1,96 +1,191 @@
 # Evaluation of Line and Multiple Integrals
 
-## From adding along a path to adding over a region
+## The core idea: add tiny contributions over the object
 
-Imagine measuring rain collected while walking along a winding path. You would add the rain encountered at each tiny piece of the path. If instead you wanted the total rain over a field, you would divide the field into tiny patches and add their contributions. Integrals extend this familiar idea of accumulation:
+An ordinary integral adds contributions along an interval. The same idea works when the thing being covered is a curve, a flat region, or a solid:
 
-- An ordinary integral adds along an interval.
 - A **line integral** adds along a curve.
 - A **double integral** adds over a two-dimensional region.
 - A **triple integral** adds throughout a three-dimensional volume.
 
-The symbol after the integral tells you what is being traversed: $ds$ is a small length, $dA$ a small area, and $dV$ a small volume. The integrand tells you how much quantity is contributed at each location.
+The small element tells you what you are covering: $ds$ is a small length, $dA$ a small area, and $dV$ a small volume. The function inside the integral tells how much quantity there is at each location.
 
-## Adding a scalar quantity along a curve
+## Scalar line integrals: add a value along a path
 
-Suppose a curve $C$ is traced by a position vector $\mathbf r(t)$ for $a\le t\le b$. The parameter $t$ is a way to move along the curve; it need not represent time. At each parameter value, $\mathbf r(t)$ gives the point on the curve.
+Imagine walking along a winding path where the ground has a varying density of fallen leaves. A scalar field $f(x,y)$ assigns a number to each point. To find the total weighted amount along the path, multiply each tiny length by the field value there and add.
 
-For a scalar field $f$—a rule assigning one number to each point—the line integral with respect to arc length is
+### Why the speed factor appears
 
-$$\int_C f\,ds=\int_a^b f(\mathbf r(t))\,\|\mathbf r'(t)\|\,dt.$$
+Describe the curve using a parameter $t$:
 
-Here, $f(\mathbf r(t))$ is the value at the current point. The derivative $\mathbf r'(t)$ points along the curve, and its magnitude $\|\mathbf r'(t)\|$ is the speed at which the parametrization moves. Thus $\|\mathbf r'(t)\|dt$ is a tiny piece of actual distance, $ds$. This factor matters: without it, the calculation would weight parameter steps rather than lengths.
+$$
+\mathbf r(t)=(x(t),y(t)),\qquad a\le t\le b.
+$$
 
-### Worked example: accumulate along a quarter-circle
+A tiny change $dt$ moves the point by approximately $\mathbf r'(t)dt$. Its length is approximately the magnitude of that movement:
 
-Let $C$ be the quarter-circle $x=\cos t$, $y=\sin t$, $0\le t\le\pi/2$, and let $f(x,y)=xy$. This models adding the value of $xy$ at every tiny piece of the arc.
+$$
+ds=\|\mathbf r'(t)\|\,dt.
+$$
 
-The position is $\mathbf r(t)=(\cos t,\sin t)$, so $\mathbf r'(t)=(-\sin t,\cos t)$ and $\|\mathbf r'(t)\|=1$. The curve is traversed at unit speed, so $ds=dt$. Also, $f(\mathbf r(t))=\cos t\sin t$. Therefore
+So each tiny contribution is field value times tiny length, $f(\mathbf r(t))\|\mathbf r'(t)\|dt$. Adding these contributions gives
 
-$$\int_C xy\,ds=\int_0^{\pi/2}\cos t\sin t\,dt=\frac12.$$
+$$
+\int_C f\,ds
+=\int_a^b f(\mathbf r(t))\,\|\mathbf r'(t)\|\,dt.
+$$
 
-**Pause and check:** If the same circle were parametrized with a different speed, would the value of this scalar line integral change? No. The speed factor converts each parameter step into the corresponding physical arc length, so the curve and integrand—not the choice of parameter speed—determine the result.
+The norm $\|\mathbf r'(t)\|$ is the speed along the curve. It converts a parameter step into a physical distance. Without it, changing how quickly the parameter traces the path would change the answer.
 
-## Work done by a vector field
+### Worked example: quarter-circle path
 
-A vector field assigns a vector to each point. For example, wind has both strength and direction at every location. If an object moves through that field, only the part of the field pointing along the motion contributes to the field's work.
+Take the quarter-circle $x=\cos t$, $y=\sin t$, $0\le t\le\pi/2$, and the scalar field $f(x,y)=xy$.
 
-For a vector field $\mathbf F$ along a parametrized curve,
+1. Position: $\mathbf r(t)=(\cos t,\sin t)$.
+2. Velocity along the parameter: $\mathbf r'(t)=(-\sin t,\cos t)$.
+3. Speed: $\|\mathbf r'(t)\|=\sqrt{\sin^2t+\cos^2t}=1$.
+4. Field on the path: $f(\mathbf r(t))=\cos t\sin t$.
 
-$$\int_C\mathbf F\cdot d\mathbf r=\int_a^b\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt.$$
+Therefore
 
-The dot product $\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)$ measures the field's contribution in the direction of travel. A field pushing with the motion contributes positively; one pushing against it contributes negatively; a perpendicular field contributes zero.
+$$
+\int_Cxy\,ds
+=\int_0^{\pi/2}\cos t\sin t\,dt
+=\left[-\frac12\cos^2t\right]_0^{\pi/2}
+=\frac12.
+$$
 
-### Worked example: direction changes the sign
+If we traversed the same arc in reverse, the scalar line integral would remain $\frac12$: length has no direction.
 
-Take the constant field $\mathbf F=(1,0)$ and move along the straight path $\mathbf r(t)=(t,t)$, $0\le t\le1$. Then $\mathbf r'(t)=(1,1)$, so
+## Vector line integrals: add the part of a force along motion
 
-$$\int_C\mathbf F\cdot d\mathbf r=\int_0^1(1,0)\cdot(1,1)\,dt=\int_0^1 1\,dt=1.$$
+A vector field $\mathbf F$ assigns a direction and magnitude to each point, like wind or force. During a small displacement $d\mathbf r$, only the component of the force along the displacement does work. The dot product selects that component:
 
-The field points right, and the path moves partly right, so the work is positive. Traversing the same path in reverse changes $\mathbf r'(t)$ to its opposite and changes the sign of the work integral. In contrast, the scalar arc-length integral $\int_C f\,ds$ does not change when the path is reversed.
+$$
+dW=\mathbf F\cdot d\mathbf r.
+$$
 
-## Adding over a region: double integrals
+Along $\mathbf r(t)$, the displacement is $d\mathbf r=\mathbf r'(t)dt$, so adding the small work contributions gives
 
-Picture a rectangle covered by many tiny tiles. If the tile at $(x,y)$ has area $dA$ and the quantity per unit area there is $f(x,y)$, then that tile contributes approximately $f(x,y)dA$. Adding all the tiles and taking the limit gives a double integral.
+$$
+\int_C\mathbf F\cdot d\mathbf r
+=\int_a^b\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt.
+$$
 
-For a rectangle $R=[a,b]\times[c,d]$,
+Unlike the scalar length integral, this depends on orientation: reversing direction reverses $d\mathbf r$ and changes the sign.
 
-$$\iint_R f(x,y)\,dA=\int_a^b\int_c^d f(x,y)\,dy\,dx.$$
+### Worked example: a constant force along a diagonal
 
-The inner integral first accumulates across $y$ while $x$ is held fixed. The outer integral then sweeps those accumulated values across $x$. Reversing the order is possible when the region and integrand allow it, but the bounds must still describe the same region exactly once.
+Let $\mathbf F=(1,0)$ and move along $\mathbf r(t)=(t,t)$, $0\le t\le1$. Then $\mathbf r'(t)=(1,1)$, and
 
-### Worked example: a signed total can be negative
+$$
+\int_C\mathbf F\cdot d\mathbf r
+=\int_0^1(1,0)\cdot(1,1)\,dt
+=\int_0^1 1\,dt
+=1.
+$$
 
-Evaluate the accumulation of $2x-4y^3$ over the square $1\le x\le3$, $1\le y\le3$:
+The force points right; the path has a rightward component, so the work is positive. Reversing the path gives work $-1$. A perpendicular force would contribute zero because its dot product with the direction of motion is zero.
 
-$$\int_1^3\int_1^3(2x-4y^3)\,dy\,dx=\int_1^3(4x-80)\,dx=-144.$$
+## Double integrals: add over tiny area patches
 
-For each fixed $x$, integrating with respect to $y$ gives $2x(3-1)-(3^4-1^4)=4x-80$. The result is negative because the integrand is negative across this square. A double integral is a **signed** total; it represents area or volume only for particular integrands and setups.
+Picture a field spread over a flat region, such as a varying mass density on a sheet. Divide the region into tiny patches. A patch with area $\Delta A$ near $(x_{ij},y_{ij})$ contributes approximately $f(x_{ij},y_{ij})\Delta A$. Summing all patches and taking the limit gives
 
-**Try before reading on:** For $R=[0,2]\times[0,1]$, set up the total of $x+y$ over the region. The $y$-slice is accumulated first, then swept across $x$:
+$$
+\iint_R f(x,y)\,dA.
+$$
 
-$$\iint_R(x+y)\,dA=\int_0^2\int_0^1(x+y)\,dy\,dx.$$
+This is the two-dimensional version of a Riemann sum. For a rectangle $R=[a,b]\times[c,d]$, the patches can be arranged in rows and columns. Accumulate along $y$ first, holding $x$ fixed, then sweep across $x$:
 
-## Adding throughout a solid: triple integrals
+$$
+\iint_R f(x,y)\,dA
+=\int_a^b\left(\int_c^d f(x,y)\,dy\right)dx.
+$$
 
-The same idea extends to a three-dimensional region $E$. Each tiny box contributes approximately $f(x,y,z)dV$, so
+The inner integral produces a value for each fixed $x$. The outer integral adds those values across the rectangle. Under the usual integrability conditions, the order may be reversed if the limits are changed to describe the same region.
 
-$$\iiint_E f(x,y,z)\,dV$$
+### Worked example: evaluate an iterated integral
 
-adds the field throughout the volume. If $f=1$, every tiny box contributes only its volume, and $\iiint_E1\,dV$ is the volume of $E$. If $f$ is a density, the integral gives total mass.
+Find the total of $f(x,y)=x+2y$ over $0\le x\le1$, $0\le y\le2$:
+
+$$
+\begin{aligned}
+\iint_R(x+2y)\,dA
+&=\int_0^1\int_0^2(x+2y)\,dy\,dx\\
+&=\int_0^1[xy+y^2]_{y=0}^{y=2}\,dx\\
+&=\int_0^1(2x+4)\,dx\\
+&=[x^2+4x]_0^1=5.
+\end{aligned}
+$$
+
+Inside the inner integral, $x$ is fixed, so the antiderivative with respect to $y$ is $xy+y^2$. The outer integral then adds these slice totals.
+
+### Bounds describe the region, not just the integrand
+
+For a nonrectangular region, sketch it and determine which variable runs between which curves. For the triangular region $0\le x\le1$, $0\le y\le x$, one valid setup is
+
+$$
+\iint_R 1\,dA=\int_0^1\int_0^x1\,dy\,dx.
+$$
+
+It gives $\int_0^1x\,dx=1/2$, the triangle's area. Reversing the order describes the same triangle as $0\le y\le1$, $y\le x\le1$:
+
+$$
+\int_0^1\int_y^1 1\,dx\,dy=\frac12.
+$$
+
+Correct bounds cover the region once, with no gaps or overlap.
+
+## Triple integrals: add over tiny volume pieces
+
+In a solid $E$, a tiny box has volume $dV$. If $f(x,y,z)$ is density, its contribution is approximately $f(x,y,z)dV$, so the total is
+
+$$
+\iiint_E f(x,y,z)\,dV.
+$$
+
+When $f=1$, the integral is just the volume. For example, a unit cube has
+
+$$
+\iiint_{[0,1]^3}1\,dV
+=\int_0^1\int_0^1\int_0^1 1\,dz\,dy\,dx
+=1.
+$$
+
+If $f$ is mass per unit volume, the integral gives total mass. The meaning depends on what the integrand measures.
+
+## Volumes from rotating a curve
+
+Suppose the region under $y=f(x)\ge0$ is rotated around the $x$-axis. At position $x$, a thin slice becomes a disk with radius $f(x)$ and area $\pi[f(x)]^2$. A thin disk of thickness $dx$ has volume approximately its area times its thickness. Add all the disks:
+
+$$
+V=\int_a^b\pi[f(x)]^2\,dx
+=\pi\int_a^b[f(x)]^2\,dx.
+$$
+
+For example, rotating $y=x$ from $x=0$ to $x=1$ gives
+
+$$
+V=\pi\int_0^1x^2\,dx
+=\pi\left[\frac{x^3}{3}\right]_0^1
+=\frac{\pi}{3}.
+$$
+
+The radius must be measured from the axis of rotation. If the region has a hole, washer or shell methods may be needed instead of this disk formula.
 
 ## A dependable setup routine
 
-Before calculating, identify what is being accumulated and what shape is being covered:
+1. Identify the object: curve, planar region, or solid.
+2. Decide what the integrand represents (density, work, area, volume, or another quantity).
+3. Describe the path or region exactly once using a parametrization or bounds.
+4. Choose the correct small element: $ds$, $d\mathbf r$, $dA$, or $dV$.
+5. Substitute the parametrization or bounds before integrating.
+6. Check units, signs, orientation, and whether the bounds cover the intended object.
 
-1. Decide whether the object is a curve, a planar region, or a solid.
-2. Describe it once: use a parametrization for a curve or bounds for a region.
-3. Choose the correct element: $ds$ for arc length, $d\mathbf r$ for directed motion, $dA$ for area, or $dV$ for volume.
-4. Substitute the parametrization or bounds into the integrand.
-5. Integrate in the stated order, then check signs, units, and—when using $d\mathbf r$—orientation.
+## Practice before checking
 
-The disk method for a solid of revolution is one application of area accumulation: rotating the region under $y=f(x)\ge0$ about the $x$-axis creates circular cross-sections of area $\pi[f(x)]^2$, so
+1. For the quarter-circle $x=\cos t$, $y=\sin t$, find the speed and $ds$.
+2. Set up $\iint_R(x+y)\,dA$ for $0\le x\le2$, $0\le y\le1$, integrating $y$ first.
+3. What does $\iiint_E1\,dV$ represent?
 
-$$V=\pi\int_a^b[f(x)]^2\,dx,$$
-
-provided the region and axis match those assumptions.
+**Check:** 1. Speed is 1, so $ds=dt$. 2. $\int_0^2\int_0^1(x+y)\,dy\,dx$. 3. The volume of $E$.
