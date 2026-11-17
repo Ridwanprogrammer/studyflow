@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db import models
-from .models import Discipline, Course, Topic, UserProgress, GlossaryTerm
+from .models import Discipline, Course, Topic, UserProgress, LearningSession, GlossaryTerm
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -151,6 +151,33 @@ class UserProgressSerializer(serializers.ModelSerializer):
             'started_at', 'completed_at', 'updated_at'
         ]
         read_only_fields = ['id', 'started_at', 'completed_at', 'updated_at']
+
+
+class LearningSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LearningSession
+        fields = [
+            'id', 'topic', 'current_node_id', 'responses', 'concept_states',
+            'misconceptions', 'pending_choice_id', 'is_completed', 'updated_at',
+        ]
+        read_only_fields = ['id', 'topic', 'updated_at']
+
+
+class LearningSessionUpdateSerializer(serializers.Serializer):
+    current_node_id = serializers.CharField(max_length=100)
+    responses = serializers.ListField(
+        child=serializers.DictField(),
+        max_length=500,
+    )
+    concept_states = serializers.DictField(
+        child=serializers.ChoiceField(choices=['understood', 'needs_review']),
+    )
+    misconceptions = serializers.ListField(
+        child=serializers.CharField(max_length=100),
+        max_length=200,
+    )
+    pending_choice_id = serializers.CharField(max_length=100, allow_blank=True)
+    is_completed = serializers.BooleanField()
 
 
 class GlossaryTermListSerializer(serializers.ModelSerializer):

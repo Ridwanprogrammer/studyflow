@@ -5,6 +5,7 @@ from .views import (
     CourseViewSet,
     TopicViewSet,
     UserProgressViewSet,
+    LearningSessionViewSet,
     GlossaryTermViewSet,
 )
 
@@ -14,6 +15,7 @@ router = DefaultRouter()
 # course detail route.
 router.register(r'disciplines', DisciplineViewSet, basename='discipline')
 router.register(r'topics', TopicViewSet, basename='topic')
+router.register(r'learning-sessions', LearningSessionViewSet, basename='learning-session')
 router.register(r'progress', UserProgressViewSet, basename='progress')
 router.register(r'glossary', GlossaryTermViewSet, basename='course-glossary')
 router.register(r'', CourseViewSet, basename='course')

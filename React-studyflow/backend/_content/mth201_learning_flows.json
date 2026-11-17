@@ -1,0 +1,416 @@
+{
+  "mth201-t1": {
+    "version": 1,
+    "startNodeId": "t1-machine",
+    "nodes": [
+      {
+        "id": "t1-machine",
+        "conceptId": "function-rule",
+        "title": "A function is a rule that returns one answer",
+        "explanation": "Think of a function as a dependable machine: give it an allowed input, let it follow one rule, and it returns exactly one output. Different inputs may share an output, but one input cannot produce two different outputs.",
+        "example": "For $f(x)=x^2+3$, input $2$ gives $f(2)=2^2+3=7$. The notation $f(2)$ means “the output when the input is 2,” not $f$ multiplied by 2.",
+        "question": {
+          "prompt": "A rule sends input 4 to both 6 and 9. Which reason tells you whether it is a function?",
+          "choices": [
+            {"id": "one-output", "text": "It is not a function: one input has two outputs."},
+            {"id": "many-inputs", "text": "It is a function: different inputs are allowed to share outputs."},
+            {"id": "input-size", "text": "It is not a function because 4 is not a real number."}
+          ]
+        },
+        "outcomes": {
+          "one-output": {"feedback": "Exactly. The defining rule is one output for every allowed input. The output does not have to be unique to that input.", "conceptStatus": "understood", "nextNodeId": "t1-domain-range"},
+          "many-inputs": {"feedback": "Different inputs may share an output, but this example gives one input two outputs. Check the direction: the restriction is one output per input.", "conceptStatus": "needs_review", "misconceptionId": "function-allows-two-outputs", "nextNodeId": "t1-machine"},
+          "input-size": {"feedback": "The number 4 is a real number. The issue is not its size: the same input was assigned two outputs.", "conceptStatus": "needs_review", "misconceptionId": "function-input-must-be-unique", "nextNodeId": "t1-machine"}
+        }
+      },
+      {
+        "id": "t1-domain-range",
+        "conceptId": "domain-range",
+        "title": "Domain is what can go in; range is what comes out",
+        "explanation": "The domain is the set of permitted inputs. The range is the set of outputs the rule actually produces. A formula may look usable for every real number but still reject some inputs.",
+        "example": "For $f(x)=x^2$ with domain $\\mathbb R$, negative inputs are allowed, but squaring never gives a negative result. Its range is $[0,\\infty)$.",
+        "question": {
+          "prompt": "For $g(x)=\\sqrt{4-x^2}$, why is the real domain $[-2,2]$?",
+          "choices": [
+            {"id": "radicand", "text": "Because a real square root needs $4-x^2\\geq0$, which gives $-2\\leq x\\leq2$."},
+            {"id": "positive-x", "text": "Because square roots only accept positive inputs, so $x$ must be positive."},
+            {"id": "range-equals-domain", "text": "Because every function has the same domain and range."}
+          ]
+        },
+        "outcomes": {
+          "radicand": {"feedback": "Right. Solve the condition inside the root, $4-x^2\\geq0$, and the allowed inputs are exactly from $-2$ to $2$.", "conceptStatus": "understood", "nextNodeId": null},
+          "positive-x": {"feedback": "The input $x$ itself can be negative here. What must be nonnegative is the radicand $4-x^2$.", "conceptStatus": "needs_review", "misconceptionId": "root-restricts-input-sign", "nextNodeId": "t1-domain-range"},
+          "range-equals-domain": {"feedback": "Domain and range answer different questions: allowed inputs versus actual outputs. Recheck which expression must stay real.", "conceptStatus": "needs_review", "misconceptionId": "domain-equals-range", "nextNodeId": "t1-domain-range"}
+        }
+      }
+    ]
+  },
+  "mth201-t2": {
+    "version": 1,
+    "startNodeId": "t2-change",
+    "nodes": [
+      {
+        "id": "t2-change",
+        "conceptId": "derivative-as-rate",
+        "title": "A derivative measures change at one instant",
+        "explanation": "An average speed describes a whole trip. An instantaneous speed describes what is happening at one moment. A derivative is the curve's instantaneous rate of change, built by shrinking an average change interval toward zero.",
+        "example": "For position $s(t)=t^2$, the average velocity from $t=2$ to $t=2+h$ is $\\frac{(2+h)^2-4}{h}=4+h$. As $h$ approaches zero, this approaches $4$ metres per second.",
+        "question": {
+          "prompt": "What does $f'(a)$ represent in the limit definition of a derivative?",
+          "choices": [
+            {"id": "instant-rate", "text": "The rate the output is changing at input $a$, found as nearby average rates approach a limit."},
+            {"id": "total-change", "text": "The total amount of output accumulated from zero to $a$."},
+            {"id": "function-value", "text": "The output value $f(a)$ itself."}
+          ]
+        },
+        "outcomes": {
+          "instant-rate": {"feedback": "Exactly: the derivative is an instantaneous rate, or geometrically the tangent slope at that input.", "conceptStatus": "understood", "nextNodeId": "t2-accumulation"},
+          "total-change": {"feedback": "That describes accumulation, the idea behind integration. A derivative focuses on the rate at one input.", "conceptStatus": "needs_review", "misconceptionId": "derivative-is-total", "nextNodeId": "t2-change"},
+          "function-value": {"feedback": "$f(a)$ is the height. $f'(a)$ is how quickly that height is changing there.", "conceptStatus": "needs_review", "misconceptionId": "derivative-is-function-value", "nextNodeId": "t2-change"}
+        }
+      },
+      {
+        "id": "t2-accumulation",
+        "conceptId": "integral-as-accumulation",
+        "title": "An integral adds many small contributions",
+        "explanation": "If a quantity changes at a rate, a small time slice contributes approximately rate times time. Adding those slices gives the total change. Integration is the limit of that adding process.",
+        "example": "A tap flowing at $3$ litres per minute for $4$ minutes adds $3\\times4=12$ litres. If its flow rate varies, $\\int_0^4 r(t)\\,dt$ adds the changing contributions instead.",
+        "question": {
+          "prompt": "A particle has velocity $v(t)$ along a line. What does $\\int_a^b v(t)\\,dt$ give?",
+          "choices": [
+            {"id": "displacement", "text": "Net displacement: forward and backward changes count with their signs."},
+            {"id": "speed", "text": "Total distance in every case, even when velocity becomes negative."},
+            {"id": "final-velocity", "text": "The velocity at the final time $b$."}
+          ]
+        },
+        "outcomes": {
+          "displacement": {"feedback": "Correct. The signed integral gives net displacement. Total distance requires $\\int_a^b|v(t)|\\,dt$.", "conceptStatus": "understood", "nextNodeId": null},
+          "speed": {"feedback": "A negative velocity cancels some positive displacement. To add all distance traveled, integrate the speed $|v(t)|$.", "conceptStatus": "needs_review", "misconceptionId": "integral-velocity-is-distance", "nextNodeId": "t2-accumulation"},
+          "final-velocity": {"feedback": "The integral accumulates contributions over the whole interval; it does not select just the endpoint value.", "conceptStatus": "needs_review", "misconceptionId": "integral-is-endpoint-value", "nextNodeId": "t2-accumulation"}
+        }
+      }
+    ]
+  },
+  "mth201-t3": {
+    "version": 1,
+    "startNodeId": "t3-average-instant",
+    "nodes": [
+      {
+        "id": "t3-average-instant",
+        "conceptId": "mvt-average-slope",
+        "title": "An average slope must occur as a tangent slope",
+        "explanation": "If a journey is smooth, its instantaneous speed must match its average speed at least once. The Mean Value Theorem makes the same claim for the slope of a function between two endpoints.",
+        "example": "For $f(x)=x^2$ from $x=1$ to $x=4$, the average slope is $\\frac{16-1}{4-1}=5$. Since $f'(x)=2x$, the tangent slope is 5 at $c=5/2$.",
+        "question": {
+          "prompt": "What does the Mean Value Theorem guarantee when its hypotheses hold on $[a,b]$?",
+          "choices": [
+            {"id": "matching-slope", "text": "At least one interior point has tangent slope equal to the secant's average slope."},
+            {"id": "constant-slope", "text": "The function has the same slope at every point in the interval."},
+            {"id": "endpoint-slope", "text": "The derivative at $a$ equals the derivative at $b$."}
+          ]
+        },
+        "outcomes": {
+          "matching-slope": {"feedback": "Yes. At some $c$ inside $(a,b)$, $f'(c)=\\frac{f(b)-f(a)}{b-a}$.", "conceptStatus": "understood", "nextNodeId": "t3-hypotheses"},
+          "constant-slope": {"feedback": "The theorem guarantees one matching point, not that the whole curve is a straight line.", "conceptStatus": "needs_review", "misconceptionId": "mvt-constant-rate", "nextNodeId": "t3-average-instant"},
+          "endpoint-slope": {"feedback": "It compares an interior tangent slope to the average endpoint slope, not the derivatives at the endpoints.", "conceptStatus": "needs_review", "misconceptionId": "mvt-endpoint-derivatives", "nextNodeId": "t3-average-instant"}
+        }
+      },
+      {
+        "id": "t3-hypotheses",
+        "conceptId": "mvt-hypotheses",
+        "title": "Smoothness conditions make the guarantee possible",
+        "explanation": "The function must be continuous on the closed interval and differentiable inside it. A jump or an interior corner can break the path needed for the theorem's conclusion.",
+        "example": "For $f(x)=|x|$ on $[-1,1]$, the endpoint values match, but the corner at 0 is not differentiable. No interior point has derivative 0, so Rolle's theorem cannot be applied.",
+        "question": {
+          "prompt": "Why can we not use the Mean Value Theorem on $f(x)=1/x$ over $[-1,1]$?",
+          "choices": [
+            {"id": "discontinuity", "text": "It is not continuous on the whole interval; it is undefined at 0."},
+            {"id": "different-endpoints", "text": "The theorem only applies when endpoint values are equal."},
+            {"id": "nonzero-function", "text": "The theorem only applies to functions whose values include zero."}
+          ]
+        },
+        "outcomes": {
+          "discontinuity": {"feedback": "Right. Continuity on every point of the closed interval is required, and $1/x$ has a break at 0.", "conceptStatus": "understood", "nextNodeId": null},
+          "different-endpoints": {"feedback": "The Mean Value Theorem allows unequal endpoint values. Equal values are needed only for Rolle's special case.", "conceptStatus": "needs_review", "misconceptionId": "mvt-requires-equal-endpoints", "nextNodeId": "t3-hypotheses"},
+          "nonzero-function": {"feedback": "The function may take positive and negative values. What matters here is continuity and differentiability.", "conceptStatus": "needs_review", "misconceptionId": "mvt-requires-zero", "nextNodeId": "t3-hypotheses"}
+        }
+      }
+    ]
+  },
+  "mth201-t4": {
+    "version": 1,
+    "startNodeId": "t4-local-model",
+    "nodes": [
+      {
+        "id": "t4-local-model",
+        "conceptId": "taylor-local-model",
+        "title": "A Taylor polynomial copies a function near one point",
+        "explanation": "A complicated curve can be hard to calculate with, but near a chosen centre $a$ it can be approximated by a polynomial. We choose its coefficients so the polynomial matches the function's value, slope, curvature, and further derivatives at $a$.",
+        "example": "For $f(x)=e^x$ near $a=0$, the first terms are $1+x+\\frac{x^2}{2!}$. At $x=0.1$, this gives $1.105$, close to $e^{0.1}\\approx1.10517$.",
+        "question": {
+          "prompt": "Why does the Taylor polynomial begin with $f(a)$ as its constant term?",
+          "choices": [
+            {"id": "match-value", "text": "So the polynomial has the same value as $f$ at the centre $a$."},
+            {"id": "make-zero", "text": "Because every function must be zero at the centre."},
+            {"id": "factorial-rule", "text": "Because the factorial in every later term forces the constant to be $f(a)$."}
+          ]
+        },
+        "outcomes": {
+          "match-value": {"feedback": "Exactly. At $x=a$, all positive powers of $(x-a)$ vanish, so the polynomial equals $f(a)$.", "conceptStatus": "understood", "nextNodeId": "t4-coefficients"},
+          "make-zero": {"feedback": "The function need not be zero at the centre. The polynomial's constant term is chosen to match whatever value $f(a)$ has.", "conceptStatus": "needs_review", "misconceptionId": "taylor-centre-is-zero", "nextNodeId": "t4-local-model"},
+          "factorial-rule": {"feedback": "The constant term is chosen by matching the function's value. Factorials appear when matching higher derivatives.", "conceptStatus": "needs_review", "misconceptionId": "taylor-constant-from-factorial", "nextNodeId": "t4-local-model"}
+        }
+      },
+      {
+        "id": "t4-coefficients",
+        "conceptId": "taylor-coefficients",
+        "title": "Derivative matching creates the coefficients",
+        "explanation": "Write $P_n(x)=c_0+c_1(x-a)+c_2(x-a)^2+\\cdots$. Matching values gives $c_0=f(a)$. Differentiating once and setting $x=a$ gives $c_1=f'(a)$. Differentiating twice gives $2!c_2=f''(a)$, so $c_2=f''(a)/2!$. The same pattern gives $c_k=f^{(k)}(a)/k!$.",
+        "example": "For $f(x)=e^x$ at $a=0$, every derivative equals 1. Thus the terms are $1+x+\\frac{x^2}{2!}+\\frac{x^3}{3!}+\\cdots$. The factorial divides out the repeated factors produced by differentiating powers.",
+        "question": {
+          "prompt": "Why is the coefficient of $(x-a)^2$ equal to $f''(a)/2!$?",
+          "choices": [
+            {"id": "second-derivative", "text": "The second derivative of $c_2(x-a)^2$ at $a$ is $2!c_2$, so it must equal $f''(a)$."},
+            {"id": "square-distance", "text": "Because distance from the centre is always divided by two."},
+            {"id": "second-power", "text": "Because every coefficient is the function value divided by its power."}
+          ]
+        },
+        "outcomes": {
+          "second-derivative": {"feedback": "Correct. Two differentiations bring down the factor $2!$, so dividing by it makes the second derivatives match.", "conceptStatus": "understood", "nextNodeId": null},
+          "square-distance": {"feedback": "The division is not an arbitrary distance rule. It compensates for the factor produced when differentiating $(x-a)^2$ twice.", "conceptStatus": "needs_review", "misconceptionId": "taylor-factorial-arbitrary", "nextNodeId": "t4-coefficients"},
+          "second-power": {"feedback": "Each coefficient uses the matching derivative $f^{(k)}(a)$, not always the function value. The factorial comes from differentiating the power.", "conceptStatus": "needs_review", "misconceptionId": "taylor-coefficient-value", "nextNodeId": "t4-coefficients"}
+        }
+      }
+    ]
+  },
+  "mth201-t5": {
+    "version": 1,
+    "startNodeId": "t5-inputs",
+    "nodes": [
+      {
+        "id": "t5-inputs",
+        "conceptId": "multivariable-inputs",
+        "title": "Several inputs locate one point",
+        "explanation": "A function of several variables takes a whole tuple of inputs. Each coordinate describes one independent quantity, and the rule returns one output for that combination.",
+        "example": "A rectangular field's area can be written $A(l,w)=lw$. The inputs are length and width; a field 5 m by 3 m has area $A(5,3)=15\\text{ m}^2$.",
+        "question": {
+          "prompt": "For $V(l,w,h)=lwh$, what does one input $(l,w,h)$ represent?",
+          "choices": [
+            {"id": "three-measures", "text": "One combination of length, width, and height, which produces one volume."},
+            {"id": "three-outputs", "text": "Three separate outputs, one for each variable."},
+            {"id": "one-input", "text": "Only the length; the other symbols are fixed constants."}
+          ]
+        },
+        "outcomes": {
+          "three-measures": {"feedback": "Yes. The triple is one input point in three-dimensional input space, and the rule returns one volume.", "conceptStatus": "understood", "nextNodeId": "t5-domain"},
+          "three-outputs": {"feedback": "The three variables form one combined input. The function still returns a single value.", "conceptStatus": "needs_review", "misconceptionId": "multivariable-many-outputs", "nextNodeId": "t5-inputs"},
+          "one-input": {"feedback": "Here all three are independent inputs. Changing any one changes the volume.", "conceptStatus": "needs_review", "misconceptionId": "multivariable-fixed-inputs", "nextNodeId": "t5-inputs"}
+        }
+      },
+      {
+        "id": "t5-domain",
+        "conceptId": "multivariable-domain",
+        "title": "The domain is the set of allowed input combinations",
+        "explanation": "For multiple inputs, the domain is not just a list of possible values for one variable. It is the set of combinations that make sense and keep the output defined.",
+        "example": "For $f(x,y)=\\sqrt{9-x^2-y^2}$, the radicand must be nonnegative. The allowed input points satisfy $x^2+y^2\\leq9$, a disk of radius 3.",
+        "question": {
+          "prompt": "Why is the domain of $f(x,y)=\\sqrt{9-x^2-y^2}$ a disk?",
+          "choices": [
+            {"id": "circle-inequality", "text": "The inputs must satisfy $x^2+y^2\\leq9$, which describes all points inside and on a circle."},
+            {"id": "independent-intervals", "text": "Because $x$ and $y$ can be any real values independently."},
+            {"id": "output-zero", "text": "Because the square root forces the output to equal zero."}
+          ]
+        },
+        "outcomes": {
+          "circle-inequality": {"feedback": "Exactly. The inequality restricts pairs $(x,y)$ to a disk; points outside would make the square root non-real.", "conceptStatus": "understood", "nextNodeId": null},
+          "independent-intervals": {"feedback": "The inputs are linked by one condition: $x^2+y^2$ cannot exceed 9.", "conceptStatus": "needs_review", "misconceptionId": "multivariable-domain-independent", "nextNodeId": "t5-domain"},
+          "output-zero": {"feedback": "The output can be positive or zero. The condition restricts the inputs so the radicand stays nonnegative.", "conceptStatus": "needs_review", "misconceptionId": "multivariable-root-output-zero", "nextNodeId": "t5-domain"}
+        }
+      }
+    ]
+  },
+  "mth201-t6": {
+    "version": 1,
+    "startNodeId": "t6-freeze",
+    "nodes": [
+      {
+        "id": "t6-freeze",
+        "conceptId": "partial-derivative-freeze",
+        "title": "A partial derivative changes one input at a time",
+        "explanation": "For a function with several inputs, ask how the output changes when only one input moves and the others are held fixed. This is the partial derivative.",
+        "example": "For $f(x,y)=x^2+3y$, the partial derivative with respect to $x$ is $2x$: treat $y$ like a fixed number while differentiating in $x$.",
+        "question": {
+          "prompt": "When finding $\\frac{\\partial}{\\partial x}(x^2+3y)$, what happens to $y$?",
+          "choices": [
+            {"id": "hold-y", "text": "Hold $y$ constant, so the derivative is $2x$."},
+            {"id": "differentiate-y", "text": "Differentiate $y$ with respect to $x$ as if it were the same variable."},
+            {"id": "set-y-zero", "text": "Set $y=0$ before differentiating."}
+          ]
+        },
+        "outcomes": {
+          "hold-y": {"feedback": "Right. Only $x$ varies, so $3y$ behaves like a constant and contributes zero.", "conceptStatus": "understood", "nextNodeId": "t6-meaning"},
+          "differentiate-y": {"feedback": "The variables are independent here. When taking the partial with respect to $x$, treat $y$ as fixed.", "conceptStatus": "needs_review", "misconceptionId": "partial-variables-change-together", "nextNodeId": "t6-freeze"},
+          "set-y-zero": {"feedback": "Holding a variable constant does not mean setting it to zero. It stays at its current value.", "conceptStatus": "needs_review", "misconceptionId": "partial-held-variable-zero", "nextNodeId": "t6-freeze"}
+        }
+      },
+      {
+        "id": "t6-meaning",
+        "conceptId": "partial-derivative-direction",
+        "title": "The direction tells you which rate you measure",
+        "explanation": "At a point on a surface, changing $x$ while holding $y$ fixed moves in one direction; changing $y$ moves in another. The two partial derivatives can be different because the surface can rise differently in each direction.",
+        "example": "For $f(x,y)=x^2+3y$ at $(2,1)$, $f_x=2x=4$ while $f_y=3$. The surface rises at different rates along the two coordinate directions.",
+        "question": {
+          "prompt": "At $(2,1)$, what is $f_y$ for $f(x,y)=x^2+3y$, and what does it mean?",
+          "choices": [
+            {"id": "three", "text": "$3$: the rate of output change as $y$ changes while $x$ stays fixed."},
+            {"id": "four", "text": "$4$: both partial derivatives must equal $f_x$."},
+            {"id": "seven", "text": "$7$: the function value is always the partial derivative."}
+          ]
+        },
+        "outcomes": {
+          "three": {"feedback": "Correct. The $3y$ term changes at rate 3 with respect to $y$; the $x^2$ term stays fixed.", "conceptStatus": "understood", "nextNodeId": null},
+          "four": {"feedback": "$4$ is $f_x$ at this point. The subscript $y$ tells you to vary $y$ instead.", "conceptStatus": "needs_review", "misconceptionId": "partial-subscript-ignored", "nextNodeId": "t6-meaning"},
+          "seven": {"feedback": "The function value is 7, but $f_y$ measures a rate. Differentiate with respect to $y$ while holding $x$ fixed.", "conceptStatus": "needs_review", "misconceptionId": "partial-is-function-value", "nextNodeId": "t6-meaning"}
+        }
+      }
+    ]
+  },
+  "mth201-t7": {
+    "version": 1,
+    "startNodeId": "t7-chain",
+    "nodes": [
+      {
+        "id": "t7-chain",
+        "conceptId": "chain-rule-dependence",
+        "title": "The chain rule follows a chain of changing quantities",
+        "explanation": "If $x$ changes an intermediate quantity $u$, and $u$ changes $y$, then $x$ affects $y$ through both links. Multiply the rates along that path.",
+        "example": "If $y=u^2$ and $u=3x$, then $\\frac{dy}{dx}=\\frac{dy}{du}\\frac{du}{dx}=2u\\cdot3=18x$ after substituting $u=3x$.",
+        "question": {
+          "prompt": "For $y=(3x)^2$, why does the derivative include a factor of 3?",
+          "choices": [
+            {"id": "inside-rate", "text": "Because the inside quantity $u=3x$ changes at rate $du/dx=3$."},
+            {"id": "square-rule", "text": "Because squaring always adds 3 to the derivative."},
+            {"id": "constant-factor", "text": "Because 3 is a constant and constants are always multiplied into every derivative."}
+          ]
+        },
+        "outcomes": {
+          "inside-rate": {"feedback": "Exactly. The outer derivative gives $2u$, and the inner rate contributes the additional factor 3.", "conceptStatus": "understood", "nextNodeId": "t7-constraint"},
+          "square-rule": {"feedback": "The factor 3 comes from how fast the inside changes, not from squaring itself.", "conceptStatus": "needs_review", "misconceptionId": "chain-rule-factor-from-power", "nextNodeId": "t7-chain"},
+          "constant-factor": {"feedback": "A constant outside a function can be factored, but here the 3 is inside $u=3x$; the chain rule accounts for its rate.", "conceptStatus": "needs_review", "misconceptionId": "chain-rule-constant-confusion", "nextNodeId": "t7-chain"}
+        }
+      },
+      {
+        "id": "t7-constraint",
+        "conceptId": "lagrange-constraint",
+        "title": "A constraint limits which choices are allowed",
+        "explanation": "In constrained optimization, you want the largest or smallest value but cannot choose any point freely. A condition such as $x+y=10$ limits you to one path. At an interior best point on that path, the objective and constraint have parallel gradients.",
+        "example": "To maximize $xy$ with $x+y=10$, substitute $y=10-x$ to get $x(10-x)$. Its maximum occurs at $x=5$, $y=5$. Lagrange multipliers express the same tangency idea using $\\nabla f=\\lambda\\nabla g$.",
+        "question": {
+          "prompt": "What does the condition $\\nabla f=\\lambda\\nabla g$ express at a constrained optimum?",
+          "choices": [
+            {"id": "parallel-gradients", "text": "The objective has no improving direction along the constraint; the gradients are parallel."},
+            {"id": "equal-values", "text": "The objective function and constraint must have the same numerical value."},
+            {"id": "unconstrained", "text": "The constraint can be ignored because the gradients are equal."}
+          ]
+        },
+        "outcomes": {
+          "parallel-gradients": {"feedback": "Right. The constraint blocks the directions that would improve the objective; at the optimum the gradient directions align.", "conceptStatus": "understood", "nextNodeId": null},
+          "equal-values": {"feedback": "$\\lambda$ is a multiplier, not a requirement that $f$ and $g$ have equal values. The equation compares gradient directions.", "conceptStatus": "needs_review", "misconceptionId": "lagrange-values-equal", "nextNodeId": "t7-constraint"},
+          "unconstrained": {"feedback": "The constraint is essential. The multiplier encodes how the objective's gradient aligns with the constraint's gradient.", "conceptStatus": "needs_review", "misconceptionId": "lagrange-ignores-constraint", "nextNodeId": "t7-constraint"}
+        }
+      }
+    ]
+  },
+  "mth201-t8": {
+    "version": 1,
+    "startNodeId": "t8-small-change",
+    "nodes": [
+      {
+        "id": "t8-small-change",
+        "conceptId": "differential-meaning",
+        "title": "A differential estimates the effect of a small input change",
+        "explanation": "A finite change $\\Delta x$ is an actual step from one input to another. The differential $dx$ represents a small chosen input step; the total differential estimates the corresponding output change using the local tangent plane.",
+        "example": "For $y=x^2$ near $x=3$, a small step $dx=0.1$ gives $dy\\approx2x\\,dx=2(3)(0.1)=0.6$. The exact change is $(3.1)^2-3^2=0.61$.",
+        "question": {
+          "prompt": "In the estimate $dy=f'(x)dx$, which quantity is the actual finite input change?",
+          "choices": [
+            {"id": "delta-x", "text": "$\\Delta x$ is the actual finite change; $dx$ is the small step used in the differential estimate."},
+            {"id": "dx-exact", "text": "$dx$ is always exactly equal to the full change in the function."},
+            {"id": "delta-y", "text": "$\\Delta x$ is the change in output, not input."}
+          ]
+        },
+        "outcomes": {
+          "delta-x": {"feedback": "Correct. The differential uses $dx$ to build a local linear estimate; the actual output change is $\\Delta y$.", "conceptStatus": "understood", "nextNodeId": "t8-linear"},
+          "dx-exact": {"feedback": "$dx$ is an input increment, not the exact output change. $dy$ estimates the output change and may differ from $\\Delta y$.", "conceptStatus": "needs_review", "misconceptionId": "differential-is-exact-change", "nextNodeId": "t8-small-change"},
+          "delta-y": {"feedback": "The symbol $\\Delta x$ names an input change. The output change is $\\Delta y$.", "conceptStatus": "needs_review", "misconceptionId": "delta-x-is-output", "nextNodeId": "t8-small-change"}
+        }
+      },
+      {
+        "id": "t8-linear",
+        "conceptId": "linear-approximation",
+        "title": "The tangent gives a nearby straight-line estimate",
+        "explanation": "A smooth curve looks almost straight when you zoom in close enough. The tangent line uses the function value and slope at a known point to estimate a nearby value.",
+        "example": "Near $x=4$, use $f(x)=\\sqrt{x}$ and $f'(x)=1/(2\\sqrt{x})$. At $x=4$, the estimate is $\\sqrt{4+h}\\approx2+h/4$. For $h=0.1$, this gives $2.025$.",
+        "question": {
+          "prompt": "Why can a tangent-line estimate work well when $h$ is small?",
+          "choices": [
+            {"id": "local-straight", "text": "A differentiable curve is well approximated locally by its tangent, so curvature matters less over a tiny step."},
+            {"id": "curve-is-line", "text": "The whole curve becomes a straight line whenever a derivative exists."},
+            {"id": "no-error", "text": "A derivative guarantees the linear estimate has no error."}
+          ]
+        },
+        "outcomes": {
+          "local-straight": {"feedback": "Yes. The tangent captures the local value and slope; the approximation generally improves as the step gets smaller.", "conceptStatus": "understood", "nextNodeId": null},
+          "curve-is-line": {"feedback": "The curve need not be a line globally. The tangent is a local model near the chosen point.", "conceptStatus": "needs_review", "misconceptionId": "linearization-global-line", "nextNodeId": "t8-linear"},
+          "no-error": {"feedback": "Linear approximation usually has some error because a curve can bend away from its tangent.", "conceptStatus": "needs_review", "misconceptionId": "linearization-no-error", "nextNodeId": "t8-linear"}
+        }
+      }
+    ]
+  },
+  "mth201-t9": {
+    "version": 1,
+    "startNodeId": "t9-curve",
+    "nodes": [
+      {
+        "id": "t9-curve",
+        "conceptId": "line-integral",
+        "title": "A line integral adds contributions along a path",
+        "explanation": "A line integral accumulates something while you travel along a curve. The path matters: at each small piece, the field or quantity is sampled at the current location.",
+        "example": "For a scalar field $f$ along a curve, $\\int_C f\\,ds$ adds field value times tiny arc length. For a vector field, $\\int_C\\mathbf F\\cdot d\\mathbf r$ measures the component along the direction of travel, so reversing orientation can change its sign.",
+        "question": {
+          "prompt": "Why can reversing a vector line integral change its sign?",
+          "choices": [
+            {"id": "direction", "text": "The displacement direction reverses, so the field component along the path reverses sign."},
+            {"id": "same-length", "text": "The path length becomes negative even for a scalar integral."},
+            {"id": "no-change", "text": "Reversing a curve never changes a line integral."}
+          ]
+        },
+        "outcomes": {
+          "direction": {"feedback": "Exactly. $d\\mathbf r$ points along the direction of travel, so reversing the path reverses the dot product's sign.", "conceptStatus": "understood", "nextNodeId": "t9-region"},
+          "same-length": {"feedback": "Arc length $ds$ stays nonnegative. The sign change comes from the oriented vector element $d\\mathbf r$.", "conceptStatus": "needs_review", "misconceptionId": "arc-length-negative", "nextNodeId": "t9-curve"},
+          "no-change": {"feedback": "For a scalar integral with $ds$, orientation alone does not change it. A vector integral with $d\\mathbf r$ is orientation-sensitive.", "conceptStatus": "needs_review", "misconceptionId": "line-integral-orientation-insensitive", "nextNodeId": "t9-curve"}
+        }
+      },
+      {
+        "id": "t9-region",
+        "conceptId": "multiple-integral",
+        "title": "A multiple integral accumulates over a region",
+        "explanation": "A double integral adds contributions over a two-dimensional region, and a triple integral adds them through a volume. Bounds describe which points are included and how the accumulation is carried out.",
+        "example": "For a rectangle $0\\leq x\\leq2$, $0\\leq y\\leq1$, the integral $\\int_0^2\\int_0^1(x+y)\\,dy\\,dx$ adds the value of $x+y$ over every point in that rectangle.",
+        "question": {
+          "prompt": "What does $\\iiint_E1\\,dV$ represent for a solid region $E$?",
+          "choices": [
+            {"id": "volume", "text": "The volume of $E$, because each tiny volume element is counted once."},
+            {"id": "surface-area", "text": "The surface area of the boundary of $E$."},
+            {"id": "line-length", "text": "The length of a curve passing through $E$."}
+          ]
+        },
+        "outcomes": {
+          "volume": {"feedback": "Correct. Integrating 1 over the solid simply adds all its tiny volume elements.", "conceptStatus": "understood", "nextNodeId": null},
+          "surface-area": {"feedback": "A volume element $dV$ fills the solid, not just its boundary. Surface area uses a surface element such as $dS$.", "conceptStatus": "needs_review", "misconceptionId": "volume-integral-is-surface", "nextNodeId": "t9-region"},
+          "line-length": {"feedback": "A line integral follows a curve. This triple integral fills a three-dimensional region.", "conceptStatus": "needs_review", "misconceptionId": "volume-integral-is-line", "nextNodeId": "t9-region"}
+        }
+      }
+    ]
+  }
+}

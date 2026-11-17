@@ -12,6 +12,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils.text import slugify
 
+from courses.learning import validate_session_flow
 from courses.models import Course, Discipline, GlossaryTerm, Topic
 
 
@@ -64,6 +65,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         courses = read_json("courses.json")
+        learning_flows = read_json("mth201_learning_flows.json")
         glossary = read_json("glossary.json")
 
         if options["flush"]:
@@ -109,13 +111,21 @@ class Command(BaseCommand):
 
             for topic_order, topic_data in enumerate(course_data.get("topics", []), start=1):
                 notes = topic_data.get("notes", "") or ""
+                learning_guide = topic_data.get("learningGuide") or {}
+                session_flow = learning_flows.get(topic_data["id"])
+                if session_flow:
+                    validate_session_flow(session_flow)
+                    learning_guide = {
+                        **learning_guide,
+                        "sessionFlow": session_flow,
+                    }
                 Topic.objects.update_or_create(
                     course=course,
                     topic_id=topic_data["id"],
                     defaults={
                         "title": topic_data.get("title", "Untitled topic"),
                         "notes": notes,
-                        "learning_guide": topic_data.get("learningGuide") or {},
+                        "learning_guide": learning_guide,
                         "order": topic_order,
                         "estimated_read_time": reading_minutes(notes),
                         "is_active": True,

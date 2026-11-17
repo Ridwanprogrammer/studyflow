@@ -129,6 +129,38 @@ class UserProgress(models.Model):
         return f"{self.user.username} - {self.topic.title}: {self.completion_percentage}%"
 
 
+class LearningSession(models.Model):
+    """Persist a learner's position and structured responses for one topic."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='learning_sessions',
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        related_name='learning_sessions',
+    )
+    current_node_id = models.CharField(max_length=100)
+    responses = models.JSONField(default=list, blank=True)
+    concept_states = models.JSONField(default=dict, blank=True)
+    misconceptions = models.JSONField(default=list, blank=True)
+    pending_choice_id = models.CharField(max_length=100, blank=True)
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['user', 'topic']
+        ordering = ['-updated_at']
+        indexes = [
+            models.Index(fields=['user', 'topic']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.topic.title} learning session"
+
+
 class GlossaryTerm(models.Model):
     """Glossary terms for the global glossary feature."""
     term = models.CharField(max_length=200)

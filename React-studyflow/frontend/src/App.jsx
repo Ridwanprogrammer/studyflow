@@ -7,6 +7,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Courses } from './pages/Courses'
 import { CourseDetail } from './pages/CourseDetail'
 import { Topic } from './pages/Topic'
+import { Learn } from './pages/Learn'
 import { Glossary } from './pages/Glossary'
 import { Chat } from './pages/Chat'
 import { CalendarPage as Calendar } from './pages/Calendar'
@@ -35,6 +36,9 @@ function LearningPageLayout() {
             )}
             <NavLink to="/" className="sf-learning-nav__link">
               Dashboard
+            </NavLink>
+            <NavLink to="/chat" className="sf-learning-nav__link">
+              AI chat
             </NavLink>
           </nav>
         </header>
@@ -65,7 +69,9 @@ function AppRoutes() {
         </Route>
 
         <Route element={<LearningPageLayout />}>
-          <Route path="/courses/:courseId/topics/:topicId" element={<Topic />} />
+          <Route path="/courses/:courseId/topics/:topicId" element={<Navigate to="learn" replace />} />
+          <Route path="/courses/:courseId/topics/:topicId/learn" element={<Learn />} />
+          <Route path="/courses/:courseId/topics/:topicId/notes" element={<Topic />} />
           <Route path="/glossary" element={<Glossary />} />
         </Route>
 
