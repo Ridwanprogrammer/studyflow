@@ -58,9 +58,7 @@ export function CourseDetail() {
     )
   }
 
-  const completedTopics = topics.filter((t) => t.user_progress?.is_completed).length
   const totalTopics = topics.length
-  const progressPercentage = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0
   const discColor = disciplineColors[course.discipline?.name] || '#06b6d4'
 
   return (
@@ -103,20 +101,6 @@ export function CourseDetail() {
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">
             {course.description || 'Master key principles, structured reading notes, KaTeX formulas, and guided university exam exercises.'}
           </p>
-        </div>
-
-        {/* Learning Progress Indicator */}
-        <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold">
-            <span className="text-slate-300">Course Completion</span>
-            <span className="text-cyan-400 font-bold">{progressPercentage}% ({completedTopics}/{totalTopics} topics)</span>
-          </div>
-          <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-500"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
         </div>
 
         {/* Action Buttons */}
