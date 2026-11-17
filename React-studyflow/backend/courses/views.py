@@ -7,7 +7,7 @@ from django.db.models import Q, Avg, Count
 from django.shortcuts import get_object_or_404
 
 from .models import Discipline, Course, Topic, UserProgress, LearningSession, GlossaryTerm
-from .learning import validate_session_flow
+from .learning import validate_session_flow, validate_session_state
 from .serializers import (
     DisciplineSerializer,
     CourseListSerializer,
@@ -119,17 +119,7 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        nodes = {
-            node['id']: node
-            for node in flow.get('nodes', [])
-            if isinstance(node, dict) and isinstance(node.get('id'), str)
-        }
-        if flow['startNodeId'] not in nodes:
-            return Response(
-                {'detail': 'The guided lesson is not configured correctly.'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
+        nodes = {node['id']: node for node in flow['nodes']}
         session, _ = LearningSession.objects.get_or_create(
             user=request.user,
             topic=topic,
@@ -147,84 +137,13 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
         serializer = LearningSessionUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         values = serializer.validated_data
-
-        choices_by_node = {
-            node_id: {
-                choice['id']
-                for choice in node.get('question', {}).get('choices', [])
-                if isinstance(choice, dict) and isinstance(choice.get('id'), str)
-            }
-            for node_id, node in nodes.items()
-        }
-        concept_ids = {
-            node['conceptId']
-            for node in nodes.values()
-            if isinstance(node.get('conceptId'), str)
-        }
-        misconception_ids = {
-            outcome['misconceptionId']
-            for node in nodes.values()
-            for outcome in node.get('outcomes', {}).values()
-            if isinstance(outcome, dict) and isinstance(outcome.get('misconceptionId'), str)
-        }
-
-        if values['current_node_id'] not in nodes:
+        try:
+            validate_session_state(flow, values)
+        except ValueError as error:
             return Response(
-                {'current_node_id': 'Unknown lesson step.'},
+                {'detail': str(error)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if (
-            values['pending_choice_id']
-            and values['pending_choice_id'] not in choices_by_node[values['current_node_id']]
-        ):
-            return Response(
-                {'pending_choice_id': 'This answer is not available for the current step.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if not set(values['concept_states']).issubset(concept_ids):
-            return Response(
-                {'concept_states': 'Unknown lesson concept.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if not set(values['misconceptions']).issubset(misconception_ids):
-            return Response(
-                {'misconceptions': 'Unknown lesson misconception.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        for response in values['responses']:
-            node_id = response.get('nodeId')
-            choice_id = response.get('choiceId')
-            if node_id not in choices_by_node or choice_id not in choices_by_node[node_id]:
-                return Response(
-                    {'responses': 'A recorded answer does not match this lesson.'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            misconception_id = response.get('misconceptionId')
-            outcome = nodes[node_id].get('outcomes', {}).get(choice_id, {})
-            if misconception_id and (
-                misconception_id not in misconception_ids
-                or misconception_id != outcome.get('misconceptionId')
-            ):
-                return Response(
-                    {'responses': 'A recorded misconception is not part of this lesson.'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        if values['is_completed']:
-            last_response = values['responses'][-1] if values['responses'] else {}
-            completion_outcome = nodes.get(last_response.get('nodeId'), {}).get(
-                'outcomes', {}
-            ).get(last_response.get('choiceId'), {})
-            if (
-                last_response.get('nodeId') != values['current_node_id']
-                or completion_outcome.get('conceptStatus') != 'understood'
-                or completion_outcome.get('nextNodeId') is not None
-                or values['pending_choice_id']
-            ):
-                return Response(
-                    {'is_completed': 'Complete the final lesson step before marking the session complete.'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
 
         session.current_node_id = values['current_node_id']
         session.responses = values['responses']

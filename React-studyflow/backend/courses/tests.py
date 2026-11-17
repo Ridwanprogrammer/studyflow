@@ -20,18 +20,41 @@ class LearningSessionApiTests(TestCase):
                 {
                     'id': 'first',
                     'conceptId': 'function-rule',
+                    'title': 'First step',
+                    'explanation': 'Explain the first idea.',
+                    'example': 'Show the first idea.',
                     'question': {
+                        'prompt': 'Choose the answer.',
                         'choices': [
-                            {'id': 'correct', 'text': 'Correct'},
-                            {'id': 'wrong', 'text': 'Wrong'},
+                            {'id': 'correct', 'text': 'Correct answer'},
+                            {'id': 'wrong', 'text': 'Wrong answer'},
                         ],
                     },
                     'outcomes': {
-                        'correct': {'conceptStatus': 'understood', 'nextNodeId': None},
+                        'correct': {'feedback': 'Correct.', 'conceptStatus': 'understood', 'nextNodeId': 'last'},
                         'wrong': {
+                            'feedback': 'Try again.',
                             'conceptStatus': 'needs_review',
                             'misconceptionId': 'two-outputs',
                             'nextNodeId': 'first',
+                        },
+                    },
+                },
+                {
+                    'id': 'last',
+                    'conceptId': 'domain-range',
+                    'title': 'Final step',
+                    'explanation': 'Explain the final idea.',
+                    'example': 'Show the final idea.',
+                    'question': {
+                        'prompt': 'Choose the final answer.',
+                        'choices': [{'id': 'finish', 'text': 'Final answer'}],
+                    },
+                    'outcomes': {
+                        'finish': {
+                            'feedback': 'Finished.',
+                            'conceptStatus': 'understood',
+                            'nextNodeId': None,
                         },
                     },
                 },
@@ -100,3 +123,72 @@ class LearningSessionApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(LearningSession.objects.count(), 2)
         self.assertEqual(response.data['responses'], [])
+
+    def test_api_rejects_skipped_steps_and_tampered_concept_state(self):
+        self.client.get(self.url)
+        skipped_step = {
+            'current_node_id': 'last',
+            'responses': [{'nodeId': 'last', 'choiceId': 'finish'}],
+            'concept_states': {'domain-range': 'understood'},
+            'misconceptions': [],
+            'pending_choice_id': '',
+            'is_completed': True,
+        }
+
+        response = self.client.put(self.url, skipped_step, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(LearningSession.objects.get(user=self.user).responses, [])
+
+        first_answer = {
+            'current_node_id': 'last',
+            'responses': [{'nodeId': 'first', 'choiceId': 'correct'}],
+            'concept_states': {'function-rule': 'needs_review'},
+            'misconceptions': [],
+            'pending_choice_id': '',
+            'is_completed': False,
+        }
+        response = self.client.put(self.url, first_answer, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_saves_feedback_wait_state_then_marks_final_step_complete(self):
+        self.client.get(self.url)
+        first_response = {
+            'current_node_id': 'first',
+            'responses': [{'nodeId': 'first', 'choiceId': 'correct'}],
+            'concept_states': {'function-rule': 'understood'},
+            'misconceptions': [],
+            'pending_choice_id': 'correct',
+            'is_completed': False,
+        }
+        response = self.client.put(self.url, first_response, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        continued = {
+            **first_response,
+            'current_node_id': 'last',
+            'pending_choice_id': '',
+        }
+        response = self.client.put(self.url, continued, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        final_feedback = {
+            'current_node_id': 'last',
+            'responses': [
+                {'nodeId': 'first', 'choiceId': 'correct'},
+                {'nodeId': 'last', 'choiceId': 'finish'},
+            ],
+            'concept_states': {
+                'function-rule': 'understood',
+                'domain-range': 'understood',
+            },
+            'misconceptions': [],
+            'pending_choice_id': 'finish',
+            'is_completed': False,
+        }
+        response = self.client.put(self.url, final_feedback, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        completed = {**final_feedback, 'pending_choice_id': '', 'is_completed': True}
+        response = self.client.put(self.url, completed, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data['is_completed'])
