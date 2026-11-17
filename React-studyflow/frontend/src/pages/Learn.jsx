@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../lib/api'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
 import { TopicModeNav } from '../components/TopicModeNav'
-import { ChevronLeft, BookOpen, CheckCircle2, Loader2, RotateCcw } from '../components/ui/Icons'
+import { ChevronLeft, BookOpen, CheckCircle2, Loader2, RefreshCw } from '../components/ui/Icons'
 import { continueAfterFeedback, getFlowNode, submitChoice } from '../lib/learningFlow'
 
 function sessionPayload(session) {
@@ -266,7 +266,7 @@ function LearningConversation({
 
         {session.is_completed && (
           <button type="button" className="sf-learn-secondary-button" onClick={onRestart} disabled={isSaving}>
-            <RotateCcw size={15} /> Start again
+            <RefreshCw size={15} /> Start again
           </button>
         )}
 
