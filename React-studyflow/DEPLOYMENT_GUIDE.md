@@ -60,7 +60,7 @@
 
 #### Option B: Manual Service
 1. **New** → **Web Service** → Connect GitHub repo
-2. **Root Directory**: `backend`
+2. **Root Directory**: `React-studyflow/backend` *(the repo stores the project under this subfolder)*
 3. **Runtime**: `Docker`
 4. **Plan**: `Free`
 5. **Health Check Path**: `/api/health/`
@@ -109,9 +109,9 @@ Wait for deploy to complete (2-5 min first time), then test:
 2. **"Add new site"** → **"Import an existing project"**
 3. Connect GitHub → Select repo
 4. **Configure build:**
-   - **Base directory**: `frontend`
+   - **Base directory**: `React-studyflow/frontend` *(repo stores project under this subfolder)*
    - **Build command**: `npm ci && npm run build`
-   - **Publish directory**: `frontend/dist`
+   - **Publish directory**: `dist` *(relative to base directory)*
 5. **Deploy site**
 
 ---

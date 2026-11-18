@@ -1,5 +1,5 @@
-# StudyFlow Backend - Multi-stage Dockerfile for Railway
-# -------------------------------------------------------
+# StudyFlow Backend - Multi-stage Dockerfile for Render
+# ------------------------------------------------------
 # Stage 1: Build dependencies
 FROM python:3.11-slim AS builder
 
@@ -62,7 +62,7 @@ RUN mkdir -p /app/logs /app/media && chown -R django:django /app/logs /app/media
 # Switch to non-root user
 USER django
 
-# Expose port (Railway sets PORT env var)
+# Expose port (Render injects PORT; Gunicorn binds 8000 by default)
 EXPOSE 8000
 
 # Health check
@@ -70,8 +70,9 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python manage.py check --deploy || exit 1
 
 # Entrypoint script handles migrations + server start
-COPY --chown=django:docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+COPY --chown=django:django docker-entrypoint.sh /app/docker-entrypoint.sh
+# Normalize line endings in case file was authored on Windows (CRLF -> LF)
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-"]

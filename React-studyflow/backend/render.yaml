@@ -7,8 +7,10 @@ services:
   - type: web
     name: studyflow-backend
     runtime: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    # Repo stores project under React-studyflow/ (monorepo-style)
+    rootDir: React-studyflow/backend
+    dockerfilePath: ./React-studyflow/backend/Dockerfile
+    dockerContext: ./React-studyflow/backend
     plan: free
     region: frankfurt  # or oregon, singapore - choose closest to users
     healthCheckPath: /api/health/
