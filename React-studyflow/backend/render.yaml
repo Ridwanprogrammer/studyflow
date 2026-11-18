@@ -1,0 +1,73 @@
+# StudyFlow Backend - Render Blueprint
+# https://render.com/docs/blueprint-spec
+# Deploy: Connect GitHub repo → "New Blueprint Instance" → select this file
+
+services:
+  # Backend Web Service (Django + Gunicorn)
+  - type: web
+    name: studyflow-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: frankfurt  # or oregon, singapore - choose closest to users
+    healthCheckPath: /api/health/
+    autoDeploy: true
+    envVars:
+      # Django Settings
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DEBUG
+        value: "false"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+      # Database - Neon PostgreSQL (set after creating Neon project)
+      - key: DATABASE_URL
+        sync: false  # Set manually in Render dashboard after Neon setup
+
+      # Security
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,studyflow-backend.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://studyflow-frontend.netlify.app,https://studyflow-backend.onrender.com"
+
+      # CORS - Netlify Frontend
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://studyflow-frontend.netlify.app"
+
+      # NVIDIA AI API (set manually)
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: NVIDIA_BASE_URL
+        value: "https://integrate.api.nvidia.com/v1"
+      - key: NVIDIA_MODEL_NAME
+        value: "google/gemma-4-31b-it"
+      - key: NVIDIA_MODEL_FALLBACKS
+        value: "meta/llama-3.1-8b-instruct"
+
+      # Optional: Superuser creation (first deploy only)
+      - key: CREATE_SUPERUSER
+        value: "true"
+      - key: SUPERUSER_USERNAME
+        value: "admin"
+      - key: SUPERUSER_EMAIL
+        sync: false
+
+# Note: Database is hosted on Neon (external), not Render
+# databases: []  # Intentionally empty - using Neon instead
+
+# =============================================================================
+# DEPLOYMENT ORDER:
+# =============================================================================
+# 1. Create Neon project → get DATABASE_URL
+# 2. Push this repo to GitHub
+# 3. Render Dashboard → "New Blueprint Instance" → connect repo
+# 4. Render creates studyflow-backend service
+# 5. Add DATABASE_URL in Render service → Environment
+# 6. Add NVIDIA_API_KEY in Render service → Environment
+# 7. Deploy!
+# 8. Netlify: New site from Git → frontend/ folder → build: npm run build
+# 9. Netlify: Add VITE_API_URL = https://studyflow-backend.onrender.com/api

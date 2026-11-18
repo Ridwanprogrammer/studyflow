@@ -7,7 +7,7 @@ from django.db.models import Q, Avg, Count
 from django.shortcuts import get_object_or_404
 
 from .models import Discipline, Course, Topic, UserProgress, LearningSession, GlossaryTerm
-from .learning import validate_session_flow, validate_session_state
+from .learning import replay_session_state, validate_session_flow, validate_session_state
 from .serializers import (
     DisciplineSerializer,
     CourseListSerializer,
@@ -127,6 +127,42 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
         )
 
         if request.method == 'GET':
+            saved_values = {
+                'current_node_id': session.current_node_id,
+                'responses': session.responses,
+                'concept_states': session.concept_states,
+                'misconceptions': session.misconceptions,
+                'pending_choice_id': session.pending_choice_id,
+                'is_completed': session.is_completed,
+            }
+            try:
+                validate_session_state(flow, saved_values)
+            except ValueError:
+                if not session.is_completed or session.pending_choice_id:
+                    return Response(
+                        {'detail': 'This saved session no longer matches the lesson. Restart the session to continue.'},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                try:
+                    upgraded_values = replay_session_state(flow, session.responses)
+                except ValueError:
+                    return Response(
+                        {'detail': 'This saved session no longer matches the lesson. Restart the session to continue.'},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                if (
+                    upgraded_values['is_completed']
+                    or upgraded_values['current_node_id'] == session.current_node_id
+                    or upgraded_values['concept_states'] != session.concept_states
+                    or upgraded_values['misconceptions'] != session.misconceptions
+                ):
+                    return Response(
+                        {'detail': 'This saved session no longer matches the lesson. Restart the session to continue.'},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                session.current_node_id = upgraded_values['current_node_id']
+                session.is_completed = upgraded_values['is_completed']
+                session.save(update_fields=['current_node_id', 'is_completed', 'updated_at'])
             if session.current_node_id not in nodes:
                 return Response(
                     {'detail': 'This saved session no longer matches the lesson. Restart the session to continue.'},

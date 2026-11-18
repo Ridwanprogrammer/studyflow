@@ -1,0 +1,9 @@
+# StudyFlow Frontend - SPA Routing for Railway Static Site
+# This file is copied to dist/ during build
+# https://docs.railway.com/guides/deploying-static-sites#single-page-applications
+
+# API routes proxy to backend (optional - if using same domain)
+# /api/*  https://studyflow-backend.railway.app/api/:splat  200
+
+# SPA fallback - all routes serve index.html
+/*    /index.html   200

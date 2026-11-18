@@ -9,10 +9,31 @@ export function getFlowNode(flow, nodeId) {
 export function getChoiceOutcome(flow, nodeId, choiceId) {
   const node = getFlowNode(flow, nodeId)
   const outcome = node.outcomes?.[choiceId]
-  if (!node.question?.choices?.some((choice) => choice.id === choiceId) || !outcome) {
+  const isNumericOutcome = node.question?.answerType === 'numeric'
+    && ['correct', 'incorrect'].includes(choiceId)
+  const isChoiceOutcome = node.question?.answerType !== 'numeric'
+    && node.question?.choices?.some((choice) => choice.id === choiceId)
+  if ((!isNumericOutcome && !isChoiceOutcome) || !outcome) {
     throw new Error(`Unknown answer "${choiceId}" for lesson step "${nodeId}"`)
   }
   return outcome
+}
+
+function getNumericOutcomeId(question, rawAnswer) {
+  const value = Number(rawAnswer)
+  const answerText = String(rawAnswer).trim()
+  if (
+    !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(answerText)
+    || !Number.isFinite(value)
+    || answerText.length > 64
+  ) {
+    throw new Error('Enter a valid number before continuing.')
+  }
+
+  const expected = Number(question.numericAnswer)
+  const tolerance = Number(question.numericTolerance ?? 1e-9)
+  const difference = Math.abs(value - expected)
+  return difference <= tolerance * Math.max(1, Math.abs(expected)) ? 'correct' : 'incorrect'
 }
 
 export function submitChoice(flow, session, choiceId) {
@@ -37,6 +58,19 @@ export function submitChoice(flow, session, choiceId) {
     pending_choice_id: choiceId,
     is_completed: false,
   }
+}
+
+export function submitAnswer(flow, session, response) {
+  const node = getFlowNode(flow, session.current_node_id)
+  if (node.question?.answerType !== 'numeric') {
+    return submitChoice(flow, session, response.choiceId)
+  }
+
+  const answer = String(response.answer ?? '').trim()
+  const choiceId = getNumericOutcomeId(node.question, answer)
+  const nextSession = submitChoice(flow, session, choiceId)
+  nextSession.responses[nextSession.responses.length - 1].answer = answer
+  return nextSession
 }
 
 export function continueAfterFeedback(flow, session) {

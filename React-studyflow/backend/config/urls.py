@@ -16,6 +16,25 @@ from rest_framework_simplejwt.views import (
 )
 from core.views import CustomTokenObtainPairView
 from django.views.generic import RedirectView
+from django.db import connection
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_check(request):
+    """Health check endpoint for Railway/load balancer."""
+    try:
+        # Test database connection
+        connection.ensure_connection()
+        db_status = "healthy"
+    except Exception:
+        db_status = "unhealthy"
+    
+    status = 200 if db_status == "healthy" else 503
+    return Response({
+        "status": "ok" if db_status == "healthy" else "error",
+        "database": db_status,
+        "service": "studyflow-backend",
+    }, status=status)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -36,6 +55,9 @@ def api_root(request, format=None):
     })
 
 urlpatterns = [
+    # Health check (for Railway load balancer)
+    path('api/health/', health_check, name='health-check'),
+    
     # Root redirect to API root
     path('', RedirectView.as_view(url='/api/', permanent=False)),
     

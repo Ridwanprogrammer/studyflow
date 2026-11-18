@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState, useEffect, useRef } from 'react'
 import { api, unwrapList } from '../lib/api'
 import { MarkdownRenderer } from '../components/MarkdownRenderer'
-import { TopicModeNav } from '../components/TopicModeNav'
+import { TopicPageLink } from '../components/TopicPageLink'
 import { ChevronLeft, Clock, Search, Bot, Sparkles, Sparkle, BookOpen, X, Download } from '../components/ui/Icons'
 
 export function Topic() {
@@ -116,7 +116,6 @@ export function Topic() {
 
   return (
     <>
-      <TopicModeNav courseId={courseId} topicId={topicId} mode="notes" />
       <div className="sf-reading-progress" aria-hidden="true">
         <div
           className="sf-reading-progress__fill"
@@ -135,6 +134,12 @@ export function Topic() {
           </NavLink>
 
           <div className="sf-study-toolbar__actions">
+            <TopicPageLink
+              courseId={courseId}
+              topicId={topicId}
+              page="notes"
+              className="sf-study-tool sf-study-tool--primary"
+            />
             {headings.length > 0 && (
               <button
                 type="button"
