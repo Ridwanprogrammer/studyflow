@@ -53,8 +53,7 @@ WORKDIR /app
 # Copy project files
 COPY --chown=django:django . .
 
-# Collect static files (THE "npm run build" equivalent)
-RUN python manage.py collectstatic --noinput --clear
+# collectstatic runs in docker-entrypoint.sh with Render's runtime environment.
 
 # Create directories for logs and media
 RUN mkdir -p /app/logs /app/media && chown -R django:django /app/logs /app/media
