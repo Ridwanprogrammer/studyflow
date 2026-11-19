@@ -8,27 +8,19 @@ echo "🚀 StudyFlow Backend Starting..."
 echo "   Django Settings: $DJANGO_SETTINGS_MODULE"
 echo "   Database: ${DATABASE_URL:0:20}..."
 
-# Wait for database to be ready (Railway PostgreSQL)
+# Wait for database to be ready (Neon / any PostgreSQL)
 echo "⏳ Waiting for database..."
 python << 'EOF'
 import os
 import time
 import psycopg2
-from urllib.parse import urlparse
 
 database_url = os.environ.get('DATABASE_URL')
 if database_url:
-    parsed = urlparse(database_url)
     for i in range(30):
         try:
-            conn = psycopg2.connect(
-                host=parsed.hostname,
-                port=parsed.port or 5432,
-                user=parsed.username,
-                password=parsed.password,
-                database=parsed.path[1:],
-                connect_timeout=3
-            )
+            # Pass the full URI so psycopg2 honours ?sslmode=require (Neon needs TLS).
+            conn = psycopg2.connect(database_url, connect_timeout=5)
             conn.close()
             print("✅ Database is ready!")
             break
