@@ -10,6 +10,7 @@ export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const returnTo = location.state?.from?.pathname || "/";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -37,7 +38,7 @@ export function Login() {
 
     try {
       await login(formData.email.trim(), formData.password);
-      navigate("/");
+      navigate(returnTo, { replace: true });
     } catch (err) {
       const detail = err.response?.data?.detail || err.response?.data?.non_field_errors?.[0];
       setError(detail || "Invalid email or password. Please try again.");

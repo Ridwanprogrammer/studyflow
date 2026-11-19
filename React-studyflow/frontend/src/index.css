@@ -26,92 +26,94 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --ink: #071018;
-  --slate: #0b1723;
-  --mineral: #101d2d;
-  --mist: #edf4ff;
-  --sea-glass: #01a9fe;
-  --citron: #b9e201;
+  --ink: #050b12;
+  --slate: #0a1521;
+  --mineral: #0f1d2c;
+  --mist: #eaf3fa;
+  --sea-glass: #43d7ff;
+  --citron: #c6f259;
 
-  --brand-cyan: #01a9fe;
-  --brand-blue: #004ada;
-  --brand-lime: #b9e201;
-  --brand-green: #3eaf00;
+  --brand-cyan: #43d7ff;
+  --brand-blue: #2f6bff;
+  --brand-lime: #c6f259;
+  --brand-green: #36c08a;
 
-  --bg: #071018;
-  --bg-800: #0b1723;
-  --bg-700: #101d2d;
+  --bg: #050b12;
+  --bg-800: #0a1521;
+  --bg-700: #0f1d2c;
 
-  --panel: rgba(12, 18, 27, 0.72);
-  --panel-strong: rgba(14, 22, 31, 0.96);
-  --panel-raised: rgba(16, 23, 32, 0.9);
+  --panel: rgba(11, 19, 29, 0.74);
+  --panel-strong: rgba(12, 21, 32, 0.96);
+  --panel-raised: rgba(15, 26, 39, 0.92);
 
-  --line: rgba(173, 188, 206, 0.08);
-  --border: rgba(180, 205, 226, 0.12);
-  --border-strong: rgba(180, 205, 226, 0.2);
+  --line: rgba(180, 205, 226, 0.09);
+  --border: rgba(180, 205, 226, 0.14);
+  --border-strong: rgba(180, 205, 226, 0.22);
+  --grid-line: rgba(180, 205, 226, 0.045);
 
-  --text: #edf4ff;
-  --text-soft: #e9f0fa;
-  --text-secondary: #8b99ac;
-  --text-muted: #8b99ac;
+  --text: #eaf3fa;
+  --text-soft: #dce9f4;
+  --text-secondary: #98abbe;
+  --text-muted: #7e93a8;
 
-  --cyan: #75d9ff;
-  --lime: #d7f671;
-  --violet: #9ea8ff;
-  --glow: rgba(117, 217, 255, 0.15);
+  --cyan: #8fe8ff;
+  --lime: #dff88c;
+  --violet: #a99bff;
+  --glow: rgba(67, 215, 255, 0.16);
 
   --font-interface: 'Poppins', 'Segoe UI', sans-serif;
   --font-reading: 'Poppins', 'Segoe UI', sans-serif;
+  --font-hand: 'Lemon', cursive;
   --font-math: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif;
 
   /* Remap Tailwind color utilities to the product palette. */
-  --color-slate-50: #edf4ff;
-  --color-slate-100: #e9f0fa;
-  --color-slate-200: #d5e0ed;
-  --color-slate-300: #b8c6d6;
-  --color-slate-400: #8b99ac;
-  --color-slate-500: #68788c;
-  --color-slate-600: #4b5a6c;
-  --color-slate-700: #26384a;
-  --color-slate-800: #101d2d;
-  --color-slate-900: #0b1723;
-  --color-slate-950: #071018;
+  --color-slate-50: #eaf3fa;
+  --color-slate-100: #dce9f4;
+  --color-slate-200: #bfd2e2;
+  --color-slate-300: #9fb6c9;
+  --color-slate-400: #8198ac;
+  --color-slate-500: #62798f;
+  --color-slate-600: #475d73;
+  --color-slate-700: #294056;
+  --color-slate-800: #122334;
+  --color-slate-900: #0a1521;
+  --color-slate-950: #050b12;
 
-  --color-cyan-50: #e5f7ff;
-  --color-cyan-100: #c9efff;
-  --color-cyan-200: #a6e5ff;
-  --color-cyan-300: #8cddff;
-  --color-cyan-400: #75d9ff;
-  --color-cyan-500: #01a9fe;
-  --color-cyan-600: #008de5;
-  --color-cyan-700: #006fc7;
-  --color-cyan-800: #0057a8;
-  --color-cyan-900: #004ada;
-  --color-cyan-950: #052d66;
+  --color-cyan-50: #e8fbff;
+  --color-cyan-100: #ccf5ff;
+  --color-cyan-200: #a9edff;
+  --color-cyan-300: #8fe8ff;
+  --color-cyan-400: #67ddff;
+  --color-cyan-500: #43d7ff;
+  --color-cyan-600: #1fbeeb;
+  --color-cyan-700: #119bc9;
+  --color-cyan-800: #0e7ba4;
+  --color-cyan-900: #0d5f84;
+  --color-cyan-950: #0a3f5e;
 
   --color-blue-50: #eaf1ff;
-  --color-blue-100: #d4e2ff;
+  --color-blue-100: #d4e3ff;
   --color-blue-200: #adc8ff;
   --color-blue-300: #80a8ff;
   --color-blue-400: #5685ff;
-  --color-blue-500: #2867f5;
-  --color-blue-600: #004ada;
-  --color-blue-700: #003eb9;
-  --color-blue-800: #06358f;
-  --color-blue-900: #092d6d;
-  --color-blue-950: #071d45;
+  --color-blue-500: #4e86ff;
+  --color-blue-600: #2f6bff;
+  --color-blue-700: #2457da;
+  --color-blue-800: #1d46b3;
+  --color-blue-900: #17378a;
+  --color-blue-950: #102257;
 
-  --color-lime-50: #f7fbdc;
-  --color-lime-100: #eff7b5;
-  --color-lime-200: #e3f17f;
-  --color-lime-300: #d7f671;
-  --color-lime-400: #c9e941;
-  --color-lime-500: #b9e201;
-  --color-lime-600: #98bd00;
-  --color-lime-700: #789500;
-  --color-lime-800: #5c7004;
-  --color-lime-900: #424f08;
-  --color-lime-950: #252e06;
+  --color-lime-50: #f7fde4;
+  --color-lime-100: #eefac0;
+  --color-lime-200: #e0f58c;
+  --color-lime-300: #dff88c;
+  --color-lime-400: #d2f063;
+  --color-lime-500: #c6f259;
+  --color-lime-600: #a6d132;
+  --color-lime-700: #84a626;
+  --color-lime-800: #647d20;
+  --color-lime-900: #465817;
+  --color-lime-950: #28330c;
 
   /* Shadows - EXACT from studyflow reference */
   --shadow-soft: rgba(0, 0, 0, 0.12);
@@ -132,22 +134,22 @@
 
   --bg-gradient:
     radial-gradient(
-      circle at top right,
-      rgba(1, 169, 254, 0.1),
-      transparent 40%
+      circle at 88% 0%,
+      rgba(67, 215, 255, 0.12),
+      transparent 42%
     ),
     radial-gradient(
-      circle at bottom left,
-      rgba(185, 226, 1, 0.05),
-      transparent 40%
+      circle at 6% 92%,
+      rgba(198, 242, 89, 0.055),
+      transparent 42%
     );
 }
 
 /* Light mode - derived from dark */
 .light {
-  --bg: #e8efed;
-  --bg-800: #dce7e5;
-  --bg-700: #cddbd9;
+  --bg: #e8f0f3;
+  --bg-800: #dce7ec;
+  --bg-700: #cbd9df;
 
   --panel: rgba(255, 255, 255, 0.8);
   --panel-strong: rgba(255, 255, 255, 0.95);

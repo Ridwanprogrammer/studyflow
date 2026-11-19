@@ -14,9 +14,9 @@ export function ProtectedRoute({ children, requireAuth = false }) {
     )
   }
 
-  // Allow guest access by default to match StudyFlow prototype behavior; only redirect if requireAuth is explicitly set
+  // Guests land on the front door instead of being dropped straight into a login form.
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to="/" state={{ from: location }} replace />
   }
 
   return children ? <>{children}</> : <Outlet />

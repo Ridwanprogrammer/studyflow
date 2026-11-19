@@ -13,6 +13,9 @@ import { Chat } from './pages/Chat'
 import { CalendarPage as Calendar } from './pages/Calendar'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
+import { Landing } from './pages/Landing'
+import { useAuth } from './stores/authStore'
+import { Loader2 } from './components/ui/Icons'
 
 function LearningPageLayout() {
   const location = useLocation()
@@ -50,9 +53,27 @@ function LearningPageLayout() {
   )
 }
 
+// The first page a visitor sees: a landing page for guests, the workspace for members.
+function HomeRoute() {
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 bg-gradient-brand bg-fixed">
+        <Loader2 size={48} className="animate-spin text-cyan-400" aria-hidden="true" />
+      </div>
+    )
+  }
+
+  return isAuthenticated ? <Dashboard /> : <Landing />
+}
+
 function AppRoutes() {
   return (
     <Routes>
+      {/* The front door */}
+      <Route path="/" element={<HomeRoute />} />
+
       {/* Public routes */}
       <Route element={<PublicOnlyRoute />}>
         <Route path="/login" element={<Login />} />
@@ -62,7 +83,7 @@ function AppRoutes() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute requireAuth={true} />}>
         <Route element={<PageContainer />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:courseId" element={<CourseDetail />} />
           <Route path="/calendar" element={<Calendar />} />
