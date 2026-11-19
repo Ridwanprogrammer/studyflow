@@ -68,7 +68,8 @@ WHITENOISE_ALLOW_ALL_ORIGINS = True
 # =============================================================================
 # Netlify gives frontend a domain like: studyflow-frontend.netlify.app
 CORS_ALLOWED_ORIGINS = [
-    'https://studyflow-frontend.netlify.app',  # Default Netlify subdomain
+    'https://peaceful-eclair-485bef.netlify.app',  # Live Netlify site
+    'https://studyflow-frontend.netlify.app',      # Friendly renamed site
 ] + [
     o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
     if o.strip()
@@ -162,6 +163,7 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'StudyFlow <noreply@st
 # =============================================================================
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
+    'https://peaceful-eclair-485bef.netlify.app',
     'https://studyflow-frontend.netlify.app',
 ] + [
     o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')

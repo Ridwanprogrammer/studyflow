@@ -10,6 +10,8 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
+  # Backend API (also baked in via .env.production for manual dist uploads)
+  VITE_API_URL = "https://studyflow-backend.onrender.com/api"
 
 # SPA routing - all routes serve index.html
 [[redirects]]
