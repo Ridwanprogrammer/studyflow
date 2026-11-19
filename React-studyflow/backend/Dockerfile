@@ -58,6 +58,11 @@ COPY --chown=django:django . .
 # Create directories for logs and media
 RUN mkdir -p /app/logs /app/media && chown -R django:django /app/logs /app/media
 
+# Entrypoint script handles migrations + server start
+COPY --chown=django:django docker-entrypoint.sh /app/docker-entrypoint.sh
+# Normalize line endings before dropping root privileges.
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
+
 # Switch to non-root user
 USER django
 
@@ -67,11 +72,6 @@ EXPOSE 8000
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python manage.py check --deploy || exit 1
-
-# Entrypoint script handles migrations + server start
-COPY --chown=django:django docker-entrypoint.sh /app/docker-entrypoint.sh
-# Normalize line endings in case file was authored on Windows (CRLF -> LF)
-RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-"]
