@@ -6,15 +6,6 @@ import {
   CheckCircle2, ArrowRight 
 } from '../components/ui/Icons'
 
-const disciplineColors = {
-  'Computer Science': '#8b5cf6',
-  'Mathematics': '#06b6d4',
-  'Entrepreneurship': '#ec4899',
-  'Practicum': '#f59e0b',
-  'Physics': '#a855f7',
-  'Chemistry': '#10b981',
-}
-
 export function CourseDetail() {
   const { courseId } = useParams()
 
@@ -59,16 +50,12 @@ export function CourseDetail() {
   }
 
   const totalTopics = topics.length
-  const discColor = disciplineColors[course.discipline?.name] || '#06b6d4'
 
   return (
     <div className="sf-course-detail-page max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Course Header Hero Card */}
       <header className="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-2xl space-y-6">
-        <div
-          className="absolute top-0 left-0 right-0 h-1"
-          style={{ backgroundColor: discColor }}
-        />
+        <div className="sf-course-detail-page__accent" />
 
         <div className="flex items-center justify-between gap-4">
           <NavLink 
@@ -80,15 +67,8 @@ export function CourseDetail() {
           </NavLink>
 
           {course.discipline && (
-            <span
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border"
-              style={{
-                backgroundColor: `${discColor}15`,
-                color: discColor,
-                borderColor: `${discColor}30`,
-              }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: discColor }} />
+            <span className="sf-course-detail-page__discipline">
+              <span />
               {course.discipline.name}
             </span>
           )}

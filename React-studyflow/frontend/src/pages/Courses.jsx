@@ -5,12 +5,12 @@ import { CourseCard } from '../components/CourseCard'
 import { Search, X, Cpu, Briefcase, FlaskConical, GraduationCap, BookOpen, SearchX } from '../components/ui/Icons'
 
 const disciplineIcons = {
-  'Computer Science': <Cpu size={15} className="text-purple-400" />,
-  'Mathematics': <GraduationCap size={15} className="text-cyan-400" />,
-  'Entrepreneurship': <Briefcase size={15} className="text-pink-400" />,
-  'Practicum': <FlaskConical size={15} className="text-amber-400" />,
-  'Physics': <FlaskConical size={15} className="text-violet-400" />,
-  'Chemistry': <FlaskConical size={15} className="text-emerald-400" />,
+  'Computer Science': <Cpu size={15} className="sf-discipline-icon" />,
+  'Mathematics': <GraduationCap size={15} className="sf-discipline-icon" />,
+  'Entrepreneurship': <Briefcase size={15} className="sf-discipline-icon" />,
+  'Practicum': <FlaskConical size={15} className="sf-discipline-icon" />,
+  'Physics': <FlaskConical size={15} className="sf-discipline-icon" />,
+  'Chemistry': <FlaskConical size={15} className="sf-discipline-icon" />,
 }
 
 export function Courses() {

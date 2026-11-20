@@ -1,19 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, Sparkles, ArrowRight } from '../components/ui/Icons'
 
-const disciplineColors = {
-  'Computer Science': '#8b5cf6',
-  'Mathematics': '#06b6d4',
-  'Entrepreneurship': '#ec4899',
-  'Practicum': '#f59e0b',
-  'Physics': '#a855f7',
-  'Chemistry': '#10b981',
-}
-
 export function CourseCard({ course, index = 0 }) {
   const navigate = useNavigate()
   const topicCount = course.topic_count || course.topics?.length || 0
-  const discColor = disciplineColors[course.discipline?.name] || '#06b6d4'
   const courseIdentifier = course.code || course.id
 
   const handleCardClick = () => {
@@ -33,10 +23,7 @@ export function CourseCard({ course, index = 0 }) {
       aria-label={`${course.code}: ${course.title}`}
     >
       {/* Top Discipline Accent Bar */}
-      <div
-        className="absolute top-0 left-6 right-6 h-0.5 rounded-b-full transition-all duration-300 group-hover:left-4 group-hover:right-4 group-hover:h-1"
-        style={{ backgroundColor: discColor }}
-      />
+      <div className="sf-course-card__accent" />
 
       <div className="space-y-3">
         {/* Top Header: Code & Discipline Pill */}
@@ -45,14 +32,7 @@ export function CourseCard({ course, index = 0 }) {
             {course.code}
           </h3>
           {course.discipline && (
-            <span
-              className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
-              style={{
-                backgroundColor: `${discColor}15`,
-                color: discColor,
-                borderColor: `${discColor}30`,
-              }}
-            >
+            <span className="sf-course-card__discipline">
               {course.discipline.name}
             </span>
           )}
