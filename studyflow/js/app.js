@@ -224,7 +224,10 @@ function renderDashboard() {
     }
   }
 
-  // 4. If courses container is present (e.g. on pages/courses.html), render full courses list
+  // 4. Always initialize the real-time calendar
+  initCalendar();
+
+  // 5. If courses container is present (e.g. on index.html or pages/courses.html), render full courses list
   const container = document.getElementById("courses-container");
   if (!container) return;
 
@@ -409,6 +412,8 @@ function renderDashboard() {
   initCalendar();
 }
 
+let calendarClockInterval = null;
+
 function initCalendar() {
   const title = document.getElementById("calendar-month-title");
   const dates = document.getElementById("calendar-dates");
@@ -416,18 +421,21 @@ function initCalendar() {
   const timeLabel = document.getElementById("calendar-time");
   const previous = document.getElementById("calendar-prev");
   const next = document.getElementById("calendar-next");
-  if (!title || !dates || !todayLabel || !timeLabel || !previous || !next)
-    return;
+  const todayBtn = document.getElementById("calendar-today-btn");
+  const headerTime = document.getElementById("header-live-time");
+
+  if (!title || !dates) return;
 
   const now = new Date();
   let displayedMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
   const monthFormatter = new Intl.DateTimeFormat(undefined, {
     month: "long",
     year: "numeric",
   });
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
-    weekday: "long",
-    month: "long",
+    weekday: "short",
+    month: "short",
     day: "numeric",
     year: "numeric",
   });
@@ -435,11 +443,13 @@ function initCalendar() {
     hour: "numeric",
     minute: "2-digit",
     second: "2-digit",
+    hour12: true,
   });
 
   function renderMonth() {
     title.textContent = monthFormatter.format(displayedMonth);
     dates.innerHTML = "";
+
     const firstDay = displayedMonth.getDay();
     const daysInMonth = new Date(
       displayedMonth.getFullYear(),
@@ -452,55 +462,96 @@ function initCalendar() {
       0,
     ).getDate();
 
-    for (let index = 0; index < 42; index += 1) {
+    const totalCells = firstDay + daysInMonth > 35 ? 42 : 35;
+
+    for (let index = 0; index < totalCells; index += 1) {
       const dayOffset = index - firstDay + 1;
-      const date = new Date(
+      const cellDate = new Date(
         displayedMonth.getFullYear(),
         displayedMonth.getMonth(),
         dayOffset,
       );
       const cell = document.createElement("span");
-      cell.textContent = String(
+      const isCurrentMonth = dayOffset > 0 && dayOffset <= daysInMonth;
+
+      const dayNumber =
         dayOffset <= 0
           ? daysInPreviousMonth + dayOffset
           : dayOffset > daysInMonth
             ? dayOffset - daysInMonth
-            : dayOffset,
-      );
-      if (dayOffset <= 0 || dayOffset > daysInMonth)
+            : dayOffset;
+
+      cell.textContent = String(dayNumber);
+
+      if (!isCurrentMonth) {
         cell.classList.add("muted");
-      if (date.toDateString() === now.toDateString())
+      }
+
+      const today = new Date();
+      if (
+        cellDate.getDate() === today.getDate() &&
+        cellDate.getMonth() === today.getMonth() &&
+        cellDate.getFullYear() === today.getFullYear()
+      ) {
         cell.classList.add("highlight-date");
+        cell.setAttribute("aria-current", "date");
+        cell.title = "Today";
+      }
+
       dates.appendChild(cell);
     }
   }
 
   function updateClock() {
     const current = new Date();
-    todayLabel.textContent = `Today: ${dateFormatter.format(current)}`;
-    timeLabel.textContent = timeFormatter.format(current);
+    if (todayLabel) {
+      todayLabel.textContent = `Today: ${dateFormatter.format(current)}`;
+    }
+    if (timeLabel) {
+      timeLabel.textContent = timeFormatter.format(current);
+    }
+    if (headerTime) {
+      headerTime.textContent = timeFormatter.format(current);
+    }
   }
 
-  previous.addEventListener("click", () => {
-    displayedMonth = new Date(
-      displayedMonth.getFullYear(),
-      displayedMonth.getMonth() - 1,
-      1,
-    );
-    renderMonth();
-  });
-  next.addEventListener("click", () => {
-    displayedMonth = new Date(
-      displayedMonth.getFullYear(),
-      displayedMonth.getMonth() + 1,
-      1,
-    );
-    renderMonth();
-  });
+  if (previous) {
+    previous.onclick = () => {
+      displayedMonth = new Date(
+        displayedMonth.getFullYear(),
+        displayedMonth.getMonth() - 1,
+        1,
+      );
+      renderMonth();
+    };
+  }
+
+  if (next) {
+    next.onclick = () => {
+      displayedMonth = new Date(
+        displayedMonth.getFullYear(),
+        displayedMonth.getMonth() + 1,
+        1,
+      );
+      renderMonth();
+    };
+  }
+
+  if (todayBtn) {
+    todayBtn.onclick = () => {
+      const liveNow = new Date();
+      displayedMonth = new Date(liveNow.getFullYear(), liveNow.getMonth(), 1);
+      renderMonth();
+    };
+  }
 
   renderMonth();
   updateClock();
-  window.setInterval(updateClock, 1000);
+
+  if (calendarClockInterval) {
+    clearInterval(calendarClockInterval);
+  }
+  calendarClockInterval = window.setInterval(updateClock, 1000);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

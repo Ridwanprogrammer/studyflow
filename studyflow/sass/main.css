@@ -220,9 +220,6 @@
   font-size: 1rem;
   font-weight: 500;
 }
-.sf-cmd-input-row input::-moz-placeholder {
-  color: #64748b;
-}
 .sf-cmd-input-row input::placeholder {
   color: #64748b;
 }
@@ -450,9 +447,6 @@
   font-size: 0.92rem;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-.sf-course-search-wrap input::-moz-placeholder {
-  color: #64748b;
 }
 .sf-course-search-wrap input::placeholder {
   color: #64748b;
@@ -802,7 +796,6 @@
 .topic-item .topic-info .topic-math-badge {
   display: inline-flex;
   align-items: center;
-  width: -moz-fit-content;
   width: fit-content;
   margin-top: 0.35rem;
   padding: 0.22rem 0.48rem;
@@ -1946,9 +1939,7 @@
   font-weight: 700;
   color: #34d399;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   list-style: none;
   display: flex;
   align-items: center;
@@ -2210,9 +2201,6 @@
 #chat-input:focus {
   outline: none;
   border-color: var(--brand-cyan);
-}
-#chat-input::-moz-placeholder {
-  color: var(--text-secondary);
 }
 #chat-input::placeholder {
   color: var(--text-secondary);
@@ -2556,8 +2544,7 @@
 .chat-page-body .chat-brand img {
   width: 31px;
   height: 31px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .chat-page-body .chat-brand span span {
@@ -3413,10 +3400,6 @@
   line-height: 1.5;
 }
 
-.chat-page-body .gpt-textarea::-moz-placeholder {
-  color: #74839a;
-}
-
 .chat-page-body .gpt-textarea::placeholder {
   color: #74839a;
 }
@@ -3876,9 +3859,6 @@
   font-size: 0.96rem;
   font-family: inherit;
 }
-.sf-search-input-wrap input::-moz-placeholder {
-  color: #64748b;
-}
 .sf-search-input-wrap input::placeholder {
   color: #64748b;
 }
@@ -3948,9 +3928,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .sf-pill:hover {
   background: rgba(255, 255, 255, 0.08);
@@ -4976,11 +4954,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-::-moz-selection {
-  color: #06111a;
-  background: var(--brand-cyan);
-}
-
 ::selection {
   color: #06111a;
   background: var(--brand-cyan);
@@ -5056,8 +5029,7 @@ button:disabled {
 .message-attachment-chip img {
   width: 34px;
   height: 34px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border-radius: 10px;
   flex-shrink: 0;
 }
@@ -5158,4 +5130,6 @@ button:disabled {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}/*# sourceMappingURL=main.css.map */
+}
+
+/*# sourceMappingURL=main.css.map */
