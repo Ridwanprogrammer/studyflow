@@ -55,8 +55,8 @@ COPY --chown=django:django . .
 
 # collectstatic runs in docker-entrypoint.sh with Render's runtime environment.
 
-# Create directories for logs and media
-RUN mkdir -p /app/logs /app/media && chown -R django:django /app/logs /app/media
+# Create directories for logs, media, and staticfiles
+RUN mkdir -p /app/logs /app/media /app/staticfiles && chown -R django:django /app/logs /app/media /app/staticfiles
 
 # Entrypoint script handles migrations + server start
 COPY --chown=django:django docker-entrypoint.sh /app/docker-entrypoint.sh
