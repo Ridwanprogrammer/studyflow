@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://studyflow-b9jw.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -70,7 +70,7 @@ api.interceptors.response.use(
         const tokens = getTokens()
         if (tokens?.refresh) {
           const response = await axios.post(
-            `${import.meta.env.VITE_API_URL || '/api'}/auth/token/refresh/`,
+            `${import.meta.env.VITE_API_URL || 'https://studyflow-b9jw.onrender.com'}/auth/token/refresh/`,
             { refresh: tokens.refresh },
             { headers: { 'Content-Type': 'application/json' } }
           )
