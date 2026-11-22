@@ -16,7 +16,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://studyflow-b9jw.onrender.com',
         changeOrigin: true,
       },
     },
