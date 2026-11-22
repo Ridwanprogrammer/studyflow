@@ -67,12 +67,17 @@ WHITENOISE_ALLOW_ALL_ORIGINS = True
 # CORS - Frontend on Netlify
 # =============================================================================
 # Netlify gives frontend a domain like: studyflow-frontend.netlify.app
+# Origins must be scheme + host with no path or trailing slash (corsheaders.E014).
 CORS_ALLOWED_ORIGINS = [
-    'https://peaceful-eclair-485bef.netlify.app',  # Live Netlify site
-    'https://studyflow-frontend.netlify.app',      # Friendly renamed site
-] + [
-    o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
-    if o.strip()
+    origin.strip().rstrip('/')
+    for origin in (
+        [
+            'https://peaceful-eclair-485bef.netlify.app',  # Live Netlify site
+            'https://studyflow-frontend.netlify.app',      # Friendly renamed site
+        ]
+        + os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+    )
+    if origin.strip()
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -166,6 +171,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://peaceful-eclair-485bef.netlify.app',
     'https://studyflow-frontend.netlify.app',
 ] + [
-    o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+    o.strip().rstrip('/') for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
     if o.strip()
 ]
