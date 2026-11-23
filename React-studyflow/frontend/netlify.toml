@@ -11,7 +11,7 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
   # Backend API (also baked in via .env.production for manual dist uploads)
-  VITE_API_URL = "https://studyflow-backend.onrender.com/api"
+  VITE_API_URL = "https://studyflow-b9jw.onrender.com/api"
 
 # SPA routing - all routes serve index.html
 [[redirects]]
@@ -43,7 +43,7 @@
 # API proxy (optional - if you want same-domain API calls)
 # [[redirects]]
 #   from = "/api/*"
-#   to = "https://studyflow-backend.onrender.com/api/:splat"
+#   to = "https://studyflow-b9jw.onrender.com/api/:splat"
 #   status = 200
 #   force = true
 #   headers = {X-Forwarded-For = ":splat"}

@@ -2,7 +2,7 @@
 
 **Architecture:**
 - **Frontend** → Netlify (React static site, free forever)
-- **Backend** → Render Web Service (Django + Gunicorn, free tier)
+- **Backend** → Render Web Service (Django + Gunicorn, free tier) — live at `https://studyflow-b9jw.onrender.com`
 - **Database** → Neon (PostgreSQL, free forever)
 
 ---
@@ -78,7 +78,7 @@ In Render Dashboard → `studyflow-backend` → **Environment**:
 | `DEBUG` | `false` | |
 | `ALLOWED_HOSTS` | `.onrender.com,your-custom-domain.com` | |
 | `CORS_ALLOWED_ORIGINS` | `https://your-site.netlify.app` | **Update after Netlify deploy** |
-| `CSRF_TRUSTED_ORIGINS` | `https://your-site.netlify.app,https://studyflow-backend.onrender.com` | |
+| `CSRF_TRUSTED_ORIGINS` | `https://your-site.netlify.app,https://studyflow-b9jw.onrender.com` | |
 | `NVIDIA_API_KEY` | *Your NVIDIA key* | **Required for AI chat** |
 | `NVIDIA_BASE_URL` | `https://integrate.api.nvidia.com/v1` | |
 | `NVIDIA_MODEL_NAME` | `google/gemma-4-31b-it` | |
@@ -94,12 +94,12 @@ In Render Dashboard → `studyflow-backend` → **Environment**:
 
 Wait for deploy to complete (2-5 min first time), then test:
 
-- **Health check**: `https://studyflow-backend.onrender.com/api/health/`
+- **Health check**: `https://studyflow-b9jw.onrender.com/api/health/`
   ```json
   {"status": "ok", "database": "healthy", "service": "studyflow-backend"}
   ```
-- **API root**: `https://studyflow-backend.onrender.com/api/`
-- **Admin**: `https://studyflow-backend.onrender.com/admin/` (if superuser created)
+- **API root**: `https://studyflow-b9jw.onrender.com/api/`
+- **Admin**: `https://studyflow-b9jw.onrender.com/admin/` (if superuser created)
 
 ---
 
@@ -122,7 +122,7 @@ In Netlify Dashboard → Site → **Site settings** → **Environment variables*
 
 | Variable | Value |
 |----------|-------|
-| `VITE_API_URL` | `https://studyflow-backend.onrender.com/api` |
+| `VITE_API_URL` | `https://studyflow-b9jw.onrender.com/api` |
 
 **Trigger new deploy** (Deploys → Trigger deploy → Clear cache and deploy)
 
@@ -135,7 +135,7 @@ In Netlify Dashboard → Site → **Site settings** → **Environment variables*
 3. Now your frontend is: `https://studyflow-frontend.netlify.app`
 4. **Update Render backend env vars:**
    - `CORS_ALLOWED_ORIGINS` = `https://studyflow-frontend.netlify.app`
-   - `CSRF_TRUSTED_ORIGINS` = `https://studyflow-frontend.netlify.app,https://studyflow-backend.onrender.com`
+   - `CSRF_TRUSTED_ORIGINS` = `https://studyflow-frontend.netlify.app,https://studyflow-b9jw.onrender.com`
 5. **Re-deploy backend** (Render → Manual Deploy → Deploy latest commit)
 
 ---

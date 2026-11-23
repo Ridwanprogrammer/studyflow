@@ -33,7 +33,8 @@ FROM python:3.11-slim AS production
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/opt/venv/bin:$PATH" \
-    DJANGO_SETTINGS_MODULE=config.settings.production
+    DJANGO_SETTINGS_MODULE=config.settings.production \
+    HOME=/app
 
 # Install runtime dependencies only
 RUN apt-get update && apt-get install -y --no-install-recommends \
