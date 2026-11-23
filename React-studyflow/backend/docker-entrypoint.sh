@@ -38,6 +38,21 @@ EOF
 echo "📦 Running migrations..."
 python manage.py migrate --noinput
 
+# Import course content on first start only (preserves user progress)
+echo "📚 Checking course content..."
+python << 'PYEOF'
+import os, django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+django.setup()
+from courses.models import Course
+from django.core.management import call_command
+if Course.objects.exists():
+    print("   Content already present, skipping import")
+else:
+    print("   No courses found - importing content...")
+    call_command('import_content')
+PYEOF
+
 # Create superuser if needed (optional, for first deploy)
 if [ "$CREATE_SUPERUSER" = "true" ]; then
     echo "👤 Creating superuser..."
