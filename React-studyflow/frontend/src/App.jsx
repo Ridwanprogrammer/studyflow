@@ -65,7 +65,7 @@ function HomeRoute() {
     )
   }
 
-  return isAuthenticated ? <Dashboard /> : <Landing />
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Landing />
 }
 
 function AppRoutes() {

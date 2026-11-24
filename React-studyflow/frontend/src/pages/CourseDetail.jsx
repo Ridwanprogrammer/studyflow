@@ -22,7 +22,7 @@ export function CourseDetail() {
 
   if (isLoading) {
     return (
-      <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-pulse">
+      <div className="sf-course-detail-loading max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-pulse">
         <div className="h-64 rounded-3xl bg-slate-900/60 border border-white/5" />
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -35,7 +35,7 @@ export function CourseDetail() {
 
   if (error || !course) {
     return (
-      <div className="max-w-md mx-auto p-12 text-center rounded-3xl bg-slate-900/80 border border-white/10 mt-12 space-y-4 shadow-xl">
+      <div className="sf-course-detail-error max-w-md mx-auto p-12 text-center rounded-3xl bg-slate-900/80 border border-white/10 mt-12 space-y-4 shadow-xl">
         <h2 className="text-xl font-bold text-white">Course not found</h2>
         <p className="text-slate-400 text-sm">The course you are looking for does not exist or has been removed.</p>
         <NavLink
@@ -54,7 +54,7 @@ export function CourseDetail() {
   return (
     <div className="sf-course-detail-page max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Course Header Hero Card */}
-      <header className="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-2xl space-y-6">
+      <header className="sf-course-detail-hero relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-2xl space-y-6">
         <div className="sf-course-detail-page__accent" />
 
         <div className="flex items-center justify-between gap-4">
@@ -104,7 +104,7 @@ export function CourseDetail() {
       </header>
 
       {/* Curriculum Topics List */}
-      <section className="space-y-4">
+      <section className="sf-course-topic-section space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Curriculum Topics</h2>
@@ -122,20 +122,20 @@ export function CourseDetail() {
               <NavLink
                 key={topic.id}
                 to={`/courses/${course.code}/topics/${topic.topic_id || topic.id}`}
-                className="p-4 sm:p-5 rounded-2xl bg-slate-900/70 border border-white/10 hover:border-cyan-400/40 hover:bg-slate-900/90 flex items-center justify-between gap-4 transition-all group shadow-sm hover:shadow-cyan-500/5 cursor-pointer"
+                className="sf-course-topic-card p-4 sm:p-5 rounded-2xl bg-slate-900/70 border border-white/10 hover:border-cyan-400/40 hover:bg-slate-900/90 flex items-center justify-between gap-4 transition-all group shadow-sm hover:shadow-cyan-500/5 cursor-pointer"
               >
                 <div className="flex items-center gap-3.5 min-w-0">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 transition-colors ${
+                    className={`sf-course-topic-index w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 transition-colors ${
                       isCompleted
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        ? 'is-complete bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                         : 'bg-white/5 text-slate-300 group-hover:bg-cyan-500/20 group-hover:text-cyan-300'
                     }`}
                   >
                     {isCompleted ? <CheckCircle2 size={16} /> : <span>{index + 1}</span>}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-bold text-white text-sm sm:text-base group-hover:text-cyan-300 transition-colors truncate">
+                    <h3 className="sf-course-topic-title font-bold text-white text-sm sm:text-base group-hover:text-cyan-300 transition-colors truncate">
                       {topic.title}
                     </h3>
                     <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
@@ -171,22 +171,22 @@ export function CourseDetail() {
       </section>
 
       {/* Course Metadata Box */}
-      <section className="p-6 rounded-3xl bg-slate-900/50 border border-white/10 space-y-3">
+      <section className="sf-course-metadata p-6 rounded-3xl bg-slate-900/50 border border-white/10 space-y-3">
         <h3 className="font-bold text-white text-sm">Course Metadata</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
+          <div className="sf-course-metadata-item p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
             <span className="text-slate-400 block font-medium">Level</span>
             <span className="text-white font-bold">{course.level || '200L'}</span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
+          <div className="sf-course-metadata-item p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
             <span className="text-slate-400 block font-medium">Semester</span>
             <span className="text-white font-bold">{course.semester || '2nd Semester'}</span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
+          <div className="sf-course-metadata-item p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
             <span className="text-slate-400 block font-medium">Credit Units</span>
             <span className="text-white font-bold">{course.credits || 3} Units</span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
+          <div className="sf-course-metadata-item p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
             <span className="text-slate-400 block font-medium">Institution</span>
             <span className="text-white font-bold">FUGUS</span>
           </div>

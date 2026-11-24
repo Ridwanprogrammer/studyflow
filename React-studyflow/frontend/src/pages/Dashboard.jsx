@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api, unwrapList } from '../lib/api'
-import { CourseCard } from '../components/CourseCard'
 import { NavLink } from 'react-router-dom'
-import { ArrowRight, Sparkles, BookOpen, Calendar, Bot, Zap, ChevronRight } from '../components/ui/Icons'
+import { ChevronRight } from '../components/ui/Icons'
 import { useState, useEffect, useRef } from 'react'
 
 export function Dashboard() {
@@ -197,23 +196,23 @@ export function Dashboard() {
             </div>
 
             {/* Quick enrolled courses preview pills - ALL 6 courses like vanilla */}
-            <div className="flex flex-wrap gap-3">
+            <div className="sf-dashboard-course-list">
               {courses.length > 0 ? (
-                courses.map((course, index) => (
+                courses.map((course) => (
                   <NavLink
                     key={course.id}
                     to={`/courses/${course.code}`}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.035] border border-white/8 hover:border-white/15 hover:bg-white/[0.06] text-slate-200 text-sm font-medium transition-all"
+                    className="sf-dashboard-course-link"
                   >
                     <span className="font-black" style={{ color: course.discipline?.color || '#06b6d4' }}>
                       {course.code}
                     </span>
-                    <span className="text-slate-500 hidden sm:inline">· {course.discipline?.name || 'Course'}</span>
+                    <span className="sf-dashboard-course-discipline">{course.discipline?.name || 'Course'}</span>
                   </NavLink>
                 ))
               ) : (
-                <div className="text-sm text-slate-500">
-                  No enrolled courses yet. <NavLink to="/courses" className="text-cyan-400 hover:underline">Browse catalog</NavLink>
+                <div className="sf-dashboard-courses-empty">
+                  No enrolled courses yet. <NavLink to="/courses">Browse catalog</NavLink>
                 </div>
               )}
             </div>

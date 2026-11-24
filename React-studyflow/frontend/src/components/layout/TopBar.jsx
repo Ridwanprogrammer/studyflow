@@ -5,7 +5,7 @@ import { Tooltip } from '../ui/Tooltip'
 import { useState, useRef, useEffect, useMemo } from 'react'
 
 function pageMeta(pathname) {
-  if (pathname === '/') {
+  if (pathname === '/' || pathname === '/dashboard') {
     return { title: 'Welcome Back!', subtitle: 'FUGUS · 200 Level · Second Semester' }
   }
   if (pathname === '/courses') {

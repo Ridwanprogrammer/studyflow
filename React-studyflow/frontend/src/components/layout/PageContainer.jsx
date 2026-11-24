@@ -7,6 +7,14 @@ import { getInstitutionLabel } from '../../config/AppConfig'
 
 export function PageContainer() {
   const location = useLocation()
+  const workspaceVariant =
+    location.pathname === '/dashboard'
+      ? 'sf-main-workspace--dashboard'
+      : location.pathname === '/courses'
+        ? 'sf-main-workspace--catalog'
+        : location.pathname.startsWith('/courses/')
+          ? 'sf-main-workspace--course-detail'
+        : ''
   const [mobileOpen, setMobileOpen] = useState(false)
   const [cmdOpen, setCmdOpen] = useState(false)
 
@@ -45,7 +53,7 @@ export function PageContainer() {
           onClose={() => setMobileOpen(false)}
           institutionLabel={getInstitutionLabel()}
         />
-        <div className="sf-main-workspace">
+        <div className={`sf-main-workspace ${workspaceVariant}`}>
           <TopBar
             onMenuClick={() => setMobileOpen(!mobileOpen)}
             onSearchClick={() => setCmdOpen(true)}

@@ -50,8 +50,8 @@ export function CourseCard({ course, index = 0 }) {
 
         {/* Quick Topic Preview (if topics available) */}
         {Array.isArray(course.topics) && course.topics.length > 0 && (
-          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-white/5 space-y-1.5 my-2">
-            <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+          <div className="sf-course-card__topics p-2.5 rounded-xl bg-slate-950/60 border border-white/5 space-y-1.5 my-2">
+            <div className="sf-course-card__topics-label text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
               Key Topics
             </div>
             {course.topics.slice(0, 3).map((t) => (
@@ -61,7 +61,7 @@ export function CourseCard({ course, index = 0 }) {
                   e.stopPropagation()
                   navigate(`/courses/${courseIdentifier}/topics/${t.topic_id || t.id}`)
                 }}
-                className="flex items-center justify-between text-xs text-slate-300 hover:text-cyan-300 py-1 px-2 rounded-lg hover:bg-white/5 transition-colors"
+                className="sf-course-card__topic flex items-center justify-between text-xs text-slate-300 hover:text-cyan-300 py-1 px-2 rounded-lg hover:bg-white/5 transition-colors"
               >
                 <span className="truncate max-w-[220px]">{t.title}</span>
                 <span className="text-cyan-400 text-xs font-bold">→</span>
@@ -72,7 +72,7 @@ export function CourseCard({ course, index = 0 }) {
       </div>
 
       {/* Card Footer */}
-      <div className="flex items-center justify-between pt-4 mt-3 border-t border-white/5 text-xs">
+      <div className="sf-course-card__footer flex items-center justify-between pt-4 mt-3 border-t border-white/5 text-xs">
         <span className="flex items-center gap-1.5 text-slate-400 font-medium">
           <BookOpen size={14} className="text-cyan-400" />
           <span>{topicCount} topics</span>
@@ -82,7 +82,7 @@ export function CourseCard({ course, index = 0 }) {
           <button
             type="button"
             onClick={handleAskAIClick}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all cursor-pointer"
+            className="sf-course-card__ask-ai inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all cursor-pointer"
             title={`Launch AI Tutor for ${course.code}`}
           >
             <Sparkles size={12} className="text-cyan-400" />

@@ -53,7 +53,7 @@ export function Courses() {
 
   if (isLoading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
+      <div className="sf-courses-page p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
         <div className="h-28 rounded-2xl bg-slate-900/60 border border-white/5" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
@@ -65,18 +65,19 @@ export function Courses() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="sf-courses-page p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
       {/* Search & Filter Header Card */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-slate-900/75 border border-white/10 backdrop-blur-xl shadow-xl space-y-4">
+      <div className="sf-courses-toolbar p-5 sm:p-6 rounded-3xl bg-slate-900/75 border border-white/10 backdrop-blur-xl shadow-xl space-y-4">
         {/* Search Bar */}
         <div className="relative">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none" />
           <input
             type="text"
             id="course-search-input"
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
+            className="sf-courses-search w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
             placeholder="Search by course code (e.g. CSC 202) or title..."
             value={searchQuery}
+            aria-label="Search courses"
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           {searchQuery && (
@@ -94,15 +95,12 @@ export function Courses() {
 
         {/* Filter Pills & Summary Counter */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="sf-courses-filterbar flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setSelectedDiscipline('all')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                selectedDiscipline === 'all'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                  : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
-              }`}
+              aria-pressed={selectedDiscipline === 'all'}
+              className={`sf-course-filter ${selectedDiscipline === 'all' ? 'is-active' : ''}`}
             >
               All Disciplines
             </button>
@@ -113,11 +111,8 @@ export function Courses() {
                   key={d.id}
                   type="button"
                   onClick={() => setSelectedDiscipline(d.slug)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                      : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
-                  }`}
+                  aria-pressed={isActive}
+                  className={`sf-course-filter ${isActive ? 'is-active' : ''}`}
                 >
                   {disciplineIcons[d.name] || <BookOpen size={14} />}
                   <span>{d.name}</span>
@@ -126,8 +121,8 @@ export function Courses() {
             })}
           </div>
 
-          <span className="text-xs font-semibold text-slate-400">
-            Showing <strong className="text-white">{filtered.length}</strong> of {courses.length} courses
+          <span className="sf-courses-count text-xs font-semibold text-slate-400">
+            Showing <strong>{filtered.length}</strong> of {courses.length} courses
           </span>
         </div>
       </div>
@@ -135,7 +130,7 @@ export function Courses() {
       {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courses-container">
         {filtered.length === 0 ? (
-          <div className="col-span-full p-12 sm:p-16 rounded-3xl bg-slate-900/40 border border-dashed border-white/10 text-center space-y-3">
+          <div className="sf-courses-empty col-span-full p-12 sm:p-16 rounded-3xl bg-slate-900/40 border border-dashed border-white/10 text-center space-y-3">
             <SearchX size={48} className="mx-auto text-slate-500 opacity-60" />
             <h3 className="font-extrabold text-white text-lg">No courses found</h3>
             <p className="text-xs text-slate-400 max-w-sm mx-auto">

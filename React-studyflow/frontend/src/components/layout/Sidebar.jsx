@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Home, BookOpen, Sparkles, Bot, Calendar, X } from '../ui/Icons'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', end: true, icon: Home },
+  { name: 'Dashboard', href: '/dashboard', end: true, icon: Home },
   { name: 'My Courses', href: '/courses', icon: BookOpen },
   { name: 'Global Glossary', href: '/glossary', icon: Sparkles },
   { name: 'AI Tutor Chat', href: '/chat', ai: true, icon: Bot },
