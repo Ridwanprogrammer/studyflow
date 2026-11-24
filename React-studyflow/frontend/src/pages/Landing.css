@@ -48,7 +48,7 @@
 
 .sf-landing-nav__inner {
   display: flex;
-  min-height: 82px;
+  min-height: 72px;
   align-items: center;
   gap: 2rem;
 }
@@ -112,7 +112,7 @@
 
 .sf-landing-btn {
   display: inline-flex;
-  min-height: 52px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
@@ -129,8 +129,8 @@
 }
 
 .sf-landing-btn--sm {
-  min-height: 44px;
-  padding: 0.6rem 1rem;
+  min-height: 38px;
+  padding: 0.55rem 0.9rem;
   font-size: 0.82rem;
 }
 
@@ -169,29 +169,29 @@
   z-index: -1;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(4, 14, 25, 0.98) 0%, rgba(5, 18, 31, 0.94) 35%, rgba(5, 18, 31, 0.58) 63%, rgba(5, 18, 31, 0.18) 100%),
-    linear-gradient(0deg, rgba(5, 16, 29, 0.78), transparent 55%),
-    url("/images/hero.png") right center / auto 100% no-repeat;
+    linear-gradient(90deg, rgba(4, 14, 25, 0.88) 0%, rgba(5, 18, 31, 0.72) 42%, rgba(5, 18, 31, 0.28) 72%, rgba(5, 18, 31, 0.16) 100%),
+    linear-gradient(0deg, rgba(5, 24, 58, 0.56), rgba(5, 24, 58, 0.1) 62%),
+    url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=85") right center / auto 85% no-repeat;
   content: "";
 }
 
 .sf-landing-hero__inner {
   display: flex;
-  min-height: 530px;
+  min-height: 470px;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: clamp(3.4rem, 7vw, 5.3rem);
+  padding-top: clamp(1.5rem, 3vw, 2.4rem);
 }
 
 .sf-landing-hero__copy {
   max-width: 590px;
-  padding-bottom: 3.2rem;
+  padding-bottom: 1.2rem;
 }
 
 .sf-landing-kicker,
 .sf-landing-eyebrow {
   margin: 0 0 0.9rem;
-  color: #087db8;
+  color: var(--landing-blue);
   font-size: 0.76rem;
   font-weight: 750;
   letter-spacing: 0.025em;
@@ -218,10 +218,10 @@
 }
 
 .sf-landing-hero h1 {
-  max-width: 11ch;
+  max-width: 15ch;
   margin: 0;
   color: #f7faff;
-  font-size: clamp(3.5rem, 6.5vw, 5.8rem);
+  font-size: clamp(2.75rem, 5.2vw, 4.5rem);
   font-weight: 800;
   letter-spacing: -0.055em;
   line-height: 0.97;
@@ -234,7 +234,7 @@
 
 .sf-landing-lede {
   max-width: 50ch;
-  margin: 1.25rem 0 0;
+  margin: 0.9rem 0 0;
   color: #c4d2e0;
   font-size: 0.98rem;
   line-height: 1.7;
@@ -245,7 +245,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1.35rem;
-  margin-top: 1.55rem;
+  margin-top: 1.2rem;
 }
 
 .sf-landing-demo-link {
@@ -281,7 +281,7 @@
 
 .sf-landing-quick-links a {
   display: flex;
-  min-height: 78px;
+  min-height: 64px;
   align-items: center;
   gap: 0.75rem;
   padding: 0.8rem 1rem;
@@ -368,7 +368,7 @@
 
 .sf-landing-benefits svg {
   flex: 0 0 auto;
-  color: #087db8;
+  color: var(--landing-blue);
 }
 
 .sf-landing-text-link {
@@ -502,8 +502,8 @@
   display: inline-block;
   padding: 0.28rem 0.5rem;
   border-radius: 4px;
-  background: #e7f5ff;
-  color: #0063a8;
+  background: #e8f1ff;
+  color: var(--landing-blue);
   font-size: 0.61rem;
   font-weight: 800;
 }
@@ -555,7 +555,7 @@
   place-items: center;
   border-radius: 5px;
   background: #e0f3ff;
-  color: #087db8;
+  color: var(--landing-blue);
 }
 
 .sf-landing-lesson__explanation strong,
@@ -680,15 +680,15 @@
 .sf-landing-feature h3 {
   margin: 0.65rem 0 0.25rem;
   color: #13273c;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 750;
   letter-spacing: -0.02em;
 }
 
 .sf-landing-feature p {
   margin: 0;
   color: #63758a;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   line-height: 1.5;
 }
 
@@ -872,7 +872,7 @@
   }
 
   .sf-landing-hero__inner {
-    min-height: 500px;
+    min-height: 450px;
   }
 
   .sf-landing-learning__grid {
@@ -892,6 +892,10 @@
 
 @media (max-width: 680px) {
   .sf-landing-wrap {
+    width: min(100% - 2rem, 1200px);
+  }
+
+  .sf-landing-cta {
     width: min(100% - 2rem, 1200px);
   }
 
@@ -919,23 +923,23 @@
 
   .sf-landing-hero::before {
     background:
-      linear-gradient(90deg, rgba(4, 14, 25, 0.97), rgba(5, 18, 31, 0.78)),
-      linear-gradient(0deg, rgba(5, 16, 29, 0.9), transparent 70%),
-      url("/images/hero.png") right center / auto 100% no-repeat;
+      linear-gradient(90deg, rgba(4, 14, 25, 0.92), rgba(5, 18, 31, 0.68)),
+      linear-gradient(0deg, rgba(0, 37, 105, 0.62), rgba(0, 73, 176, 0.2) 70%),
+      url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=85") right center / auto 60% no-repeat;
   }
 
   .sf-landing-hero__inner {
     min-height: 0;
-    padding-top: 3.5rem;
+    padding-top: 2rem;
   }
 
   .sf-landing-hero__copy {
-    padding-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .sf-landing-hero h1 {
-    max-width: 10ch;
-    font-size: clamp(3.2rem, 13vw, 4.5rem);
+    max-width: 15ch;
+    font-size: clamp(2.75rem, 11vw, 3.8rem);
   }
 
   .sf-landing-lede {
@@ -1053,6 +1057,11 @@
     flex-wrap: wrap;
     gap: 1rem;
     padding-block: 1.25rem;
+  }
+
+  .sf-landing-footer .sf-landing-brand img {
+    width: 38px;
+    height: 38px;
   }
 
   .sf-landing-footer__main nav {

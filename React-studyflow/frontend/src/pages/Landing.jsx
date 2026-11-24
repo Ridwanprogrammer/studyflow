@@ -35,7 +35,7 @@ const currentYear = new Date().getFullYear()
 function Brand({ showTagline = false }) {
   return (
     <Link to="/" className="sf-landing-brand" aria-label="StudyFlow home">
-      <img src="/icons/logo.svg" alt="" />
+      <img src="/icons/logo.png" alt="" />
       <span>
         Study<em>Flow</em>
         {showTagline && <small>Learn. Grow. Achieve.</small>}
@@ -227,7 +227,7 @@ export function Landing() {
           <div className="sf-landing-cta__image" aria-hidden="true" />
           <div className="sf-landing-wrap sf-landing-cta__inner">
             <div className="sf-landing-cta__brand" aria-hidden="true">
-              <img src="/icons/logo.svg" alt="" />
+              <img src="/icons/logo.png" alt="" />
             </div>
             <div className="sf-landing-cta__copy">
               <h2 id="sf-cta-title">Ready to transform your study journey?</h2>
