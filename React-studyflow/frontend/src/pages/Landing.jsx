@@ -8,22 +8,21 @@ import {
   Calendar,
   CheckCircle,
   FileText,
-  Heart,
+  GraduationCap,
   Lightbulb,
   PlayCircle,
   Sparkles,
   Target,
 } from '../components/ui/Icons'
-import { SiDiscord, SiGithub, SiX, SiYoutube } from 'react-icons/si'
 import './Landing.css'
 
 const features = [
-  { title: 'My Courses', description: 'Access your courses anytime', icon: BookOpen },
-  { title: 'Notes', description: 'Save and manage your study notes', icon: FileText },
-  { title: 'AI Tutor', description: "Get help whenever you're stuck", icon: Brain },
-  { title: 'Study Planner', description: 'Plan your study schedule', icon: Calendar },
-  { title: 'Progress Tracker', description: 'See your improvement', icon: Target },
-  { title: 'Smart Recommendations', description: 'Find what you need to learn', icon: Sparkles },
+  { title: 'Your courses', description: 'Open course topics and study materials.', icon: BookOpen, to: '/courses' },
+  { title: 'Structured notes', description: 'Read clear notes and revisit key ideas.', icon: FileText, to: '/courses' },
+  { title: 'Guided lessons', description: 'Work through supported topics step by step.', icon: GraduationCap, to: '/courses' },
+  { title: 'AI tutor', description: 'Ask questions about what you are studying.', icon: Brain, to: '/chat' },
+  { title: 'Course glossary', description: 'Look up key terms across your subjects.', icon: Sparkles, to: '/glossary' },
+  { title: 'Semester calendar', description: 'Keep important academic dates in view.', icon: Calendar, to: '/calendar' },
 ]
 
 const answers = [
@@ -62,12 +61,9 @@ function LandingLessonPreview() {
           <div>
             <span className="sf-landing-lesson__course">CSC 215</span>
             <h3>Propositional logic</h3>
-            <p>Understand the building blocks of logical statements.</p>
+            <p>A short example of how a guided lesson can work.</p>
           </div>
-          <div className="sf-landing-lesson__progress-wrap">
-            <span className="sf-landing-lesson__progress-label">Your progress <strong>45%</strong></span>
-            <div className="sf-landing-lesson__progress"><span /></div>
-          </div>
+          <span className="sf-landing-lesson__preview-label">Lesson preview</span>
         </div>
 
         <div className="sf-landing-lesson__body">
@@ -124,10 +120,9 @@ export function Landing() {
           <Brand />
           <nav className="sf-landing-nav__links" aria-label="Page navigation">
             <a className="is-current" href="#top">Home</a>
-            <a href="#features">Courses</a>
+            <Link to="/courses">Courses</Link>
             <a href="#features">Features</a>
-            <a href="#learning">About</a>
-            <a href="#contact">Contact</a>
+            <a href="#learning">How it works</a>
           </nav>
           <Link to="/register" className="sf-landing-btn sf-landing-btn--primary sf-landing-btn--sm">
             Get Started <ArrowRight size={15} aria-hidden="true" />
@@ -141,33 +136,33 @@ export function Landing() {
             <div className="sf-landing-hero__copy">
               <p className="sf-landing-kicker">
                 <span aria-hidden="true" />
-                Smarter Learning. Better Results.
+                Your study space, all in one place
               </p>
               <h1 id="sf-landing-title">
-                Learn Smarter.<br />
-                Not <span>Harder.</span>
+                Make room<br />
+                for <span>progress.</span>
               </h1>
               <p className="sf-landing-lede">
-                StudyFlow is an adaptive learning platform that teaches you, tests your
-                understanding, and helps you study more effectively.
+                Bring your courses, structured notes, guided lessons, and study tools
+                together in one calm place to learn.
               </p>
               <div className="sf-landing-actions">
                 <Link to="/register" className="sf-landing-btn sf-landing-btn--primary">
-                  Start Learning <ArrowRight size={17} aria-hidden="true" />
+                  Create your account <ArrowRight size={17} aria-hidden="true" />
                 </Link>
                 <a href="#learning" className="sf-landing-demo-link">
                   <PlayCircle size={34} aria-hidden="true" />
-                  Watch Demo
+                  Try a lesson preview
                 </a>
               </div>
             </div>
 
             <nav className="sf-landing-quick-links" aria-label="StudyFlow learning tools">
-              <a href="#learning"><BookOpen aria-hidden="true" /><span>Adaptive<br />Learning Path</span></a>
-              <a href="#features"><Brain aria-hidden="true" /><span>AI Tutor<br />(Ask &amp; Learn)</span></a>
-              <a href="#features"><FileText aria-hidden="true" /><span>Organised<br />Notes</span></a>
-              <a href="#features"><Target aria-hidden="true" /><span>Track Your<br />Progress</span></a>
-              <a href="#features"><Calendar aria-hidden="true" /><span>Plan Your<br />Studies</span></a>
+              <Link to="/courses"><BookOpen aria-hidden="true" /><span>Course<br />materials</span></Link>
+              <Link to="/courses"><FileText aria-hidden="true" /><span>Structured<br />notes</span></Link>
+              <Link to="/courses"><Target aria-hidden="true" /><span>Guided<br />lessons</span></Link>
+              <Link to="/glossary"><Sparkles aria-hidden="true" /><span>Course<br />glossary</span></Link>
+              <Link to="/chat"><Brain aria-hidden="true" /><span>AI<br />tutor</span></Link>
             </nav>
           </div>
         </section>
@@ -177,22 +172,20 @@ export function Landing() {
             <LandingLessonPreview />
 
             <div className="sf-landing-learning__copy">
-              <p className="sf-landing-eyebrow">III &nbsp; ADAPTIVE LEARNING</p>
-              <h2 id="sf-learning-title">A Learning Experience That Adapts to You</h2>
+              <p className="sf-landing-eyebrow">Learn by working through ideas</p>
+              <h2 id="sf-learning-title">Understand the idea. Then practise it.</h2>
               <p>
-                Get more than just questions. StudyFlow introduces concepts, asks
-                follow-up questions based on your responses, and fills your knowledge
-                gaps — step by step.
+                For supported topics, guided lessons introduce a concept, give you a
+                chance to reason through it, and explain what to revisit.
               </p>
               <ul className="sf-landing-benefits">
                 <li><CheckCircle size={18} aria-hidden="true" /> Interactive lessons, not just quizzes</li>
-                <li><CheckCircle size={18} aria-hidden="true" /> Personalised learning path</li>
-                <li><CheckCircle size={18} aria-hidden="true" /> Instant explanations</li>
-                <li><CheckCircle size={18} aria-hidden="true" /> Track what you understand</li>
+                <li><CheckCircle size={18} aria-hidden="true" /> Clear explanations after each answer</li>
+                <li><CheckCircle size={18} aria-hidden="true" /> Return to your saved lesson session</li>
               </ul>
-              <a className="sf-landing-text-link" href="#features">
-                Explore How It Works <ArrowRight size={16} aria-hidden="true" />
-              </a>
+              <Link className="sf-landing-text-link" to="/courses">
+                Explore your courses <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>
@@ -200,24 +193,25 @@ export function Landing() {
         <section className="sf-landing-features" id="features" aria-labelledby="sf-features-title">
           <div className="sf-landing-wrap sf-landing-features__grid">
             <div className="sf-landing-features__intro">
-              <p className="sf-landing-eyebrow">III &nbsp; MORE THAN A STUDY APP</p>
-              <h2 id="sf-features-title">Everything You Need for Academic Success</h2>
+              <p className="sf-landing-eyebrow">Made for the way you study</p>
+              <h2 id="sf-features-title">The tools you use, in one study space.</h2>
               <p>
-                From organised notes to AI-powered tutoring, StudyFlow gives you the
-                tools to stay focused and achieve more.
+                Start from your course, then move between notes, guided practice,
+                reference terms, and help when you need it.
               </p>
-              <Link to="/register" className="sf-landing-btn sf-landing-btn--outline">
-                Discover All Features <ArrowRight size={16} aria-hidden="true" />
+              <Link to="/courses" className="sf-landing-btn sf-landing-btn--outline">
+                Browse courses <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
 
             <div className="sf-landing-feature-grid">
-              {features.map(({ title, description, icon: Icon }) => (
-                <article className="sf-landing-feature" key={title}>
+              {features.map(({ title, description, icon: Icon, to }) => (
+                <Link className="sf-landing-feature" key={title} to={to}>
                   <Icon size={20} aria-hidden="true" />
                   <h3>{title}</h3>
                   <p>{description}</p>
-                </article>
+                  <span className="sf-landing-feature__action">Explore</span>
+                </Link>
               ))}
             </div>
           </div>
@@ -230,11 +224,11 @@ export function Landing() {
               <img src="/icons/logo.png" alt="" />
             </div>
             <div className="sf-landing-cta__copy">
-              <h2 id="sf-cta-title">Ready to transform your study journey?</h2>
-              <p>Join thousands of students already using StudyFlow.</p>
+              <h2 id="sf-cta-title">Start with the course you are studying.</h2>
+              <p>Create an account to open your courses, notes, and study tools.</p>
             </div>
             <Link to="/register" className="sf-landing-btn sf-landing-btn--primary">
-              Get Started Free <ArrowRight size={16} aria-hidden="true" />
+              Get started <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         </section>
@@ -248,20 +242,15 @@ export function Landing() {
           <nav aria-label="Footer navigation">
             <a href="#top">Home</a>
             <a href="#features">Features</a>
-            <a href="#features">Courses</a>
-            <a href="#learning">About</a>
-            <a href="#contact">Contact</a>
+            <Link to="/courses">Courses</Link>
+            <a href="#learning">How it works</a>
+            <Link to="/login">Sign in</Link>
           </nav>
-          <div className="sf-landing-footer__socials" aria-hidden="true">
-            <SiGithub />
-            <SiYoutube />
-            <SiDiscord />
-            <SiX />
-          </div>
+          <Link className="sf-landing-footer__signin" to="/register">Create account</Link>
         </div>
         <div className="sf-landing-wrap sf-landing-footer__bottom">
           <span>© {currentYear} StudyFlow. All rights reserved.</span>
-          <span>Built for a smarter tomorrow <Heart size={13} aria-hidden="true" /></span>
+          <span>StudyFlow · Your learning workspace</span>
         </div>
       </footer>
     </div>

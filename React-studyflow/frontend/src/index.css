@@ -10,7 +10,7 @@
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Medium.ttf') format('truetype');
-  font-weight: 400 700;
+  font-weight: 500;
   font-display: swap;
 }
 
@@ -27,20 +27,20 @@
 
 :root {
   --ink: #071018;
-  --slate: #0b1723;
-  --mineral: #101d2d;
+  --slate: #0b1a31;
+  --mineral: #112646;
   --mist: #edf4ff;
-  --sea-glass: #01a9fe;
+  --sea-glass: #007cfe;
   --citron: #b9e201;
 
-  --brand-cyan: #01a9fe;
-  --brand-blue: #004ada;
+  --brand-cyan: #007cfe;
+  --brand-blue: #0757cf;
   --brand-lime: #b9e201;
   --brand-green: #3eaf00;
 
-  --bg: #071018;
-  --bg-800: #0b1723;
-  --bg-700: #101d2d;
+  --bg: #08152a;
+  --bg-800: #0c1e39;
+  --bg-700: #11294a;
 
   --panel: rgba(12, 18, 27, 0.72);
   --panel-strong: rgba(14, 22, 31, 0.96);
@@ -56,10 +56,10 @@
   --text-secondary: #8b99ac;
   --text-muted: #748297;
 
-  --cyan: #75d9ff;
+  --cyan: #54baff;
   --lime: #d7f671;
   --violet: #9ea8ff;
-  --glow: rgba(117, 217, 255, 0.15);
+  --glow: rgba(0, 124, 254, 0.18);
 
   --font-interface: 'Poppins', 'Segoe UI', sans-serif;
   --font-reading: 'Poppins', 'Segoe UI', sans-serif;
@@ -71,36 +71,36 @@
   --color-slate-100: #e9f0fa;
   --color-slate-200: #cbd6e5;
   --color-slate-300: #aebbd0;
-  --color-slate-400: #8b99ac;
+  --color-slate-400: #91a2bc;
   --color-slate-500: #718198;
   --color-slate-600: #53647b;
   --color-slate-700: #334459;
-  --color-slate-800: #1d2b3c;
-  --color-slate-900: #0b1723;
-  --color-slate-950: #071018;
+  --color-slate-800: #1a2e4b;
+  --color-slate-900: #0c1e39;
+  --color-slate-950: #08152a;
 
-  --color-cyan-50: #e8faff;
-  --color-cyan-100: #c9f1ff;
-  --color-cyan-200: #a2e8ff;
-  --color-cyan-300: #75d9ff;
-  --color-cyan-400: #35c5ff;
-  --color-cyan-500: #01a9fe;
-  --color-cyan-600: #0088d9;
-  --color-cyan-700: #006db3;
-  --color-cyan-800: #07568a;
-  --color-cyan-900: #0b456e;
-  --color-cyan-950: #082c49;
+  --color-cyan-50: #eaf3ff;
+  --color-cyan-100: #d3e6ff;
+  --color-cyan-200: #a8d0ff;
+  --color-cyan-300: #78b9ff;
+  --color-cyan-400: #45a0ff;
+  --color-cyan-500: #007cfe;
+  --color-cyan-600: #0066df;
+  --color-cyan-700: #0754b7;
+  --color-cyan-800: #10458e;
+  --color-cyan-900: #153a70;
+  --color-cyan-950: #0b2448;
 
   --color-blue-50: #eaf0ff;
   --color-blue-100: #d6e2ff;
   --color-blue-200: #b7ccff;
-  --color-blue-300: #8eaeff;
-  --color-blue-400: #6288ff;
-  --color-blue-500: #3569f5;
-  --color-blue-600: #004ada;
-  --color-blue-700: #073cb3;
-  --color-blue-800: #0d328a;
-  --color-blue-900: #102b6e;
+  --color-blue-300: #8bbaff;
+  --color-blue-400: #5da0ff;
+  --color-blue-500: #287ff2;
+  --color-blue-600: #0757cf;
+  --color-blue-700: #0949ac;
+  --color-blue-800: #103c86;
+  --color-blue-900: #123367;
   --color-blue-950: #0b1c49;
 
   --color-lime-50: #f7fbe5;
@@ -133,8 +133,8 @@
   --transition-smooth: 260ms cubic-bezier(0.16, 1, 0.3, 1);
 
   --bg-gradient:
-    radial-gradient(circle at top right, rgba(1, 169, 254, 0.1), transparent 40%),
-    radial-gradient(circle at bottom left, rgba(185, 226, 1, 0.05), transparent 40%);
+    radial-gradient(circle at top right, rgba(0, 124, 254, 0.12), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(16, 75, 171, 0.08), transparent 42%);
 }
 
 /* Light mode - derived from dark */
@@ -158,10 +158,10 @@
   --bg-gradient:
     radial-gradient(
       circle at top right,
-      rgba(1, 169, 254, 0.1),
+      rgba(0, 124, 254, 0.1),
       transparent 40%
     ),
-    radial-gradient(circle at bottom left, rgba(185, 226, 1, 0.05), transparent 40%);
+    radial-gradient(circle at bottom left, rgba(16, 75, 171, 0.06), transparent 42%);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

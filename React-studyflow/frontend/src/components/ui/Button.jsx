@@ -24,9 +24,9 @@ const Button = forwardRef(function Button({
 
   const variants = {
     primary: `
-      bg-gradient-to-r from-blue-600 to-cyan-500 text-slate-950
-      hover:from-blue-500 hover:to-cyan-600
-      hover:shadow-lg hover:shadow-cyan-400/25 hover:-translate-y-0.5
+      bg-gradient-to-r from-blue-600 to-cyan-600 text-white
+      hover:from-blue-500 hover:to-cyan-500
+      hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5
       active:translate-y-0
     `,
     secondary: `
@@ -39,8 +39,8 @@ const Button = forwardRef(function Button({
       hover:text-white hover:bg-white/5
     `,
     ai: `
-      bg-gradient-to-r from-blue-600 via-cyan-500 to-lime-400 text-white
-      hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-0.5
+      bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 text-white
+      hover:shadow-lg hover:shadow-blue-400/30 hover:-translate-y-0.5
       active:translate-y-0
     `,
     danger: `
@@ -50,8 +50,8 @@ const Button = forwardRef(function Button({
       active:translate-y-0
     `,
     outline: `
-      border-2 border-cyan-400/50 text-cyan-300 bg-transparent
-      hover:bg-cyan-400/10 hover:border-cyan-400 hover:text-white
+      border border-cyan-400/55 text-cyan-200 bg-transparent
+      hover:bg-cyan-400/10 hover:border-cyan-300 hover:text-white
     `,
   }
 

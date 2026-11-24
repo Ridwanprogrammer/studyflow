@@ -9,8 +9,8 @@ export default {
       colors: {
         // Brand colors - EXACT from studyflow reference
         brand: {
-          cyan: '#01a9fe',        // Primary actions, focus, active (brighter)
-          blue: '#004ada',        // Secondary, gradients, CS discipline (deep blue)
+          cyan: '#007cfe',        // Primary actions and active states
+          blue: '#0757cf',        // Secondary actions and deep brand blue
           lime: '#b9e201',        // Success, progress, Math discipline (bright lime)
           green: '#3eaf00',       // Success messages (green)
         },
@@ -44,13 +44,13 @@ export default {
         },
         // Accent colors - matching reference
         accent: {
-          cyan: '#75d9ff',         // Bright cyan
+          cyan: '#54baff',         // Bright cyan
           lime: '#d7f671',         // Bright lime
           violet: '#9ea8ff',       // Violet
         },
         // Discipline colors - distinct and accessible
         discipline: {
-          math: '#01a9fe',         // cyan
+          math: '#007cfe',         // blue
           cs: '#6341f0',           // purple (from reference course page)
           phys: '#f59e0b',         // amber
           chem: '#3eaf00',         // green
@@ -63,12 +63,12 @@ export default {
           weak: 'rgba(180, 205, 226, 0.08)',
           DEFAULT: 'rgba(180, 205, 226, 0.12)',
           strong: 'rgba(180, 205, 226, 0.2)',
-          focus: '#01a9fe',
+          focus: '#007cfe',
         },
         // Glow effects - matching reference
         glow: {
-          cyan: 'rgba(1, 169, 254, 0.15)',
-          math: 'rgba(1, 169, 254, 0.18)',
+          cyan: 'rgba(0, 124, 254, 0.15)',
+          math: 'rgba(0, 124, 254, 0.18)',
           cs: 'rgba(99, 65, 240, 0.18)',
           phys: 'rgba(245, 158, 11, 0.18)',
           chem: 'rgba(62, 175, 0, 0.18)',
@@ -128,7 +128,7 @@ export default {
         'elevated': '0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(180, 205, 226, 0.1)',
       },
       backgroundImage: {
-        'bg-gradient': 'radial-gradient(ellipse at 85% 0%, rgba(1, 169, 254, 0.1), transparent 40%), radial-gradient(ellipse at 15% 100%, rgba(185, 226, 1, 0.05), transparent 40%)',
+        'bg-gradient': 'radial-gradient(ellipse at 85% 0%, rgba(0, 124, 254, 0.12), transparent 40%), radial-gradient(ellipse at 15% 100%, rgba(16, 75, 171, 0.08), transparent 42%)',
         'card-gradient': 'linear-gradient(145deg, rgba(14, 22, 31, 0.95), rgba(10, 20, 31, 0.98))',
         'card-hover': 'linear-gradient(145deg, rgba(20, 30, 42, 0.98), rgba(14, 22, 31, 0.98))',
       },
